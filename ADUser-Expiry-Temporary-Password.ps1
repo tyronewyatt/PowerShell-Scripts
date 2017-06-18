@@ -1,8 +1,8 @@
 Import-Module ActiveDirectory
 
 #Task to perform if account has expired. To enable a task remove # from start of line and to disable add # to start of line. Only uncomment one task.
-$ExpiredPasswordTask="Disable-ADAccount" #Production
-#$ExpiredPasswordTask="Write-Host" #Testing
+#$ExpiredPasswordTask="Disable-ADAccount" #Production
+$ExpiredPasswordTask="Write-Host" #Testing
 
 #Limit AD SearchBase to OU
 $AccountSearchBase="OU=Domain Users,DC=domain,DC=local"
