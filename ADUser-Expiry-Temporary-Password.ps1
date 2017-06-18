@@ -15,6 +15,6 @@ $TemporaryPasswordAge='10'
 
 # Search AD and perform task
 Write-Host "Disable accounts after $InitialPasswordAge days if initial password not changed:"
-Get-ADUser -SearchBase $AccountSearchBase -Filter {Enabled -eq $True} -Properties Name,pwdLastSet,lastLogonTimestamp,whenChanged | Where-Object {($_.pwdLastSet -eq "0") -AND ($_.lastLogonTimestamp -eq $null) -AND ($_.whenChanged -lt (Get-Date).AddDays(-($InitialPasswordAge)))} | & $ExpiredPasswordTask -Verbose
+Get-ADUser -SearchBase $AccountSearchBase -Filter {Enabled -eq $True} -Properties Name,pwdLastSet,lastLogonTimestamp,whenChanged | Where-Object {($_.pwdLastSet -eq $False) -AND ($_.lastLogonTimestamp -eq $null) -AND ($_.whenChanged -lt (Get-Date).AddDays(-($InitialPasswordAge)))} | & $ExpiredPasswordTask -Verbose
 Write-Host "Disable accounts after $TemporaryPasswordAge days if temporary password not changed:"
-Get-ADUser -SearchBase $AccountSearchBase -Filter {Enabled -eq $True} -Properties Name,pwdLastSet,lastLogonTimestamp,whenChanged | Where-Object {($_.pwdLastSet -eq "0") -AND ($_.lastLogonTimestamp -ne $null) -AND ($_.whenChanged -lt (Get-Date).AddDays(-($TemporaryPasswordAge)))} | & $ExpiredPasswordTask -Verbose
+Get-ADUser -SearchBase $AccountSearchBase -Filter {Enabled -eq $True} -Properties Name,pwdLastSet,lastLogonTimestamp,whenChanged | Where-Object {($_.pwdLastSet -eq $False) -AND ($_.lastLogonTimestamp -ne $null) -AND ($_.whenChanged -lt (Get-Date).AddDays(-($TemporaryPasswordAge)))} | & $ExpiredPasswordTask -Verbose
