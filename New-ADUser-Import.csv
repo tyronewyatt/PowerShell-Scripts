@@ -1,0 +1,2 @@
+AccountName,FirstName,LastName,Description,PrincipalName,Password,OrganisationalUnit
+SMI0001,John,SMITH,Student,domain.edu,8n8LOfI,"OU=Domain Users,DC=domain,DC=edu"
