@@ -8,7 +8,7 @@ foreach ($User in $Users)
     $UserLastName = $User.'LastName'
     $OrganisationalUnit = $User.'OrganisationalUnit'
     $AccountName = $User.'AccountName'
-    $PrincipalName = $User.'AccountName' + "@" + $User.'PrincipalName'
+    $PrincipalName = $User.'AccountName' + "@" + $User.'DomainName'
     $Description = $User.'Description'
     $Password = $User.'Password'
     New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$UserFirstName" -Surname "$UserLastName" -Description "$Description" -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
