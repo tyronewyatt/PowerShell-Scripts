@@ -1,8 +1,8 @@
 Import-Module ActiveDirectory
 
-$Users = Import-Csv -Delimiter "," -Path ".\New-ADUser-Import.csv"            
-foreach ($User in $Users)            
-{            
+$Users = Import-Csv -Delimiter "," -Path ".\New-ADUser-Import.csv"
+foreach ($User in $Users)
+{
     $DisplayName = $User.'FirstName' + " " + $User.'LastName'
     $UserFirstName = $User.'FirstName'
     $UserLastName = $User.'LastName'
@@ -11,5 +11,5 @@ foreach ($User in $Users)
     $PrincipalName = $User.'AccountName' + "@" + $User.'PrincipalName'
     $Description = $User.'Description'
     $Password = $User.'Password'
-    New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$UserFirstName" -Surname "$UserLastName" -Description "$Description" -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false -Verbose
+    New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$UserFirstName" -Surname "$UserLastName" -Description "$Description" -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true â€“PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
 }
