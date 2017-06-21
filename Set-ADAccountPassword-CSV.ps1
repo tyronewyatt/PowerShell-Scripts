@@ -6,5 +6,5 @@ foreach ($User in $Users)
     $AccountName = $User.'AccountName'
     $Password = $User.'Password'
 	Set-ADAccountPassword -Identity "$AccountName" -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $Password -Force)
-	Set-AdUser -Identity "$AccountName" -CannotChangePassword $false -ChangePasswordAtLogon $true 
+	Set-AdUser -Identity "$AccountName" -Enabled $true -CannotChangePassword $false -ChangePasswordAtLogon $true 
 }
