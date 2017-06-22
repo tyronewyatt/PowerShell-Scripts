@@ -13,5 +13,5 @@ foreach ($User in $Users)
     $Password = $User.'Password'
     $GroupMember = $User.'$GroupMember'
     New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$UserFirstName" -Surname "$UserLastName" -Description "$Description" -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
-    Add-ADGroupMember -Identity "$AccountName" "$GroupMember"
+    Add-ADGroupMember -Identity "$GroupMember" -Member "$AccountName" 
 }
