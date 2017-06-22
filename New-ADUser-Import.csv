@@ -1,2 +1,2 @@
-AccountName,FirstName,LastName,Description,DomainName,Password,OrganisationalUnit
-SMI0001,John,SMITH,Student,domain.edu,8n8LOfI,"OU=Domain Users,DC=domain,DC=edu"
+AccountName,FirstName,LastName,Description,DomainName,Password,OrganisationalUnit,GroupMember
+SMI0001,John,SMITH,Student,domain.edu,8n8LOfI,"OU=Domain Users,DC=domain,DC=edu",Students
