@@ -1,9 +1,9 @@
 Import-Module ActiveDirectory
 
-$SchoolNumber='8370'
-$OrganisationalUnitBase='OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
-$DomainName='tallangatta-sc.vic.edu.au'
-$Description='Student'
+$SchoolNumber = '8370'
+$OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
+$DomainName = 'tallangatta-sc.vic.edu.au'
+$Description = 'Student'
 $ExistingStudents = Get-ADUser -SearchBase $OrganisationalUnitBase -Filter * -Properties samAccountName
 
 $Students = Import-Csv -Delimiter "," -Path "C:\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV|LVNG'}
@@ -27,9 +27,10 @@ ForEach ($Student In $Students)
 	$GroupMember = $Description + "s " + $Student.'TAG'
 	$StartDate = $Student.'ENTRY'
     $PrincipalName = $AccountName + "@" + $DomainName
+	$InitialPassword = "(-join(33..126|%{[char]$_}|Get-Random -C (20)))"
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
         {
-		#New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$StudentFirstName" -Surname "$StudentLastName" -Initials "$SecondNameInitial" -Description "$Description - Start Date $StartDate" -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
+		#New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$StudentFirstName" -Surname "$StudentLastName" -Initials "$SecondNameInitial" -Description "$Description - Start Date $StartDate" -AccountPassword (ConvertTo-SecureString $InitialPassword -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
 		#ADGroupMember -Identity "$GroupMember" -Member "$AccountName"
 		Write-Host $AccountName $LastName $FirstName $SecondNameInitial $DisplayName $OrganisationalUnit $PrincipalName $GroupMember "$Description - Start date $StartDate" $SecondNameInitial
 		}
