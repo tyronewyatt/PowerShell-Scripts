@@ -27,11 +27,11 @@ ForEach ($Student In $Students)
 	$GroupMember = $Description + "s " + $Student.'TAG'
 	$StartDate = $Student.'ENTRY'
 	$PrincipalName = $AccountName + "@" + $DomainName
-	$InitialPassword = "(-join(33..126|%{[char]$_}|Get-Random -C (20)))"
+	$InitialPassword = Invoke-WebRequest -Uri http://www.dinopass.com/password/strong
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
 		{
 		New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$FirstName" -Surname "$LastName" -Initials "$SecondNameInitial" -Description "$Description - Start Date $StartDate" -AccountPassword (ConvertTo-SecureString $InitialPassword -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
 		Add-ADGroupMember -Identity "$GroupMember" -Members "$AccountName"
-		Write-Host $AccountName $LastName $FirstName $SecondNameInitial $DisplayName $OrganisationalUnit $PrincipalName $GroupMember "$Description - Start date $StartDate" $SecondNameInitial
+		Write-Host 'UserName: '$AccountName 'FullName: '$DisplayName 'GroupMember: '$GroupMember 'Initial Password: '$InitialPassword
 		}
 }
