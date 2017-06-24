@@ -12,11 +12,11 @@ ForEach ($Student In $Students)
 	$Description = $_.Description
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -ne $null)
         {
-		#Disable-ADAccount -Identity $AccountName
-		#if($?)
-		#	{
-		#	Set-ADUser -Identity $AccountName -Description "$Description - Exit date $ExitDate"
-		#	}
+		Disable-ADAccount -Identity $AccountName
+		if($?)
+			{
+			Set-ADUser -Identity $AccountName -Description "$Description - Exit date $ExitDate"
+			}
 		Write-Host $AccountName $Description - Exit date $ExitDate
 		}
 }
