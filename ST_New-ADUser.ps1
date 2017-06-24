@@ -29,7 +29,7 @@ ForEach ($Student In $Students)
 	$PrincipalName = $AccountName + "@" + $DomainName
 	$InitialPassword = "(-join(33..126|%{[char]$_}|Get-Random -C (20)))"
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
-        {
+		{
 		#New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$StudentFirstName" -Surname "$StudentLastName" -Initials "$SecondNameInitial" -Description "$Description - Start Date $StartDate" -AccountPassword (ConvertTo-SecureString $InitialPassword -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
 		#ADGroupMember -Identity "$GroupMember" -Member "$AccountName"
 		Write-Host $AccountName $LastName $FirstName $SecondNameInitial $DisplayName $OrganisationalUnit $PrincipalName $GroupMember "$Description - Start date $StartDate" $SecondNameInitial
