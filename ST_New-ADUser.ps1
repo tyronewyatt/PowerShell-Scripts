@@ -9,7 +9,7 @@ $ExistingStudents = Get-ADUser -SearchBase $OrganisationalUnitBase -Filter * -Pr
 $Students = Import-Csv -Delimiter "," -Path "C:\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV|LVNG'}
 ForEach ($Student In $Students)
 {
-    $AccountName = $Student.'STKEY'
+	$AccountName = $Student.'STKEY'
 	$LastName = $Student.'SURNAME'
 	$FirstName = $Student.'FIRST_NAME'
 	$SecondName = $Student.'SECOND_NAME'
@@ -23,10 +23,10 @@ ForEach ($Student In $Students)
 			{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
 		}
 	$DisplayName = $Student.'FIRST_NAME' + " " + $Student.'SURNAME'
-    $OrganisationalUnit = "OU=" + $Student.'TAG' + "," + $OrganisationalUnitBase
+	$OrganisationalUnit = "OU=" + $Student.'TAG' + "," + $OrganisationalUnitBase
 	$GroupMember = $Description + "s " + $Student.'TAG'
 	$StartDate = $Student.'ENTRY'
-    $PrincipalName = $AccountName + "@" + $DomainName
+	$PrincipalName = $AccountName + "@" + $DomainName
 	$InitialPassword = "(-join(33..126|%{[char]$_}|Get-Random -C (20)))"
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
         {
