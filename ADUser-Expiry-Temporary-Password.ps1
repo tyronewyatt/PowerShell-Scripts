@@ -1,20 +1,50 @@
 Import-Module ActiveDirectory
 
-#Task to perform if account has expired. To enable a task remove # from start of line and to disable add # to start of line. Only uncomment one task.
-#$ExpiredPasswordTask="Disable-ADAccount" #Production
-$ExpiredPasswordTask="Write-Host" #Testing
-
-#Limit AD SearchBase to OU
-$OrganisationalUnit="OU=Domain Users,DC=domain,DC=local"
-
-#Number of days a new accounts password lasts before it expires
+$OrganisationalUnit='OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $InitialPasswordAge='30'
-
-#Number of days an account temporary password lasts before it expires
 $TemporaryPasswordAge='10'
+$Users=Get-ADUser -SearchBase $OrganisationalUnit -Filter {Enabled -eq $True} -Properties samAccountName,pwdLastSet,lastLogonTimestamp,whenChanged,Description
 
-# Search AD and perform task
-Write-Host "Disable accounts after $InitialPasswordAge days if initial password not changed:"
-Get-ADUser -SearchBase $OrganisationalUnit -Filter {Enabled -eq $True} -Properties Name,pwdLastSet,lastLogonTimestamp,whenChanged | Where-Object {($_.pwdLastSet -eq $False) -AND ($_.lastLogonTimestamp -eq $null) -AND ($_.whenChanged -lt (Get-Date).AddDays(-($InitialPasswordAge)))} | & $ExpiredPasswordTask -Verbose
-Write-Host "Disable accounts after $TemporaryPasswordAge days if temporary password not changed:"
-Get-ADUser -SearchBase $OrganisationalUnit -Filter {Enabled -eq $True} -Properties Name,pwdLastSet,lastLogonTimestamp,whenChanged | Where-Object {($_.pwdLastSet -eq $False) -AND ($_.lastLogonTimestamp -ne $null) -AND ($_.whenChanged -lt (Get-Date).AddDays(-($TemporaryPasswordAge)))} | & $ExpiredPasswordTask -Verbose
+ForEach ($User In $Users)
+{
+    $samAccountName = $User.'samAccountName'
+	$pwdLastSet = $User.'pwdLastSet'
+	$lastLogonTimestamp = $User.'lastLogonTimestamp'
+	$whenChanged = $User.'whenChanged'
+	$Description = $User.'Description'
+	$InitialPasswordAge = $_.InitialPasswordAge
+	$TemporaryPasswordAge = $_.TemporaryPasswordAge
+	$DateString = (Get-Date).ToString()
+	
+If 	($Users | Where-Object `
+		{ `
+		$pwdLastSet -eq $False -And `
+		$lastLogonTimestamp -eq $null -And `
+		$whenChanged -lt (Get-Date).AddDays(-($InitialPasswordAge))
+		}
+	)
+	{
+	#Write-Host $samAccountName $Description - Initial password expired $DateString
+	Disable-ADAccount -Identity $samAccountName
+	if($?)
+		{
+		Set-ADUser -Identity $samAccountName -Description "$Description - Initial password expired $DateString"
+		}
+	}
+
+If 	($Users | Where-Object `
+		{ `
+		$pwdLastSet -eq $False -And `
+		$lastLogonTimestamp -ne $null -And `
+		$whenChanged -lt (Get-Date).AddDays(-($TemporaryPasswordAge))
+		}
+	)
+	{
+	#Write-Host $samAccountName $Description - Temporary password expired $DateString
+	Disable-ADAccount -Identity $samAccountName
+	if($?)
+		{
+		Set-ADUser -Identity $samAccountName -Description "$Description - Temporary password expired $DateString"
+		}
+	}
+}
