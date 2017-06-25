@@ -17,7 +17,10 @@ Function ComplexPassword
 	Write-Output $ComplexPassword
 	}
 
-$ExistingStudents = Get-ADUser -SearchBase $OrganisationalUnitBase -Filter * -Properties samAccountName
+$ExistingStudents = Get-ADUser `
+	-SearchBase $OrganisationalUnitBase `
+	-Filter * `
+	-Properties samAccountName
 
 $Students = Import-Csv -Delimiter "," -Path "C:\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV|LVNG'}
 ForEach ($Student In $Students)
