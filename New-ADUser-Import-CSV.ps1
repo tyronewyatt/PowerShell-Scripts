@@ -21,7 +21,8 @@ foreach ($User in $Users)
 		-Surname "$UserLastName" `
 		-Description "$Description" `
 		-AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) `
-		-Enabled $true -Path "$OrganisationalUnit" `
+		-Enabled $true `
+		-Path "$OrganisationalUnit" `
 		-ChangePasswordAtLogon $true `
 		–PasswordNeverExpires $false `
 		-AllowReversiblePasswordEncryption $false
