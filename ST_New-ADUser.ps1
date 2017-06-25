@@ -43,8 +43,24 @@ ForEach ($Student In $Students)
 	$ComplexPassword = ComplexPassword
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
 		{
-		New-ADUser -Name "$AccountName" -DisplayName "$DisplayName" -SamAccountName $AccountName -UserPrincipalName $PrincipalName -GivenName "$FirstName" -Surname "$LastName" -Initials "$SecondNameInitial" -Description "$Description - Start Date $StartDate" -AccountPassword (ConvertTo-SecureString $ComplexPassword -AsPlainText -Force) -Enabled $true -Path "$OrganisationalUnit" -ChangePasswordAtLogon $true –PasswordNeverExpires $false -AllowReversiblePasswordEncryption $false
-		Add-ADGroupMember -Identity "$GroupMember" -Members "$AccountName"
+		New-ADUser `
+			-Name "$AccountName" `
+			-DisplayName "$DisplayName" `
+			-SamAccountName $AccountName `
+			-UserPrincipalName $PrincipalName `
+			-GivenName "$FirstName" `
+			-Surname "$LastName" `
+			-Initials "$SecondNameInitial" `
+			-Description "$Description - Start Date $StartDate" `
+			-AccountPassword (ConvertTo-SecureString $ComplexPassword -AsPlainText -Force) `
+			-Enabled $true `
+			-Path "$OrganisationalUnit" `
+			-ChangePasswordAtLogon $true `
+			–PasswordNeverExpires $false `
+			-AllowReversiblePasswordEncryption $false
+		Add-ADGroupMember `
+			-Identity "$GroupMember" `
+			-Members "$AccountName"
 		Write-Host 'UserName: '$AccountName 'FullName: '$DisplayName 'GroupMember: '$GroupMember 'Initial Password: '$ComplexPassword
 		}
 }
