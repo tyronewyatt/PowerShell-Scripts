@@ -1,8 +1,21 @@
 Import-Module ActiveDirectory
 
-#Limit AD SearchBase to OU
-$OrganisationalUnit="OU=Domain Users,DC=domain,DC=local"
+$OrganisationalUnit = 'OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 
-# Search AD and perform task
-Write-Host 'Clear password never expire flag from the following accounts:'
-Get-ADUser -SearchBase $OrganisationalUnit -Filter {Enabled -eq $True -And PasswordNeverExpires -eq $True} -Properties samAccountName | ForEach {Set-ADUser -Verbose -Identity $_.samAccountName -PasswordNeverExpires $False}
+$Users = Get-ADUser `
+	-SearchBase $OrganisationalUnit `
+	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $True} `
+	-Properties samAccountName
+	
+ForEach ($User In $Users)
+{
+	$samAccountName = $User.'samAccountName'
+	
+	Set-ADUser `
+		-Identity $samAccountName `
+		-PasswordNeverExpires $False
+	if($?)
+		{
+		Write-Host $samAccountName 'Password can expire.'
+		}
+}
