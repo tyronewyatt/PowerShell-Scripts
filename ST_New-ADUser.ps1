@@ -8,8 +8,8 @@ $PasswordLength = '7'
 
 Function ComplexPassword
 	{
-	$UppercaseCharacters = (-join ('abcdefghijkmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 4))
-	$LowercaseCharacters = (-join ('ABCEFGHJKLMNPQRSTUVWXYZ'.ToCharArray() | Get-Random -Count 4))
+	$LowercaseCharacters = (-join ('abcdefghijkmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 4))
+	$UppercaseCharacters = (-join ('ABCEFGHJKLMNPQRSTUVWXYZ'.ToCharArray() | Get-Random -Count 4))
 	$Base10Digits = (-join ('1234567890'.ToCharArray() | Get-Random -Count 2))
 	$NonalphanumericCharacters = (-join ("~!@#$%^&*_-+=`|\(){}[]:;<>,.?/".ToCharArray() | Get-Random -Count 2))
 	$ComplexityRequirements = $UppercaseCharacters + $LowercaseCharacters + $Base10Digits + $NonalphanumericCharacters
@@ -59,7 +59,7 @@ ForEach ($Student In $Students)
 			-Enabled $true `
 			-Path "$OrganisationalUnit" `
 			-ChangePasswordAtLogon $true `
-			–PasswordNeverExpires $false `
+			â€“PasswordNeverExpires $false `
 			-AllowReversiblePasswordEncryption $false
 		Add-ADGroupMember `
 			-Identity "$GroupMember" `
