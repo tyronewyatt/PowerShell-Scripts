@@ -22,7 +22,7 @@ ForEach ($Student In $Students)
 			Set-ADUser `
 				-Identity $AccountName `
 				-Description "$Description - Exit date $ExitDate"
+			Write-Host $AccountName 'Disabled'
 			}
-		Write-Host $AccountName $Description - Exit date $ExitDate
 		}
 }
