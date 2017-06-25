@@ -3,16 +3,16 @@ Import-Module ActiveDirectory
 $Users = Import-Csv -Delimiter "," -Path ".\New-ADUser-Import.csv"
 foreach ($User in $Users)
 {
-    $DisplayName = $User.'FirstName' + " " + $User.'LastName'
-    $UserFirstName = $User.'FirstName'
-    $UserLastName = $User.'LastName'
-    $OrganisationalUnit = $User.'OrganisationalUnit'
-    $AccountName = $User.'AccountName'
-    $PrincipalName = $User.'AccountName' + "@" + $User.'DomainName'
-    $Description = $User.'Description'
-    $Password = $User.'Password'
-    $GroupMember = $User.'$GroupMember'
-    New-ADUser `
+	$DisplayName = $User.'FirstName' + " " + $User.'LastName'
+	$UserFirstName = $User.'FirstName'
+	$UserLastName = $User.'LastName'
+	$OrganisationalUnit = $User.'OrganisationalUnit'
+	$AccountName = $User.'AccountName'
+	$PrincipalName = $User.'AccountName' + "@" + $User.'DomainName'
+	$Description = $User.'Description'
+	$Password = $User.'Password'
+	$GroupMember = $User.'$GroupMember'
+	New-ADUser `
 		-Name "$AccountName" `
 		-DisplayName "$DisplayName" `
 		-SamAccountName $AccountName `
@@ -25,7 +25,8 @@ foreach ($User in $Users)
 		-ChangePasswordAtLogon $true `
 		–PasswordNeverExpires $false `
 		-AllowReversiblePasswordEncryption $false
-    Add-ADGroupMember `
+	Add-ADGroupMember `
 		-Identity "$GroupMember" `
 		-Member "$AccountName" 
 }
+	
