@@ -1,21 +1,11 @@
 Import-Module ActiveDirectory
+Add-Type -AssemblyName System.web
 
 $SchoolNumber = '8370'
 $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $DomainName = 'tallangatta-sc.vic.edu.au'
 $Description = 'Student'
 $PasswordLength = '7'
-
-Function ComplexPassword
-	{
-	$LowercaseCharacters = (-join ('abcdefghijkmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 4))
-	$UppercaseCharacters = (-join ('ABCEFGHJKLMNPQRSTUVWXYZ'.ToCharArray() | Get-Random -Count 4))
-	$Base10Digits = (-join ('1234567890'.ToCharArray() | Get-Random -Count 2))
-	$NonalphanumericCharacters = (-join ("~!@#$%^&*_-+=`|\(){}[]:;<>,.?/".ToCharArray() | Get-Random -Count 2))
-	$ComplexityRequirements = $UppercaseCharacters + $LowercaseCharacters + $Base10Digits + $NonalphanumericCharacters
-	$ComplexPassword = -join ($ComplexityRequirements.ToCharArray() | Get-Random -Count $PasswordLength)
-	Write-Output $ComplexPassword
-	}
 
 $ExistingStudents = Get-ADUser `
 	-SearchBase $OrganisationalUnitBase `
@@ -43,7 +33,7 @@ ForEach ($Student In $Students)
 	$GroupMember = $Description + "s " + $Student.'TAG'
 	$StartDate = $Student.'ENTRY'
 	$PrincipalName = $AccountName + "@" + $DomainName
-	$ComplexPassword = ComplexPassword
+	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
 		{
 		New-ADUser `
@@ -60,10 +50,12 @@ ForEach ($Student In $Students)
 			-Path "$OrganisationalUnit" `
 			-ChangePasswordAtLogon $true `
 			–PasswordNeverExpires $false `
-			-AllowReversiblePasswordEncryption $false
+			-AllowReversiblePasswordEncryption $false `
+			#-PassThru
 		Add-ADGroupMember `
 			-Identity "$GroupMember" `
-			-Members "$AccountName"
+			-Members "$AccountName" `
+			#-PassThru
 		Write-Host 'UserName: '$AccountName 'FullName: '$DisplayName 'GroupMember: '$GroupMember 'Initial Password: '$ComplexPassword
 		}
 }
