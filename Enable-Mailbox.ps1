@@ -17,7 +17,7 @@ ForEach ($User In $Users)
 	if ($User | Where-Object `
 		{
 		$mail -eq $null	-And `
-		$DistinguishedName -like "*OU=20[0-9][0-9],$OrganisationalUnit"
+		$DistinguishedName -like "*OU=[0-9][0-9][0-9][0-9],$OrganisationalUnit"
 		}
 		)
 			{
