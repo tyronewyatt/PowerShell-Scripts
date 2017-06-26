@@ -1,5 +1,5 @@
 Import-Module ActiveDirectory
-Add-Type -AssemblyName System.web
+[Reflection.Assembly]::LoadWithPartialName(“System.Web”)
 
 $SchoolNumber = '8370'
 $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
