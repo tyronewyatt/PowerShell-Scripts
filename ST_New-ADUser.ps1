@@ -1,18 +1,19 @@
 Import-Module ActiveDirectory
-[Reflection.Assembly]::LoadWithPartialName(“System.Web”)
+[Reflection.Assembly]::LoadWithPartialName("System.Web")
 
 $SchoolNumber = '8370'
 $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $DomainName = 'tallangatta-sc.vic.edu.au'
 $Description = 'Student'
 $PasswordLength = '7'
+$CSVPath = '.'
 
 $ExistingStudents = Get-ADUser `
 	-SearchBase $OrganisationalUnitBase `
 	-Filter * `
 	-Properties samAccountName
 
-$Students = Import-Csv -Delimiter "," -Path "C:\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV|LVNG'}
+$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV|LVNG'}
 ForEach ($Student In $Students)
 {
 	$AccountName = $Student.'STKEY'
