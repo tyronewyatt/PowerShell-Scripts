@@ -2,7 +2,7 @@ Import-Module ActiveDirectory
 
 $SchoolNumber = '8370'
 $StudentsOrganisationalUnit = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
-$CSVPath = '.'
+$CSVPath = '\\tscweb02\eduhub$'
 $Description = 'Student'
 
 $ExistingStudents = Get-ADUser `
@@ -24,7 +24,7 @@ ForEach ($Student In $Students)
 			Set-ADUser `
 				-Identity $AccountName `
 				-Description "$Description - Exit date $ExitDate"
-			Write-Host "$AccountName Disabled. Description $Description - Exit date $ExitDate"
+			Write-Host $AccountName 'Disabled. Description '$Description '- Exit date '$ExitDate
 			}
 		}
 }
