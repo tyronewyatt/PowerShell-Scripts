@@ -1,12 +1,12 @@
 Import-Module ActiveDirectory
-[Reflection.Assembly]::LoadWithPartialName("System.Web")
+Add-Type -AssemblyName System.web
 
 $SchoolNumber = '8370'
 $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $DomainName = 'tallangatta-sc.vic.edu.au'
 $Description = 'Student'
 $PasswordLength = '7'
-$CSVPath = '.'
+$CSVPath = '\\tscweb02\eduhub$'
 
 $ExistingStudents = Get-ADUser `
 	-SearchBase $OrganisationalUnitBase `
@@ -52,11 +52,9 @@ ForEach ($Student In $Students)
 			-ChangePasswordAtLogon $true `
 			–PasswordNeverExpires $false `
 			-AllowReversiblePasswordEncryption $false `
-			#-PassThru
 		Add-ADGroupMember `
 			-Identity "$GroupMember" `
 			-Members "$AccountName" `
-			#-PassThru
-		Write-Host 'UserName: '$AccountName 'FullName: '$DisplayName 'GroupMember: '$GroupMember 'Initial Password: '$ComplexPassword
+		Write-Host 'UserName: '$AccountName 'FullName:' $DisplayName 'GroupMember:' $GroupMember 'Initial Password:' $ComplexPassword
 		}
 }
