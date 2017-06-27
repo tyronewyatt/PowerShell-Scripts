@@ -19,11 +19,13 @@ ForEach ($Student In $Students)
         {
 		Disable-ADAccount `
 			-Identity $AccountName
+			#-PassThru
 		if($?)
 			{
 			Set-ADUser `
 				-Identity $AccountName `
 				-Description "$Description - Exit date $ExitDate"
+				#-PassThru
 			Write-Host $AccountName 'Disabled'
 			}
 		}
