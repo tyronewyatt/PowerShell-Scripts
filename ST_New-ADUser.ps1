@@ -51,10 +51,10 @@ ForEach ($Student In $Students)
 			-Path "$OrganisationalUnit" `
 			-ChangePasswordAtLogon $true `
 			–PasswordNeverExpires $false `
-			-AllowReversiblePasswordEncryption $false `
+			-AllowReversiblePasswordEncryption $false
 		Add-ADGroupMember `
 			-Identity "$GroupMember" `
-			-Members "$AccountName" `
+			-Members "$AccountName"
 		Write-Host 'UserName: '$AccountName 'FullName:' $DisplayName 'GroupMember:' $GroupMember 'Initial Password:' $ComplexPassword
 		}
 }
