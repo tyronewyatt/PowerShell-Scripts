@@ -6,7 +6,7 @@ $Database = 'TSC-Students'
 $Users = Get-ADUser `
 		-SearchBase $OrganisationalUnit `
 		-Filter * `
-		-Properties samAccountName,mail,DistinguishedName `
+		-Properties samAccountName,mail,DistinguishedName
 	
 ForEach ($User In $Users)
 	{
