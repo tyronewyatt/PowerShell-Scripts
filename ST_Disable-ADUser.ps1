@@ -37,7 +37,7 @@ ForEach ($Student In $Students)
 			Set-ADUser `
 				-Identity $AccountName `
 				-Description "$Description - $Status $Date"
-			Write-Host $AccountName 'Disabled. Description' $Description '-' $Status $Date
+			Write-Host "$AccountName Disabled. Description $Description - $Status $Date"
 			$MailBody += @("`n$AccountName Disabled. Description $Description - $Status $Date")
 			}
 		}
