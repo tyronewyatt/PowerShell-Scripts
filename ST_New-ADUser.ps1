@@ -13,7 +13,7 @@ $ExistingStudents = Get-ADUser `
 	-Filter * `
 	-Properties samAccountName
 
-$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV|LVNG'}
+$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV'}
 ForEach ($Student In $Students)
 {
 	$AccountName = $Student.'STKEY'
@@ -23,10 +23,10 @@ ForEach ($Student In $Students)
 	$PreferredName = $Student.'PREF_NAME'
 	If ($Student.'SECOND_NAME'.length -eq '0')
 		{$SecondNameInitial = $null}
-		else
+		Else
 		{If ($Student.'SECOND_NAME'.length -eq '1')
 			{$SecondNameInitial = $Student.'SECOND_NAME'}
-			else
+			Else
 			{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
 		}
 	$DisplayName = $Student.'FIRST_NAME' + " " + $Student.'SURNAME'
