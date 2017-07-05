@@ -14,7 +14,8 @@ $Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Wh
 ForEach ($Student In $Students)
 {
     $AccountName = $Student.'STKEY'
-	$ExitDate = $Student.'EXIT_DATE'
+	$DateLeft = $Student.'DATELEFT'
+	$Status = $Student.'STATUS'
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -ne $null)
         {
 		Disable-ADAccount `
@@ -23,8 +24,8 @@ ForEach ($Student In $Students)
 			{
 			Set-ADUser `
 				-Identity $AccountName `
-				-Description "$Description - Exit date $ExitDate"
-			Write-Host $AccountName 'Disabled. Description '$Description '- Exit date '$ExitDate
+				-Description "$Description - $Status $DateLeft"
+			Write-Host $AccountName 'Disabled. Description' $Description '-' $Status $DateLeft
 			}
 		}
 }
