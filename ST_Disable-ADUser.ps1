@@ -17,14 +17,14 @@ ForEach ($Student In $Students)
 	$Status = $Student.'STATUS'
 	$DateLeft = $Student.'DATELEFT'
 	$DepartureDate = $Student.'DEPARTURE_DATE'
-	If ($DateLeft -ne $Null) 
-		{
-		$Date = $DateLeft
-		}
-		Else
-		{
-		$Date = $DepartureDate
-		}
+	$DestArrivalDate = $Student.'DEST_ARRIVAL_DATE'
+	If ($DateLeft.length -ne '0') 
+		{$Date = $DateLeft}
+	ElseIf ($DepartureDate.length -ne '0')
+		{$Date = $DepartureDate}
+	ElseIf ($DestArrivalDate.length -ne '0')
+		{$Date = $DestArrivalDate}
+		
 	If (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -ne $null)
         {
 		Disable-ADAccount `
