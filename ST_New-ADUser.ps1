@@ -13,7 +13,7 @@ $ExistingStudents = Get-ADUser `
 	-Filter * `
 	-Properties samAccountName
 
-$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'ACTV'}
+$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'FUT|ACTV'}
 ForEach ($Student In $Students)
 {
 	$AccountName = $Student.'STKEY'
