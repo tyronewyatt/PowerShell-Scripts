@@ -33,6 +33,7 @@ ForEach ($Student In $Students)
 	$OrganisationalUnit = "OU=" + $Student.'TAG' + "," + $OrganisationalUnitBase
 	$GroupMember = $Description + "s " + $Student.'TAG'
 	$StartDate = $Student.'ENTRY'
+	$Status = $Student.'STATUS'
 	$PrincipalName = $AccountName + "@" + $DomainName
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
@@ -45,16 +46,16 @@ ForEach ($Student In $Students)
 			-GivenName "$FirstName" `
 			-Surname "$LastName" `
 			-Initials "$SecondNameInitial" `
-			-Description "$Description - Start Date $StartDate" `
+			-Description "$Description - $Status $StartDate" `
 			-AccountPassword (ConvertTo-SecureString $ComplexPassword -AsPlainText -Force) `
 			-Enabled $true `
 			-Path "$OrganisationalUnit" `
 			-ChangePasswordAtLogon $true `
 			–PasswordNeverExpires $false `
-			-AllowReversiblePasswordEncryption $false
+			-AllowReversiblePasswordEncryption $false `
 		Add-ADGroupMember `
 			-Identity "$GroupMember" `
-			-Members "$AccountName"
+			-Members "$AccountName" `
 		Write-Host 'UserName: '$AccountName 'FullName:' $DisplayName 'GroupMember:' $GroupMember 'Initial Password:' $ComplexPassword
 		}
 }
