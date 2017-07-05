@@ -10,22 +10,30 @@ $ExistingStudents = Get-ADUser `
 	-Filter {Enabled -eq $True} `
 	-Properties samAccountName
 
-$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'LEFT|DEL'}
+$Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'LVNG|LEFT|DEL'}
 ForEach ($Student In $Students)
 {
     $AccountName = $Student.'STKEY'
-	$DateLeft = $Student.'DATELEFT'
 	$Status = $Student.'STATUS'
-	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -ne $null)
+	$DateLeft = $Student.'DATELEFT'
+	$DepartureDate = $Student.'DEPARTURE_DATE'
+	If ($DateLeft -ne $Null) 
+		{
+		$Date = $DateLeft
+		}
+		Else
+		{
+		$Date = $DepartureDate
+		}
+	If (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -ne $null)
         {
 		Disable-ADAccount `
 			-Identity $AccountName
-		if($?)
-			{
+		If($?)			{
 			Set-ADUser `
 				-Identity $AccountName `
-				-Description "$Description - $Status $DateLeft"
-			Write-Host $AccountName 'Disabled. Description' $Description '-' $Status $DateLeft
+				-Description "$Description - $Status $Date"
+			Write-Host $AccountName 'Disabled. Description' $Description '-' $Status $Date
 			}
 		}
 }
