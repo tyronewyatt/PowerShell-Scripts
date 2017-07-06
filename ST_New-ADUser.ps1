@@ -33,13 +33,15 @@ ForEach ($Student In $Students)
 			{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
 		}
 	$DisplayName = $Student.'FIRST_NAME' + " " + $Student.'SURNAME'
+	If ($Student.'TAG' -match "\*\**")
+		{$Student.'TAG' = ($Student.'TAG').substring(2)}
 	$OrganisationalUnit = "OU=" + $Student.'TAG' + "," + $OrganisationalUnitBase
 	$GroupMember = $Description + "s " + $Student.'TAG'
 	$StartDate = $Student.'ENTRY'
 	$Status = $Student.'STATUS'
 	$PrincipalName = $AccountName + "@" + $DomainName
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
-	if (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $null)
+	If (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $Null)
 		{
 		New-ADUser `
 			-Name "$AccountName" `
@@ -49,18 +51,21 @@ ForEach ($Student In $Students)
 			-GivenName "$FirstName" `
 			-Surname "$LastName" `
 			-Initials "$SecondNameInitial" `
-			-Description "$Description - $Status $StartDate" `
+			-Description "$Description" `
 			-AccountPassword (ConvertTo-SecureString $ComplexPassword -AsPlainText -Force) `
 			-Enabled $true `
 			-Path "$OrganisationalUnit" `
 			-ChangePasswordAtLogon $true `
 			–PasswordNeverExpires $false `
-			-AllowReversiblePasswordEncryption $false `
+			-AllowReversiblePasswordEncryption $false
 		Add-ADGroupMember `
 			-Identity "$GroupMember" `
-			-Members "$AccountName" `
-		Write-Host "UserName: $AccountName FullName: $DisplayName Status: $Status GroupMember: $GroupMember Initial Password: $ComplexPassword"
-		$MailBody += @("`nUserName: $AccountName FullName: $DisplayName Status: $Status GroupMember: $GroupMember Initial Password: $ComplexPassword")
+			-Members "$AccountName"
+			If ($?)
+				{
+				Write-Host "UserName: $AccountName FullName: $DisplayName Status: $Status GroupMember: $GroupMember Initial Password: $ComplexPassword"
+				$MailBody += @("`nUserName: $AccountName FullName: $DisplayName Status: $Status GroupMember: $GroupMember Initial Password: $ComplexPassword")
+				}
 		}
 }
 
