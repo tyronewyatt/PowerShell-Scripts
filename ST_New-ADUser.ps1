@@ -9,7 +9,7 @@ $PasswordLength = '7'
 $CSVPath = '\\tscweb02\eduhub$'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
-$MailFrom = 'ST_Disable-ADUser <tscdc01@tallangatta-sc.vic.edu.au>'
+$MailFrom = 'ST_New-ADUser <tscdc01@tallangatta-sc.vic.edu.au>'
 
 $ExistingStudents = Get-ADUser `
 	-SearchBase $OrganisationalUnitBase `
