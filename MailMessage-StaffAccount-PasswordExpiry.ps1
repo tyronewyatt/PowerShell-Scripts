@@ -22,7 +22,6 @@ ForEach ($User In $Users)
 	$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
 	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).days
 	$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
-	$DaysExpired = $DaysToExipre.ToString().SubString(1)
 	
 If 	($Users | Where-Object `
 		{ `
