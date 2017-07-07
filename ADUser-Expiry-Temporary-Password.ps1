@@ -3,6 +3,10 @@ Import-Module ActiveDirectory
 $InitialPasswordAge = '30'
 $TemporaryPasswordAge = '10'
 $OrganisationalUnit = 'OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
+$SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
+$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
+$MailFrom = 'ADUser-Expiry-Temporary-Password <tscdc01@tallangatta-sc.vic.edu.au>'
+
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
 	-Filter {Enabled -eq $True} `
@@ -27,12 +31,13 @@ If 	($Users | Where-Object `
 	{
 	Disable-ADAccount `
 		-Identity $samAccountName
-	if($?)
+	If ($?)
 		{
 		Set-ADUser `
 			-Identity $samAccountName `
 			-Description "$Description - Initial password expired $DateString"
-		Write-Host $samAccountName 'Initial password expired.'
+		Write-Host "$samAccountName Initial password expired."
+		$MailBody += @("`n$samAccountName Initial password expired.")
 		}
 	}
 If 	($Users | Where-Object `
@@ -45,12 +50,32 @@ If 	($Users | Where-Object `
 	{
 	Disable-ADAccount `
 		-Identity $samAccountName
-	if($?)
+	If ($?)
 		{
 		Set-ADUser `
 			-Identity $samAccountName `
 			-Description "$Description - Temporary password expired $DateString"
-		Write-Host $samAccountName 'Temporary password expired.'
+		Write-Host "$samAccountName Temporary password expired."
+		$MailBody += @("`n$samAccountName Temporary password expired.")
 		}
 	}
 }
+
+If ($MailBody -ne $Null)
+	{
+	$NumberAccountsDisabled = ($MailBody).count
+	If (($MailBody).count -eq '1') 
+		{$MailSubject = "Disabled $NumberAccountsDisabled Account"}
+		Else
+		{$MailSubject = "Disabled $NumberAccountsDisabled Accounts"}
+	ForEach ($MailBody In $MailBodys)
+		{
+		$MailBody = $MailBody
+		}
+	Send-MailMessage `
+		-To "$MailTo" `
+		-From "$MailFrom" `
+		-Subject "$MailSubject" `
+		-SmtpServer "$SmtpServer" `
+		-Body "$MailBody"
+	}
