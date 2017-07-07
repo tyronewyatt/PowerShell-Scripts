@@ -46,8 +46,7 @@ If 	($Users | Where-Object `
 		}
 	)
 	{
-	If ($DaysToExipre -le $WarningPasswordAge -And `
-		$DaysToExipre -ge '2')
+	If ($DaysToExipre -ge '2')
 		{
 		Write-Host "$samAccountName password expires in $DaysToExipre days."
 		$MailBody += @("`n$samAccountName password expires in $DaysToExipre days.")
