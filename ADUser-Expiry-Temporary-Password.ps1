@@ -9,7 +9,7 @@ $MailFrom = 'ADUser-Expiry-Temporary-Password <tscdc01@tallangatta-sc.vic.edu.au
 
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
-	-Filter {Enabled -eq $True} `
+	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $False} `
 	-Properties samAccountName,pwdLastSet,lastLogonTimestamp,whenChanged,Description
 
 ForEach ($User In $Users)
