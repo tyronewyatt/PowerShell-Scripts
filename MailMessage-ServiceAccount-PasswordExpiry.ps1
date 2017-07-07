@@ -61,7 +61,12 @@ If 	($Users | Where-Object `
 		Write-Host "$samAccountName password expired today."
 		$MailBody += @("`n$samAccountName password expired today.")
 		}
-	ElseIf ($DaysToExipre -le '-1')
+	ElseIf ($DaysToExipre -eq '-1')
+		{
+		Write-Host "$samAccountName password expired yesterday."
+		$MailBody += @("`n$samAccountName password expired yesterday.")
+		}
+	ElseIf ($DaysToExipre -le '-2')
 		{
 		Write-Host "$samAccountName password expired $DaysExpired days ago."
 		$MailBody += @("`n$samAccountName password expired $DaysExpired days ago.")
