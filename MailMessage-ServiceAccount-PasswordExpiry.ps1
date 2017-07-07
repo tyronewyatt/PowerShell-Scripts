@@ -5,7 +5,15 @@ $WarningPasswordAge = '30'
 $OrganisationalUnit = 'OU=Services,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
-$MailFrom = 'ADUser-Expiry-Temporary-Password <tscdc01@tallangatta-sc.vic.edu.au>'
+$MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
+$MailHeader= 'Hello Administrator,'
+$MailSignature = `
+"ICT Helpdesk
+Tallangatta Secondary College
+145 Towong Street Tallangatta, 3700, VIC
+t: 02 6071 5000 | f: 02 6071 2445
+e: ict.helpdesk@tallangatta-sc.vic.edu.au
+w: www.tallangatta-sc.vic.edu.au"
 
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
@@ -66,13 +74,22 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "$NumberAccountsDisabled Service Account requires new password"}
+		{$MailSubject = "1 service account requires a new password"}
 		Else
-		{$MailSubject = "$NumberAccountsDisabled Service Accounts requires new passwords"}
+		{$MailSubject = "$NumberAccountsDisabled service accounts requires new passwords"}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
 		}
+		
+$MailBody = `
+"$MailHeader
+
+The following service accounts require your attention:
+$MailBody
+
+$MailSignature"	
+		
 	Send-MailMessage `
 		-To "$MailTo" `
 		-From "$MailFrom" `

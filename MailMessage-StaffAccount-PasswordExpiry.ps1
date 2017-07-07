@@ -1,7 +1,7 @@
 Import-Module ActiveDirectory
 
-$MaximumPasswordAge = '126' #Used only if msDS-UserPasswordExpiryTimeComputed and Default Domain Policy are both empty.
-$WarningPasswordAge = '14' #Days to send emails warning of password expiry before it expires.
+$MaximumPasswordAge = '126'
+$WarningPasswordAge = '14' 
 $OrganisationalUnit = 'OU=Staff,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
