@@ -31,6 +31,7 @@ ForEach ($User In $Users)
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
 	$MailTo = "$FullName <$Mail>"
+	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
 	If ($UserPasswordExpiryTimeComputed -ne $Null)
 		{
@@ -39,13 +40,13 @@ ForEach ($User In $Users)
 		}
 	ElseIf ($DomainPolicyMaxPasswordAge -ne '0')
 		{
-		$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
+		$pwdLastSet = [datetime]::fromFileTime($pwdLastSet)
 		$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
 		$DaysToExipre = $DomainPolicyMaxPasswordAge-$PasswordAgeDays
 		}
 	Else
 		{
-		$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
+		$pwdLastSet = [datetime]::fromFileTime($pwdLastSet)
 		$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
 		$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
 		}
