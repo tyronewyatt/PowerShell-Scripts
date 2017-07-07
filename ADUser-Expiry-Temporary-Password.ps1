@@ -73,9 +73,9 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Disabled $NumberAccountsDisabled Account"}
+		{$MailSubject = "Disabled 1 user account"}
 		Else
-		{$MailSubject = "Disabled $NumberAccountsDisabled Accounts"}
+		{$MailSubject = "Disabled $NumberAccountsDisabled user accounts"}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
