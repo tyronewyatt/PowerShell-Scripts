@@ -1,16 +1,28 @@
 Import-Module ActiveDirectory
 
-$MaximumPasswordAge = '126'
-$WarningPasswordAge = '14'
+$MaximumPasswordAge = '126' #Used only if msDS-UserPasswordExpiryTimeComputed and Default Domain Policy are both empty.
+$WarningPasswordAge = '14' #How many days before your password expires you want to send emails for.
 $OrganisationalUnit = 'OU=Staff,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
+$SupportURL = 'https://helpdesk@tallangatta-sc.vic.edu.au'
+$SchoolHostedSystems = 'Computers, Outlook and LMS'
+$SchoolCloudSystems = 'Compass'
+$MailSignature = `
+"ICT Helpdesk
+Tallangatta Secondary College
+145 Towong Street Tallangatta, 3700, VIC
+t: 02 6071 5000 | f: 02 6071 2445
+e: ict.helpdesk@tallangatta-sc.vic.edu.au
+w: www.tallangatta-sc.vic.edu.au"
+
+$DomainPolicyMaxPasswordAge = ((Get-ADDefaultDomainPasswordPolicy).MaxPasswordAge).Days
 
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
-	-Filter {Enabled -eq $True} `
-	-Properties samAccountName,pwdLastSet,mail,givenName,displayName
+	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $False} `
+	-Properties samAccountName,pwdLastSet,msDS-UserPasswordExpiryTimeComputed,mail,givenName,displayName
 
 ForEach ($User In $Users)
 {
@@ -18,18 +30,32 @@ ForEach ($User In $Users)
 	$Mail = $User.'mail'
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	#$MailTo = "'$FullName <$Mail>'"
-	$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
-	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).days
-	$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
+	#$MailTo = "$FullName <$Mail>"
+	If ($User.'msDS-UserPasswordExpiryTimeComputed' -eq $Null)
+		{
+		$UserPasswordExpiryTime = [datetime]::fromFileTime($_.'msDS-UserPasswordExpiryTimeComputed')
+		$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
+		}
+	ElseIf ($DomainPolicyMaxPasswordAge -ne $False)
+		{
+		$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
+		$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
+		$DaysToExipre = $DomainPolicyMaxPasswordAge-$PasswordAgeDays
+		}
+	Else
+		{
+		$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
+		$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
+		$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
+		}
 	
-If 	($Users | Where-Object `
+	If 	($Users | Where-Object `
 		{ `
 		$DaysToExipre -gt '0' -And `
 		$DaysToExipre -le $WarningPasswordAge -And `
 		$Mail -ne $Null
 		}
-	)
+		)
 	{
 	If ($DaysToExipre -ge '2')
 		{
@@ -45,7 +71,7 @@ If 	($Users | Where-Object `
 $MailBody = `
 "Hello $FirstName,
 
-Your school Username ($samAccountName) and password give you access to the school's hosted systems (such as Computers, Outlook and LMS) and cloud hosted systems (such as Compass).
+Your school username ($samAccountName) and password give you access to the school's hosted systems (such as $SchoolHostedSystems) and cloud hosted systems (such as $SchoolCloudSystems).
 
 Your password will expire soon, please change your password now.
 
@@ -69,14 +95,9 @@ Your new password must meet the following complexity requirements:
 
 For further assistance:
 	1)	Speak to the school ICT technician and school staff only.
-	2)	Log a request on the school ICT Helpdesk, see: (https://helpdesk@tallangatta-sc.vic.edu.au).
+	2)	Log a request on the school ICT Helpdesk, see: ($SupportURL).
 
-ICT Helpdesk
-Tallangatta Secondary College
-145 Towong Street Tallangatta, 3700, VIC
-t: 02 6071 5000 | f: 02 6071 2445
-e: ict.helpdesk@tallangatta-sc.vic.edu.au
-w: www.tallangatta-sc.vic.edu.au"
+$MailSignature"
 
 	Send-MailMessage `
 		-To "$MailTo" `
@@ -86,4 +107,3 @@ w: www.tallangatta-sc.vic.edu.au"
 		-Body "$MailBody"
 	}
 }
-
