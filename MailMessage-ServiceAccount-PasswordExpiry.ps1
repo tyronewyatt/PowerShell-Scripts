@@ -1,7 +1,7 @@
 Import-Module ActiveDirectory
 
 $MaximumPasswordAge = '365'
-$WarningPasswordAge = '14'
+$WarningPasswordAge = '30'
 $OrganisationalUnit = 'OU=Services,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
@@ -10,14 +10,26 @@ $MailFrom = 'ADUser-Expiry-Temporary-Password <tscdc01@tallangatta-sc.vic.edu.au
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
 	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $False} `
-	-Properties samAccountName,pwdLastSet
+	-Properties samAccountName,pwdLastSet,msDS-UserPasswordExpiryTimeComputed
 
 ForEach ($User In $Users)
 {
-	$samAccountName = $User.'samAccountName'
-	$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
-	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).days
+	$samAccountName = $User.'samAccountName'.ToUpper()
+	$pwdLastSet = $User.'pwdLastSet'
+	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
+	
+	If ($UserPasswordExpiryTimeComputed -ne $Null)
+	{
+	$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
+	$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
+	}
+	Else
+	{
+	$pwdLastSet = [datetime]::fromFileTime($pwdLastSet)
+	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
 	$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
+	}
+	
 	$DaysExpired = $DaysToExipre.ToString().SubString(1)
 	
 If 	($Users | Where-Object `
