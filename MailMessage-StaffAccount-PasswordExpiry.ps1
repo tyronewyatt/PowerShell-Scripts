@@ -10,15 +10,15 @@ $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
 	-Filter {Enabled -eq $True} `
-	-Properties samAccountName,pwdLastSet,userPrincipalName,givenName,displayName
+	-Properties samAccountName,pwdLastSet,mail,givenName,displayName
 
 ForEach ($User In $Users)
 {
 	$samAccountName = $User.'samAccountName'
-	$userPrincipalName = $User.'userPrincipalName'
+	$Mail = $User.'mail'
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	#$MailTo = "'$FullName <$userPrincipalName>'"
+	#$MailTo = "'$FullName <$Mail>'"
 	$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
 	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).days
 	$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
@@ -26,7 +26,8 @@ ForEach ($User In $Users)
 If 	($Users | Where-Object `
 		{ `
 		$DaysToExipre -gt '0' -And `
-		$DaysToExipre -le $WarningPasswordAge
+		$DaysToExipre -le $WarningPasswordAge -And `
+		$Mail -ne $Null
 		}
 	)
 	{
