@@ -68,7 +68,7 @@ Your new password must meet the following complexity requirements:
 	4)	Unique new password not matching your past eight passwords
 
 For further assistance:
-	1)	Speak to your school ICT technician and school staff only.
+	1)	Speak to the Schools ICT technician and school staff only.
 	2)	Log a request on the Schools ICT Helpdesk, see: (https://helpdesk@tallangatta-sc.vic.edu.au).
 
 ICT Helpdesk
