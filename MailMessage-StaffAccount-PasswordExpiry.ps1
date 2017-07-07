@@ -1,7 +1,7 @@
 Import-Module ActiveDirectory
 
 $MaximumPasswordAge = '126' #Used only if msDS-UserPasswordExpiryTimeComputed and Default Domain Policy are both empty.
-$WarningPasswordAge = '14' #How many days before your password expires you want to send emails for.
+$WarningPasswordAge = '14' #Days to send emails warning of password expiry before it expires.
 $OrganisationalUnit = 'OU=Staff,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
@@ -21,22 +21,23 @@ $DomainPolicyMaxPasswordAge = ((Get-ADDefaultDomainPasswordPolicy).MaxPasswordAg
 
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
-	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $False} `
+	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $False -And mail -like "*"} `
 	-Properties samAccountName,pwdLastSet,msDS-UserPasswordExpiryTimeComputed,mail,givenName,displayName
 
 ForEach ($User In $Users)
 {
-	$samAccountName = $User.'samAccountName'
+	$samAccountName = $User.'samAccountName'.ToUpper()
 	$Mail = $User.'mail'
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	#$MailTo = "$FullName <$Mail>"
-	If ($User.'msDS-UserPasswordExpiryTimeComputed' -eq $Null)
+	$MailTo = "$FullName <$Mail>"
+	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
+	If ($UserPasswordExpiryTimeComputed -ne $Null)
 		{
-		$UserPasswordExpiryTime = [datetime]::fromFileTime($_.'msDS-UserPasswordExpiryTimeComputed')
+		$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 		$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
 		}
-	ElseIf ($DomainPolicyMaxPasswordAge -ne $False)
+	ElseIf ($DomainPolicyMaxPasswordAge -ne '0')
 		{
 		$pwdLastSet = [datetime]::fromFileTime($User.'pwdLastSet')
 		$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
@@ -52,8 +53,7 @@ ForEach ($User In $Users)
 	If 	($Users | Where-Object `
 		{ `
 		$DaysToExipre -gt '0' -And `
-		$DaysToExipre -le $WarningPasswordAge -And `
-		$Mail -ne $Null
+		$DaysToExipre -le $WarningPasswordAge
 		}
 		)
 	{
