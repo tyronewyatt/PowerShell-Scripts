@@ -26,7 +26,7 @@ $Users = Get-ADUser `
 
 ForEach ($User In $Users)
 {
-	$samAccountName = $User.'samAccountName'.ToUpper()
+	$AccountName = $User.'samAccountName'.ToUpper()
 	$Mail = $User.'mail'
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
@@ -60,19 +60,19 @@ ForEach ($User In $Users)
 	{
 	If ($DaysToExipre -ge '2')
 		{
-		Write-Host "$samAccountName password expires in $DaysToExipre days."
+		Write-Host "$AccountName password expires in $DaysToExipre days."
 		$MailSubject = "Your password will expire in $DaysToExipre days"
 		}
 	ElseIf ($DaysToExipre -eq '1')
 		{
-		Write-Host "$samAccountName password expires tomorrow."
+		Write-Host "$AccountName password expires tomorrow."
 		$MailSubject = "Your password will expire tomorrow"
 		}
 		
 $MailBody = `
 "Hello $FirstName,
 
-Your school username ($samAccountName) and password give you access to the school's hosted systems (such as $SchoolHostedSystems) and cloud hosted systems (such as $SchoolCloudSystems).
+Your school username ($AccountName) and password give you access to the school's hosted systems (such as $SchoolHostedSystems) and cloud hosted systems (such as $SchoolCloudSystems).
 
 Your password will expire soon, please change your password now.
 

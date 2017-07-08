@@ -21,7 +21,7 @@ $Users = Get-ADUser `
 
 ForEach ($User In $Users)
 {
-	$samAccountName = $User.'samAccountName'
+	$AccountName = $User.'samAccountName'
 	$pwdLastSet = $User.'pwdLastSet'
 	$lastLogonTimestamp = $User.'lastLogonTimestamp'
 	$whenChanged = $User.'whenChanged'
@@ -37,14 +37,14 @@ If 	($Users | Where-Object `
 	)
 	{
 	Disable-ADAccount `
-		-Identity $samAccountName
+		-Identity $AccountName
 	If ($?)
 		{
 		Set-ADUser `
-			-Identity $samAccountName `
+			-Identity $AccountName `
 			-Description "$Description - Initial password expired $DateString"
-		Write-Host "$samAccountName initial password expired."
-		$MailBody += @("`n$samAccountName initial password expired.")
+		Write-Host "$AccountName initial password expired."
+		$MailBody += @("`n$AccountName initial password expired.")
 		}
 	}
 If 	($Users | Where-Object `
@@ -56,14 +56,14 @@ If 	($Users | Where-Object `
 	)
 	{
 	Disable-ADAccount `
-		-Identity $samAccountName
+		-Identity $AccountName
 	If ($?)
 		{
 		Set-ADUser `
-			-Identity $samAccountName `
+			-Identity $AccountName `
 			-Description "$Description - Temporary password expired $DateString"
-		Write-Host "$samAccountName temporary password expired."
-		$MailBody += @("`n$samAccountName temporary password expired.")
+		Write-Host "$AccountName temporary password expired."
+		$MailBody += @("`n$AccountName temporary password expired.")
 		}
 	}
 }

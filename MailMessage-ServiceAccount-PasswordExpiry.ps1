@@ -21,7 +21,7 @@ $Users = Get-ADUser `
 
 ForEach ($User In $Users)
 {
-	$samAccountName = $User.'samAccountName'.ToUpper()
+	$AccountName = $User.'samAccountName'.ToUpper()
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
 	
@@ -47,28 +47,28 @@ If 	($Users | Where-Object `
 	{
 	If ($DaysToExipre -ge '2')
 		{
-		Write-Host "$samAccountName password expires in $DaysToExipre days."
-		$MailBody += @("`n$samAccountName password expires in $DaysToExipre days.")
+		Write-Host "$AccountName password expires in $DaysToExipre days."
+		$MailBody += @("`n$AccountName password expires in $DaysToExipre days.")
 		}
 	ElseIf ($DaysToExipre -eq '1')
 		{
-		Write-Host "$samAccountName password expires tomorrow."
-		$MailBody += @("`n$samAccountName password expires tomorrow.")
+		Write-Host "$AccountName password expires tomorrow."
+		$MailBody += @("`n$AccountName password expires tomorrow.")
 		}
 	ElseIf ($DaysToExipre -eq '0')
 		{
-		Write-Host "$samAccountName password expired today."
-		$MailBody += @("`n$samAccountName password expired today.")
+		Write-Host "$AccountName password expired today."
+		$MailBody += @("`n$AccountName password expired today.")
 		}
 	ElseIf ($DaysToExipre -eq '-1')
 		{
-		Write-Host "$samAccountName password expired yesterday."
-		$MailBody += @("`n$samAccountName password expired yesterday.")
+		Write-Host "$AccountName password expired yesterday."
+		$MailBody += @("`n$AccountName password expired yesterday.")
 		}
 	ElseIf ($DaysToExipre -le '-2')
 		{
-		Write-Host "$samAccountName password expired $DaysExpired days ago."
-		$MailBody += @("`n$samAccountName password expired $DaysExpired days ago.")
+		Write-Host "$AccountName password expired $DaysExpired days ago."
+		$MailBody += @("`n$AccountName password expired $DaysExpired days ago.")
 		}
 	}
 }
