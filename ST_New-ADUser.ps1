@@ -39,9 +39,11 @@ ForEach ($Student In $Students)
 		{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
 	$DisplayName = $Student.'FIRST_NAME' + " " + $Student.'SURNAME'
 	If ($Student.'TAG' -match "\*\**")
-		{$Student.'TAG' = ($Student.'TAG').substring(2)}
-	$OrganisationalUnit = "OU=" + $Student.'TAG' + "," + $OrganisationalUnitBase
-	$GroupMember = $Description + "s " + $Student.'TAG'
+		{$TimeTableGroup = ($Student.'TAG').substring(2)}
+	Else
+		{$TimeTableGroup = $Student.'TAG'}
+	$OrganisationalUnit = "OU=" + $TimeTableGroup + "," + $OrganisationalUnitBase
+	$GroupMember = $Description + "s " + $TimeTableGroup
 	$StartDate = $Student.'ENTRY'
 	$Status = $Student.'STATUS'
 	$PrincipalName = $AccountName + "@" + $DomainName
