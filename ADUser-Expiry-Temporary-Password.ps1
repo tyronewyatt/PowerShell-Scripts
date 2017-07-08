@@ -72,9 +72,15 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Initial/temporary password expired for 1 user account"}
+		{
+		$MailSubject = "Initial/temporary password expired for 1 user account"
+		$MailHeading = "The following user account require your attention:"
+		}
 		Else
-		{$MailSubject = "Initial/temporary password expired for $NumberAccountsDisabled user accounts"}
+		{
+		$MailSubject = "Initial/temporary password expired for $NumberAccountsDisabled user accounts"
+		$MailHeading = "The following user accounts require your attention:"
+		}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
@@ -83,7 +89,7 @@ If ($MailBody -ne $Null)
 $MailBody = `
 "Hello Administrator,
 
-The following user accounts require your attention:
+$MailHeading
 $MailBody
 
 $MailSignature"	

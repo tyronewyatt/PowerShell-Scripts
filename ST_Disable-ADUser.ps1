@@ -54,9 +54,15 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Disabled 1 user account"}
+		{
+		$MailSubject = "Disabled 1 user account"
+		$MailHeading = "The following user account has been disabled:"
+		}
 		Else
-		{$MailSubject = "Disabled $NumberAccountsDisabled user accounts"}
+		{
+		$MailSubject = "Disabled $NumberAccountsDisabled user accounts"
+		$MailHeading = "The following user accounts have been disabled:"
+		}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
@@ -65,7 +71,7 @@ If ($MailBody -ne $Null)
 $MailBody = `
 "Hello Administrator,
 
-The following user accounts have been disabled:
+$MailHeading
 $MailBody
 
 $MailSignature"	

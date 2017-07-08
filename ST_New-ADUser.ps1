@@ -80,9 +80,15 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Created 1 uaer account"}
+		{
+		$MailSubject = "Created 1 uaer account"
+		$MailHeading = "The following user account has been created:"
+		}
 		Else
-		{$MailSubject = "Created $NumberAccountsDisabled user accounts"}
+		{
+		$MailSubject = "Created $NumberAccountsDisabled user accounts"
+		$MailHeading = "The following user accounts have been created:"
+		}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
@@ -91,7 +97,7 @@ If ($MailBody -ne $Null)
 $MailBody = `
 "Hello Administrator,
 
-The following user accounts have been created:
+$MailHeading
 $MailBody
 
 $MailSignature"			

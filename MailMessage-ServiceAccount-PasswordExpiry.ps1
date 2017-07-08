@@ -77,9 +77,13 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Password change required for 1 service account"}
+		{
+		$MailSubject = "Password change required for 1 service account"
+		$MailHeading = "The following service account require your attention:"
+		}
 		Else
 		{$MailSubject = "Password change required for $NumberAccountsDisabled service accounts"}
+		$MailHeading = "The following service accounts require your attention:"
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
@@ -88,7 +92,7 @@ If ($MailBody -ne $Null)
 $MailBody = `
 "Hello Administrator,
 
-The following service accounts require your attention:
+$MailHeading
 $MailBody
 
 $MailSignature"	
