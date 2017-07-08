@@ -43,8 +43,8 @@ If 	($Users | Where-Object `
 		Set-ADUser `
 			-Identity $samAccountName `
 			-Description "$Description - Initial password expired $DateString"
-		Write-Host "$samAccountName Initial password expired."
-		$MailBody += @("`n$samAccountName Initial password expired.")
+		Write-Host "$samAccountName initial password expired."
+		$MailBody += @("`n$samAccountName initial password expired.")
 		}
 	}
 If 	($Users | Where-Object `
@@ -62,8 +62,8 @@ If 	($Users | Where-Object `
 		Set-ADUser `
 			-Identity $samAccountName `
 			-Description "$Description - Temporary password expired $DateString"
-		Write-Host "$samAccountName Temporary password expired."
-		$MailBody += @("`n$samAccountName Temporary password expired.")
+		Write-Host "$samAccountName temporary password expired."
+		$MailBody += @("`n$samAccountName temporary password expired.")
 		}
 	}
 }
