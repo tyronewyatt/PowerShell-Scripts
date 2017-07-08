@@ -78,9 +78,9 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "1 service account requires a new password"}
+		{$MailSubject = "Password change required for 1 service account"}
 		Else
-		{$MailSubject = "$NumberAccountsDisabled service accounts requires new passwords"}
+		{$MailSubject = "Password change required for $NumberAccountsDisabled service accounts"}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody

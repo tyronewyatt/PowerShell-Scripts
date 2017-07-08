@@ -5,8 +5,18 @@ $StudentsOrganisationalUnit = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=
 $CSVPath = '\\tscweb02\eduhub$'
 $Description = 'Student'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
-$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
-$MailFrom = 'ST_Disable-ADUser <tscdc01@tallangatta-sc.vic.edu.au>'
+$MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
+$MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
+$SupportURL = 'https://helpdesk@tallangatta-sc.vic.edu.au'
+$SchoolHostedSystems = 'Computers, Outlook and LMS'
+$SchoolCloudSystems = 'Compass'
+$MailSignature = `
+"ICT Helpdesk
+Tallangatta Secondary College
+145 Towong Street Tallangatta, 3700, VIC
+t: 02 6071 5000 | f: 02 6071 2445
+e: ict.helpdesk@tallangatta-sc.vic.edu.au
+w: www.tallangatta-sc.vic.edu.au"
 
 $ExistingStudents = Get-ADUser `
 	-SearchBase $StudentsOrganisationalUnit `
@@ -37,8 +47,8 @@ ForEach ($Student In $Students)
 			Set-ADUser `
 				-Identity $AccountName `
 				-Description "$Description - $Status $Date"
-			Write-Host "$AccountName Disabled. Description $Description - $Status $Date"
-			$MailBody += @("`n$AccountName Disabled. Description $Description - $Status $Date")
+			Write-Host "$AccountName user account disabled as status chabged to $Status on $Date."
+			$MailBody += @("`n$AccountName user account disabled as status chabged to $Status on $Date.")
 			}
 		}
 }
@@ -47,13 +57,22 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Disabled $NumberAccountsDisabled Account"}
+		{$MailSubject = "Disabled 1 user account"}
 		Else
-		{$MailSubject = "Disabled $NumberAccountsDisabled Accounts"}
+		{$MailSubject = "Disabled $NumberAccountsDisabled user accounts"}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
 		}
+		
+$MailBody = `
+"$MailHeader
+
+The following user accounts have been disabled:
+$MailBody
+
+$MailSignature"	
+
 	Send-MailMessage `
 		-To "$MailTo" `
 		-From "$MailFrom" `

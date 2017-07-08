@@ -73,9 +73,9 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Disabled 1 user account"}
+		{$MailSubject = "Initial/temporary password expired for 1 user account"}
 		Else
-		{$MailSubject = "Disabled $NumberAccountsDisabled user accounts"}
+		{$MailSubject = "Initial/temporary password expired for $NumberAccountsDisabled user accounts"}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
