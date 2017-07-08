@@ -27,10 +27,9 @@ $Users = Get-ADUser `
 ForEach ($User In $Users)
 {
 	$AccountName = $User.'samAccountName'.ToUpper()
-	$Mail = $User.'mail'
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	$MailTo = "$FullName <$Mail>"
+	$MailTo = "$FullName <$User.'mail'>"
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
 	If ($UserPasswordExpiryTimeComputed -ne $Null)
