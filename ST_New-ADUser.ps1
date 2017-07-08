@@ -9,7 +9,14 @@ $PasswordLength = '7'
 $CSVPath = '\\tscweb02\eduhub$'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
-$MailFrom = 'ST_New-ADUser <tscdc01@tallangatta-sc.vic.edu.au>'
+$MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
+$MailSignature = `
+"ICT Helpdesk
+Tallangatta Secondary College
+145 Towong Street Tallangatta, 3700, VIC
+t: 02 6071 5000 | f: 02 6071 2445
+e: ict.helpdesk@tallangatta-sc.vic.edu.au
+w: www.tallangatta-sc.vic.edu.au"
 
 $ExistingStudents = Get-ADUser `
 	-SearchBase $OrganisationalUnitBase `
@@ -73,13 +80,22 @@ If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
 	If (($MailBody).count -eq '1') 
-		{$MailSubject = "Created $NumberAccountsDisabled Account"}
+		{$MailSubject = "Created 1 uaer account"}
 		Else
-		{$MailSubject = "Created $NumberAccountsDisabled Accounts"}
+		{$MailSubject = "Created $NumberAccountsDisabled user accounts"}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
 		}
+
+$MailBody = `
+"Hello Administrator,
+
+The following user accounts have been created:
+$MailBody
+
+$MailSignature"			
+
 	Send-MailMessage `
 		-To "$MailTo" `
 		-From "$MailFrom" `
