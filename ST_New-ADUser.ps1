@@ -6,6 +6,7 @@ $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,
 $DomainName = 'tallangatta-sc.vic.edu.au'
 $Description = 'Student'
 $PasswordLength = '7'
+$PasswordSpecialCharacters = '1'
 $CSVPath = '\\tscweb02\eduhub$'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
@@ -47,7 +48,7 @@ ForEach ($Student In $Students)
 	$StartDate = $Student.'ENTRY'
 	$Status = $Student.'STATUS'
 	$PrincipalName = $AccountName + "@" + $DomainName
-	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,$PasswordSpecialCharacters)
 	If (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $Null)
 		{
 		New-ADUser `
