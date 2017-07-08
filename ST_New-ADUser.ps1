@@ -33,12 +33,10 @@ ForEach ($Student In $Students)
 	$PreferredName = $Student.'PREF_NAME'
 	If ($Student.'SECOND_NAME'.length -eq '0')
 		{$SecondNameInitial = $null}
-		Else
-		{If ($Student.'SECOND_NAME'.length -eq '1')
-			{$SecondNameInitial = $Student.'SECOND_NAME'}
-			Else
-			{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
-		}
+	ElseIF ($Student.'SECOND_NAME'.length -eq '1')
+		{$SecondNameInitial = $Student.'SECOND_NAME'}
+	Else
+		{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
 	$DisplayName = $Student.'FIRST_NAME' + " " + $Student.'SURNAME'
 	If ($Student.'TAG' -match "\*\**")
 		{$Student.'TAG' = ($Student.'TAG').substring(2)}
