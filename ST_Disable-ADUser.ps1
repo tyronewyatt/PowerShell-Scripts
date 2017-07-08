@@ -7,9 +7,6 @@ $Description = 'Student'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
-$SupportURL = 'https://helpdesk@tallangatta-sc.vic.edu.au'
-$SchoolHostedSystems = 'Computers, Outlook and LMS'
-$SchoolCloudSystems = 'Compass'
 $MailSignature = `
 "ICT Helpdesk
 Tallangatta Secondary College
@@ -66,7 +63,7 @@ If ($MailBody -ne $Null)
 		}
 		
 $MailBody = `
-"$MailHeader
+"Hello Administrator,
 
 The following user accounts have been disabled:
 $MailBody

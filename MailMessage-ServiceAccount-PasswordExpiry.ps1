@@ -6,7 +6,6 @@ $OrganisationalUnit = 'OU=Services,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=e
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
-$MailHeader= 'Hello Administrator,'
 $MailSignature = `
 "ICT Helpdesk
 Tallangatta Secondary College
@@ -87,7 +86,7 @@ If ($MailBody -ne $Null)
 		}
 		
 $MailBody = `
-"$MailHeader
+"Hello Administrator,
 
 The following service accounts require your attention:
 $MailBody
