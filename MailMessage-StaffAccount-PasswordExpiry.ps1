@@ -29,9 +29,10 @@ ForEach ($User In $Users)
 	$AccountName = $User.'samAccountName'.ToUpper()
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	$MailTo = "$FullName <$User.'mail'>"
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
+	$Mail = $User.'mail'
+	$MailTo = "$FullName <$mail>"
 	If ($UserPasswordExpiryTimeComputed -notmatch '9223372036854775807|0')
 		{
 		$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
