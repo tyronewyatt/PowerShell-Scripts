@@ -45,31 +45,31 @@ If 	($Users | Where-Object `
 		}
 	)
 	{
-	If ($DaysToExipre -ge '2')
+	If ($DaysToExipre -le '-2')
 		{
-		Write-Host "$AccountName password expires in $DaysToExipre days."
-		$MailBody += @("`n$AccountName password expires in $DaysToExipre days.")
-		}
-	ElseIf ($DaysToExipre -eq '1')
-		{
-		Write-Host "$AccountName password expires tomorrow."
-		$MailBody += @("`n$AccountName password expires tomorrow.")
-		}
-	ElseIf ($DaysToExipre -eq '0')
-		{
-		Write-Host "$AccountName password expired today."
-		$MailBody += @("`n$AccountName password expired today.")
+		Write-Host "$AccountName password expired $DaysExpired days ago."
+		$MailBody += @("`n$AccountName password expired $DaysExpired days ago.")
 		}
 	ElseIf ($DaysToExipre -eq '-1')
 		{
 		Write-Host "$AccountName password expired yesterday."
 		$MailBody += @("`n$AccountName password expired yesterday.")
 		}
-	ElseIf ($DaysToExipre -le '-2')
+	ElseIf ($DaysToExipre -eq '0')
 		{
-		Write-Host "$AccountName password expired $DaysExpired days ago."
-		$MailBody += @("`n$AccountName password expired $DaysExpired days ago.")
+		Write-Host "$AccountName password expired today."
+		$MailBody += @("`n$AccountName password expired today.")
 		}
+	ElseIf ($DaysToExipre -eq '1')
+		{
+		Write-Host "$AccountName password expires tomorrow."
+		$MailBody += @("`n$AccountName password expires tomorrow.")
+		}
+	Else ($DaysToExipre -ge '2')
+		{
+		Write-Host "$AccountName password expires in $DaysToExipre days."
+		$MailBody += @("`n$AccountName password expires in $DaysToExipre days.")
+		} 
 	}
 }
 
