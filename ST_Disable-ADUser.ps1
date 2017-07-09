@@ -5,7 +5,7 @@ $StudentsOrganisationalUnit = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=
 $CSVPath = '\\tscweb02\eduhub$'
 $Description = 'Student'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
-$MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
+$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
 $MailSignature = `
 "ICT Helpdesk
@@ -58,7 +58,7 @@ If ($MailBody -ne $Null)
 		$MailSubject = "Disabled 1 user account"
 		$MailHeading = "The following user account has been disabled:"
 		}
-		Else
+	Else
 		{
 		$MailSubject = "Disabled $NumberAccountsDisabled user accounts"
 		$MailHeading = "The following user accounts have been disabled:"

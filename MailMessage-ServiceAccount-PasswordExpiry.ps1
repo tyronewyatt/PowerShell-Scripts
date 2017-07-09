@@ -4,7 +4,7 @@ $MaximumPasswordAge = '365'
 $WarningPasswordAge = '30'
 $OrganisationalUnit = 'OU=Services,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
-$MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
+$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
 $MailSignature = `
 "ICT Helpdesk
@@ -65,7 +65,7 @@ If 	($Users | Where-Object `
 		Write-Host "$AccountName password expires tomorrow."
 		$MailBody += @("`n$AccountName password expires tomorrow.")
 		}
-	Else ($DaysToExipre -ge '2')
+	ElseIf ($DaysToExipre -ge '2')
 		{
 		Write-Host "$AccountName password expires in $DaysToExipre days."
 		$MailBody += @("`n$AccountName password expires in $DaysToExipre days.")

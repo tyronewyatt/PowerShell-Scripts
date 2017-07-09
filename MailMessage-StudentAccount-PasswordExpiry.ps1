@@ -4,7 +4,7 @@ $MaximumPasswordAge = '365'
 $WarningPasswordAge = '14' 
 $OrganisationalUnit = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
-$MailTo = 'Netbook Admin <tw@tallangatta-sc.vic.edu.au>'
+#$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
 $SupportURL = 'https://helpdesk@tallangatta-sc.vic.edu.au'
 $SchoolHostedSystems = 'Computers, Outlook and LMS'
@@ -29,14 +29,13 @@ ForEach ($User In $Users)
 	$AccountName = $User.'samAccountName'.ToUpper()
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	#$MailTo = "$FullName <$User.'mail'>"
+	$MailTo = "$FullName <$User.'mail'>"
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
 	If ($UserPasswordExpiryTimeComputed -notmatch '9223372036854775807|0')
 		{
 		$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 		$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
-		write-host "AccountName UserPasswordExpiryTime $DaysToExipre"
 		}
 	ElseIf ($DomainPolicyMaxPasswordAge -ne '0')
 		{
@@ -53,20 +52,20 @@ ForEach ($User In $Users)
 	
 	If 	($Users | Where-Object `
 		{ `
-		$DaysToExipre -gt '0' -And `
+		$DaysToExipre -ge '1' -And `
 		$DaysToExipre -le $WarningPasswordAge
 		}
 		)
 	{
-	If ($DaysToExipre -ge '2')
-		{
-		Write-Host "$AccountName password expires in $DaysToExipre days."
-		$MailSubject = "Your password will expire in $DaysToExipre days"
-		}
-	ElseIf ($DaysToExipre -eq '1')
+	If ($DaysToExipre -eq '1')
 		{
 		Write-Host "$AccountName password expires tomorrow."
 		$MailSubject = "Your password will expire tomorrow"
+		}
+	Else
+		{
+		Write-Host "$AccountName password expires in $DaysToExipre days."
+		$MailSubject = "Your password will expire in $DaysToExipre days"
 		}
 		
 $MailBody = `
