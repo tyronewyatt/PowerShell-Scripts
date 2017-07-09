@@ -44,8 +44,8 @@ ForEach ($Student In $Students)
 			Set-ADUser `
 				-Identity $AccountName `
 				-Description "$Description - $Status $Date"
-			Write-Host "$AccountName user account disabled as status chabged to $Status on $Date."
-			$MailBody += @("`n$AccountName user account disabled as status chabged to $Status on $Date.")
+			Write-Host "$AccountName user account disabled as status changed to $Status on $Date."
+			$MailBody += @("`n$AccountName user account disabled as status changed to $Status on $Date.")
 			}
 		}
 }
