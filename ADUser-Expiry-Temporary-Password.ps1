@@ -71,7 +71,7 @@ If 	($Users | Where-Object `
 If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
-	If (($MailBody).count -eq '1') 
+	If ($NumberAccountsDisabled -eq '1') 
 		{
 		$MailSubject = "Initial/temporary password expired for 1 user account"
 		$MailHeading = "The following user account require your attention:"
