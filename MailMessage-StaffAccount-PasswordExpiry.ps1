@@ -29,10 +29,10 @@ ForEach ($User In $Users)
 	$AccountName = $User.'samAccountName'.ToUpper()
 	$FullName = $User.'displayName'
 	$FirstName = $User.'givenName'
-	$MailTo = "$FullName <$User.'mail'>"
+	#$MailTo = "$FullName <$User.'mail'>"
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
-	If ($UserPasswordExpiryTimeComputed -ne $Null)
+	If ($UserPasswordExpiryTimeComputed -ne '9223372036854775807' -And $UserPasswordExpiryTimeComputed -ne '0')
 		{
 		$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 		$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
