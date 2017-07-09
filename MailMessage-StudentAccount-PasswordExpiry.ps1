@@ -1,7 +1,7 @@
 Import-Module ActiveDirectory
 
 $MaximumPasswordAge = '365'
-$WarningPasswordAge = '14' 
+$WarningPasswordAge = '30' 
 $OrganisationalUnit = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 #$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
