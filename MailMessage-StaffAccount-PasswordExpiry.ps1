@@ -32,7 +32,7 @@ ForEach ($User In $Users)
 	#$MailTo = "$FullName <$User.'mail'>"
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
-	If ($UserPasswordExpiryTimeComputed -ne '9223372036854775807' -And $UserPasswordExpiryTimeComputed -ne '0')
+	If ($UserPasswordExpiryTimeComputed -notmatch '9223372036854775807|0')
 		{
 		$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 		$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
@@ -52,20 +52,20 @@ ForEach ($User In $Users)
 	
 	If 	($Users | Where-Object `
 		{ `
-		$DaysToExipre -gt '0' -And `
+		$DaysToExipre -ge '1' -And `
 		$DaysToExipre -le $WarningPasswordAge
 		}
 		)
 	{
-	If ($DaysToExipre -ge '2')
-		{
-		Write-Host "$AccountName password expires in $DaysToExipre days."
-		$MailSubject = "Your password will expire in $DaysToExipre days"
-		}
-	ElseIf ($DaysToExipre -eq '1')
+	If ($DaysToExipre -eq '1')
 		{
 		Write-Host "$AccountName password expires tomorrow."
 		$MailSubject = "Your password will expire tomorrow"
+		}
+	Else
+		{
+		Write-Host "$AccountName password expires in $DaysToExipre days."
+		$MailSubject = "Your password will expire in $DaysToExipre days"
 		}
 		
 $MailBody = `

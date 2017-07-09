@@ -53,7 +53,7 @@ ForEach ($Student In $Students)
 If ($MailBody -ne $Null)
 	{
 	$NumberAccountsDisabled = ($MailBody).count
-	If (($MailBody).count -eq '1') 
+	If ($NumberAccountsDisabled -eq '1') 
 		{
 		$MailSubject = "Disabled 1 user account"
 		$MailHeading = "The following user account has been disabled:"

@@ -32,10 +32,11 @@ ForEach ($User In $Users)
 	#$MailTo = "$FullName <$User.'mail'>"
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
-	If ($UserPasswordExpiryTimeComputed -ne '9223372036854775807' -And $UserPasswordExpiryTimeComputed -ne '0')
+	If ($UserPasswordExpiryTimeComputed -notmatch '9223372036854775807|0')
 		{
 		$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 		$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
+		write-host "AccountName UserPasswordExpiryTime $DaysToExipre"
 		}
 	ElseIf ($DomainPolicyMaxPasswordAge -ne '0')
 		{

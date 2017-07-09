@@ -6,7 +6,6 @@ $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,
 $DomainName = 'tallangatta-sc.vic.edu.au'
 $Description = 'Student'
 $PasswordLength = '7'
-$PasswordSpecialCharacters = '1'
 $CSVPath = '\\tscweb02\eduhub$'
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
@@ -40,22 +39,22 @@ ForEach ($Student In $Students)
 		{$SecondNameInitial = $Student.'SECOND_NAME'.Substring(0,1)}
 	$DisplayName = $Student.'FIRST_NAME' + " " + $Student.'SURNAME'
 	If ($Student.'TAG' -match "\*\**")
-		{$TimeTableGroup = ($Student.'TAG').substring(2)}
+		{$TimetableGroup = ($Student.'TAG').substring(2)}
 	Else
-		{$TimeTableGroup = $Student.'TAG'}
-	$OrganisationalUnit = "OU=" + $TimeTableGroup + "," + $OrganisationalUnitBase
-	$GroupMember = $Description + "s " + $TimeTableGroup
+		{$TimetableGroup = $Student.'TAG'}
+	$OrganisationalUnit = "OU=" + $TimetableGroup + "," + $OrganisationalUnitBase
+	$GroupMember = $Description + "s " + $TimetableGroup
 	$StartDate = $Student.'ENTRY'
 	$Status = $Student.'STATUS'
 	$PrincipalName = $AccountName + "@" + $DomainName
-	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,$PasswordSpecialCharacters)
+	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	If (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $Null)
 		{
 		New-ADUser `
 			-Name "$AccountName" `
 			-DisplayName "$DisplayName" `
-			-SamAccountName $AccountName `
-			-UserPrincipalName $PrincipalName `
+			-SamAccountName "$AccountName" `
+			-UserPrincipalName "$PrincipalName" `
 			-GivenName "$FirstName" `
 			-Surname "$LastName" `
 			-Initials "$SecondNameInitial" `
@@ -79,29 +78,29 @@ ForEach ($Student In $Students)
 
 If ($MailBody -ne $Null)
 	{
-	$NumberAccountsDisabled = ($MailBody).count
-	If (($MailBody).count -eq '1') 
+	$NumberAccountsCreated = ($MailBody).count
+	If ($NumberAccountsCreated -eq '1') 
 		{
 		$MailSubject = "Created 1 uaer account"
 		$MailHeading = "The following user account has been created:"
 		}
-		Else
+	Else 
 		{
-		$MailSubject = "Created $NumberAccountsDisabled user accounts"
+		$MailSubject = "Created $NumberAccountsCreated user accounts"
 		$MailHeading = "The following user accounts have been created:"
 		}
 	ForEach ($MailBody In $MailBodys)
 		{
 		$MailBody = $MailBody
 		}
-
+		
 $MailBody = `
 "Hello Administrator,
 
 $MailHeading
 $MailBody
 
-$MailSignature"			
+$MailSignature"
 
 	Send-MailMessage `
 		-To "$MailTo" `
