@@ -14,6 +14,8 @@ t: 02 6071 5000 | f: 02 6071 2445
 e: ict.helpdesk@tallangatta-sc.vic.edu.au
 w: www.tallangatta-sc.vic.edu.au"
 
+$DomainPolicyMaxPasswordAge = ((Get-ADDefaultDomainPasswordPolicy).MaxPasswordAge).Days
+
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
 	-Filter {Enabled -eq $True -And PasswordNeverExpires -eq $False} `
@@ -25,10 +27,16 @@ ForEach ($User In $Users)
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
 	
-	If ($UserPasswordExpiryTimeComputed -ne $Null)
+	If ($UserPasswordExpiryTimeComputed -notmatch '9223372036854775807|0')
 	{
 	$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 	$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
+	}
+	ElseIf ($DomainPolicyMaxPasswordAge -ne '0')
+	{
+	$pwdLastSet = [datetime]::fromFileTime($pwdLastSet)
+	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
+	$DaysToExipre = $DomainPolicyMaxPasswordAge-$PasswordAgeDays
 	}
 	Else
 	{
