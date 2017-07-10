@@ -84,7 +84,7 @@ Your new password must meet the following complexity requirements:
 		b)	English lowercase characters (a through z)
 		c)	Base 10 digits (0 through 9)
 		d)	Non-alphabetic characters (for example, !, $, #, %)
-	4)	Not contain the username or parts of the user's full name that exceed two consecutive characters
+	4)	Not contain your username or parts of your full name that exceed two consecutive characters
 
 For further assistance:
 	1)	Speak to the school ICT technician and school staff only.
