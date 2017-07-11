@@ -1,8 +1,8 @@
 Import-Module ActiveDirectory
 
-$MaximumPasswordAge = '126'
 $WarningPasswordAge = '14' 
 $OrganisationalUnit = 'OU=Administrators,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
+$DomainPolicyMaxPasswordAge = ((Get-ADDefaultDomainPasswordPolicy).MaxPasswordAge).Days
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 #$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
@@ -16,8 +16,6 @@ Tallangatta Secondary College
 t: 02 6071 5000 | f: 02 6071 2445
 e: ict.helpdesk@tallangatta-sc.vic.edu.au
 w: www.tallangatta-sc.vic.edu.au"
-
-$DomainPolicyMaxPasswordAge = ((Get-ADDefaultDomainPasswordPolicy).MaxPasswordAge).Days
 
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
@@ -46,9 +44,7 @@ ForEach ($User In $Users)
 		}
 	Else
 		{
-		$pwdLastSet = [datetime]::fromFileTime($pwdLastSet)
-		$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
-		$DaysToExipre = $MaximumPasswordAge-$PasswordAgeDays
+		$DaysToExipre = $Null
 		}
 	
 	If 	($Users | Where-Object `
