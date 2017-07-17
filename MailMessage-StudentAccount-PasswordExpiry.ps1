@@ -68,17 +68,17 @@ ForEach ($User In $Users)
 $MailBody = `
 "Hello $FirstName,
 
-Your school username ($AccountName) and password give you access to the school's hosted systems (such as $SchoolHostedSystems) and cloud hosted systems (such as $SchoolCloudSystems).
+Your school username ($AccountName) and password gives you access to the schools hosted systems (such as $SchoolHostedSystems) and cloud hosted systems (such as $SchoolCloudSystems).
 
 Your password will expire soon, please change your password now.
 
-Passwords are valid for twelve months, so you must change your password at least once a year. This helps protect you and the Schools's network from possible breach of IT security. It is important that you keep your password private and not share it with anyone.
+Passwords are valid for twelve months, so you must change your password at least once a year. This helps protect you and the schools network from possible breach of IT security. It is important that you keep your password private and not share it with anyone.
 
 To change your password, logon to a school computer, press CTRL+ALT+DELETE and then click Change Password.
 
 Important:
 
-When you change your password, you must also update any other PC or device with your school Username and password stored on it. Devices may include a notebook, iPad, other tablet, mobile phone and any other PC you use, including those at home.
+When you change your password, you must also update any other PC or device with your school username and password stored on it. Devices may include a notebook, iPad, other tablet, mobile phone and any other PC you use, including those at home.
 
 Your new password must meet the following complexity requirements:
 	1)	Unique password not matching your past eight passwords
