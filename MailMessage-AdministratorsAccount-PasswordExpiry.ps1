@@ -78,7 +78,7 @@ To change your password, logon to a school computer, press CTRL+ALT+DELETE and t
 
 Important:
 
-When you change your password, you must also update any other PC or device with your school Username and password stored on it. Devices may include a notebook, iPad, other tablet, mobile phone and any other PC you use, including those at home.
+When you change your password, you must also update any other PC or device with your school username and password stored on it. Devices may include a notebook, iPad, other tablet, mobile phone and any other PC you use, including those at home.
 
 Your new password must meet the following complexity requirements:
 	1)	Unique password not matching your past eight passwords
