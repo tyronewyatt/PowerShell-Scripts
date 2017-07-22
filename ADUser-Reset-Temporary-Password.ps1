@@ -42,11 +42,11 @@ ForEach ($User In $Users)
 			-NewPassword (ConvertTo-SecureString -AsPlainText $ComplexPassword -Force)
 		If ($?)
 			{
-				Set-AdUser `
-					-Identity $AccountName `
-					-Enabled $true `
-					-ChangePasswordAtLogon $true `
-					-Description "$NewDescription"
+			Set-AdUser `
+				-Identity $AccountName `
+				-Enabled $true `
+				-ChangePasswordAtLogon $true `
+				-Description "$NewDescription"
 			Write-Host "TimetableGroup: $TimetableGroup AccountName: $AccountName FullName: $FullName Password: $ComplexPassword"
 			$MailBody += @("`nTimetableGroup: $TimetableGroup AccountName: $AccountName FullName: $FullName Password: $ComplexPassword")
 			}
