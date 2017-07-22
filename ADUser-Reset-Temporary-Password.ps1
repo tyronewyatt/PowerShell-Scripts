@@ -31,7 +31,7 @@ ForEach ($User In $Users)
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	If 	($Users | Where-Object `
 		{
-		$Description -like '*password expired*' -And `
+		$Description -match '.Initial password expired.|.Temporary password expired.' -And `
 		$DistinguishedName -like "*OU=20[0-9][0-9],$OrganisationalUnit"
 		}
 		)
