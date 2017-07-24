@@ -7,7 +7,7 @@ Active Directory user account passwords must meet the following minimum requirem
 	b) English lowercase characters (a through z)
 	c) Base 10 digits (0 through 9)
 	d) Non-alphabetic characters (for example, !, $, #, %)
-4) Complexity requirements are enforced when passwords are changed or created.
+Complexity requirements are enforced when passwords are changed or created.
  #>
 
 # Import module
