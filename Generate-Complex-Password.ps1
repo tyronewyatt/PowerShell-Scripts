@@ -40,7 +40,7 @@ Do {
 	}
 While ($FullNamePasswordDoCount -ne $FullNameLength-2) 
 
-# Generate Password in loop until requirements are met
+# Generate password with at least 1 non-alphabetic characters and ensure all requirements are met
 Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	}
