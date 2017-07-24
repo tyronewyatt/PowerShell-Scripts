@@ -1,6 +1,8 @@
+#Import modules
 Import-Module ActiveDirectory   
 Add-Type -AssemblyName System.web
 
+# Script variables
 $PasswordLength = '7'
 $NewDescription = 'Student'
 $OrganisationalUnit = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
@@ -15,26 +17,45 @@ t: 02 6071 5000 | f: 02 6071 2445
 e: ict.helpdesk@tallangatta-sc.vic.edu.au
 w: www.tallangatta-sc.vic.edu.au"
 
+# Get users from Active Directory
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
 	-Filter {Enabled -eq $False} `
 	-Properties samAccountName,Description,displayName,DistinguishedName
 
-	
+
 ForEach ($User In $Users)
 	{
+	# Set ForEach variables 
 	$AccountName = $User.'samAccountName'.ToUpper()
 	$FullName = $User.'displayName'
 	$Description = $User.'Description'
 	$DistinguishedName = $User.'DistinguishedName'
 	$TimetableGroup = $DistinguishedName.Substring(14,4)
+	
+	# Generate Password and ensure meets Active Directory complexity requirements
+	$AccountNameLength = $AccountName.Length
+	Do { 
+		$AccountNamePasswordDoCount++
+		$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
+		$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
+		} while($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+	$FullNameLength = $FullName.Length
+	Do { 
+		$FullNamePasswordDoCount++
+		$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
+		$FullNamePasswordArray += ("$FullNamePasswordVariable|")
+		} while($FullNamePasswordDoCount -ne $FullNameLength-2) 
 	Do 	{
-		$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+		$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword(7,1)
 		}
-	Until	(
+	Until (
+		$ComplexPassword -match '[A-Z]' -And `
 		$ComplexPassword -match '[0-9]' -And `
-		$ComplexPassword -match '[A-Z]'
+		$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
 		)
+	
+	# Check for expired user account passwords, reset passwords and user account description
 	If 	($Users | Where-Object `
 		{
 		$Description -match '.Initial password expired.|.Temporary password expired.' -And `
@@ -59,6 +80,7 @@ ForEach ($User In $Users)
 		}
 	}
 
+	#Generate email if user account password reset occurred
 	If ($MailBody -ne $Null)
 		{
 		$NumberAccountPasswordsReset = ($MailBody).count
@@ -84,7 +106,7 @@ $MailHeading
 $MailBody
 
 $MailSignature"	
-		
+	
 	Send-MailMessage `
 		-To "$MailTo" `
 		-From "$MailFrom" `
