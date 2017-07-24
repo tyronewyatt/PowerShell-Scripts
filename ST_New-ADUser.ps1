@@ -2,7 +2,7 @@
 Import-Module ActiveDirectory
 Add-Type -AssemblyName System.web
 
-# Set script variables
+# Script variables
 $SchoolNumber = '8370'
 $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $DomainName = 'tallangatta-sc.vic.edu.au'
@@ -30,7 +30,7 @@ $ExistingStudents = Get-ADUser `
 $Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'FUT|ACTV'}
 ForEach ($Student In $Students)
 {
-	#Set variables from CSV data
+	# Set variables from CSV data
 	$AccountName = $Student.'STKEY'
 	$LastName = $Student.'SURNAME'
 	$FirstName = $Student.'FIRST_NAME'
@@ -131,7 +131,6 @@ $MailBody
 
 $MailSignature"
 
-# Send email
 	Send-MailMessage `
 		-To "$MailTo" `
 		-From "$MailFrom" `
