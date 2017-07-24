@@ -47,7 +47,7 @@ ForEach ($User In $Users)
 		$FullNamePasswordArray += ("$FullNamePasswordVariable|")
 		} while($FullNamePasswordDoCount -ne $FullNameLength-2) 
 	Do 	{
-		$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword(7,1)
+		$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 		}
 	Until (
 		$ComplexPassword -match '[A-Z]' -And `
