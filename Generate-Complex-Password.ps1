@@ -27,7 +27,7 @@ Do {
 	$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
 	$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
 	} 
-While($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+While ($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
 
 $FullNameLength = $FullName.Length
 Do { 
@@ -35,7 +35,7 @@ Do {
 	$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
 	$FullNamePasswordArray += ("$FullNamePasswordVariable|")
 	}
-While($FullNamePasswordDoCount -ne $FullNameLength-2) 
+While ($FullNamePasswordDoCount -ne $FullNameLength-2) 
 
 Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
