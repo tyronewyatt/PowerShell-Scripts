@@ -1,5 +1,5 @@
 <#
-Active Directory use account password must meet complexity requirements.
+Active Directory user account password must meet complexity requirements.
 
 Passwords must meet the following minimum requirements:
 
