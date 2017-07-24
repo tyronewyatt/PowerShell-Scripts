@@ -28,7 +28,13 @@ ForEach ($User In $Users)
 	$Description = $User.'Description'
 	$DistinguishedName = $User.'DistinguishedName'
 	$TimetableGroup = $DistinguishedName.Substring(14,4)
-	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+	Do 	{
+		$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+		}
+	Until	(
+		$ComplexPassword -match '[0-9]' -And `
+		$ComplexPassword -match '[A-Z]'
+		)
 	If 	($Users | Where-Object `
 		{
 		$Description -match '.Initial password expired.|.Temporary password expired.' -And `
