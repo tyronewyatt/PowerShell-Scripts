@@ -11,7 +11,7 @@ Non-alphabetic characters (for example, !, $, #, %)
 Complexity requirements are enforced when passwords are changed or created.
  #>
 
-#Import modules
+# Import module
 Add-Type -AssemblyName System.web
 
 # Set variables
@@ -19,8 +19,10 @@ $PasswordLength = '7'
 $AccountName = 'DRA0003'
 $FullName = 'Daniel DRAGE'
 
-# Generate Password and ensure meets Active Directory complexity requirements
+# Ensure password length is met
 If ($PasswordLength -lt '6') {} Else {$PasswordLength = '6'}
+
+# Ensure account name not exceed two consecutive characters
 $AccountNameLength = $AccountName.Length
 Do { 
 	$AccountNamePasswordDoCount++
@@ -29,6 +31,7 @@ Do {
 	} 
 While ($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
 
+# Ensure full name not exceed two consecutive characters
 $FullNameLength = $FullName.Length
 Do { 
 	$FullNamePasswordDoCount++
@@ -37,6 +40,7 @@ Do {
 	}
 While ($FullNamePasswordDoCount -ne $FullNameLength-2) 
 
+# Generate Password in loop until requirements are met
 Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	}
@@ -45,5 +49,7 @@ Until (
 	$ComplexPassword -match '[0-9]' -And `
 	$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
 	)
+
+# Display password to screen
 Write-Host $ComplexPassword
 
