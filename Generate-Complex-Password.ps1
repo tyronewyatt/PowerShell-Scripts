@@ -1,6 +1,5 @@
 <#
 Active Directory user account passwords must meet the following minimum requirements:
-
 Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
 Be at least six characters in length
 Contain characters from three of the following four categories:
