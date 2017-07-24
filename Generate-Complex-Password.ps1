@@ -1,13 +1,13 @@
 <#
 Active Directory user account passwords must meet the following minimum requirements:
-Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
-Be at least six characters in length
-Contain characters from three of the following four categories:
-English uppercase characters (A through Z)
-English lowercase characters (a through z)
-Base 10 digits (0 through 9)
-Non-alphabetic characters (for example, !, $, #, %)
-Complexity requirements are enforced when passwords are changed or created.
+1) Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
+2) Be at least six characters in length
+3) Contain characters from three of the following four categories:
+	a) English uppercase characters (A through Z)
+	b) English lowercase characters (a through z)
+	c) Base 10 digits (0 through 9)
+	d) Non-alphabetic characters (for example, !, $, #, %)
+4) Complexity requirements are enforced when passwords are changed or created.
  #>
 
 # Import module
