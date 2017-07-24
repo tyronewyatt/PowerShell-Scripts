@@ -1,6 +1,8 @@
+# Import modules
 Import-Module ActiveDirectory
 Add-Type -AssemblyName System.web
 
+# Set script variables
 $SchoolNumber = '8370'
 $OrganisationalUnitBase = 'OU=Students,OU=Domain Users,DC=tallangatta-sc,DC=vic,DC=edu,DC=au'
 $DomainName = 'tallangatta-sc.vic.edu.au'
@@ -18,14 +20,17 @@ t: 02 6071 5000 | f: 02 6071 2445
 e: ict.helpdesk@tallangatta-sc.vic.edu.au
 w: www.tallangatta-sc.vic.edu.au"
 
+# Get existing users from Active Directory
 $ExistingStudents = Get-ADUser `
 	-SearchBase $OrganisationalUnitBase `
 	-Filter * `
 	-Properties samAccountName
 
+# Get future and active users from CSV
 $Students = Import-Csv -Delimiter "," -Path "$CSVPath\ST_$SchoolNumber.csv" | Where-Object {$_.STATUS -match 'FUT|ACTV'}
 ForEach ($Student In $Students)
 {
+	#Set variables from CSV data
 	$AccountName = $Student.'STKEY'
 	$LastName = $Student.'SURNAME'
 	$FirstName = $Student.'FIRST_NAME'
@@ -47,7 +52,30 @@ ForEach ($Student In $Students)
 	$StartDate = $Student.'ENTRY'
 	$Status = $Student.'STATUS'
 	$PrincipalName = $AccountName + "@" + $DomainName
-	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+
+	# Generate Password and ensure meets Active Directory complexity requirements
+	$AccountNameLength = $AccountName.Length
+	Do { 
+		$AccountNamePasswordDoCount++
+		$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
+		$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
+        } while($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+	$FullNameLength = $FullName.Length
+	Do { 
+		$FullNamePasswordDoCount++
+		$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
+		$FullNamePasswordArray += ("$FullNamePasswordVariable|")
+        } while($FullNamePasswordDoCount -ne $FullNameLength-2) 
+	Do 	{
+		$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+		}
+	Until	(
+		$ComplexPassword -match '[A-Z]' -And `
+		$ComplexPassword -match '[0-9]' -And `
+		$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
+		)
+
+	# Create new user account if not exists in Active Directory and then add user to group
 	If (($ExistingStudents | Where-Object {$_.sAMAccountName -eq $AccountName}) -eq $Null)
 		{
 		New-ADUser `
@@ -76,6 +104,7 @@ ForEach ($Student In $Students)
 		}
 }
 
+#Generate email if user account creation occurred
 If ($MailBody -ne $Null)
 	{
 	$NumberAccountsCreated = ($MailBody).count
@@ -93,7 +122,7 @@ If ($MailBody -ne $Null)
 		{
 		$MailBody = $MailBody
 		}
-		
+
 $MailBody = `
 "Hello Administrator,
 
@@ -102,6 +131,7 @@ $MailBody
 
 $MailSignature"
 
+# Send email
 	Send-MailMessage `
 		-To "$MailTo" `
 		-From "$MailFrom" `
