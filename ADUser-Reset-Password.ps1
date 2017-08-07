@@ -1,7 +1,8 @@
+# Import module
 Import-Module ActiveDirectory   
 Add-Type -AssemblyName System.web
 
-$DomainPolicyPasswordLength = (Get-ADDefaultDomainPasswordPolicy).MinPasswordLength
+# Set variables
 $RunAsUser = $env:UserName.ToUpper()
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
@@ -16,32 +17,46 @@ t: 02 6071 5000 | f: 02 6071 2445
 e: ict.helpdesk@tallangatta-sc.vic.edu.au
 w: www.tallangatta-sc.vic.edu.au"
 
+# Get username
 $UserName = Read-Host -Prompt 'Enter Username'
 
-Try
+# Get users details from AD if exists else exit
+$User = Get-ADUser `
+	$UserName `
+	-Properties `
+		samAccountName, `
+		givenName, `
+		mail, `
+		displayName, `
+		enabled
+If ($?)
 	{
-	$User = Get-ADUser `
-		$UserName `
-		-Properties samAccountName,givenName,mail,displayName,enabled
-	$UserPasswordPolicy = Get-ADUserResultantPasswordPolicy `
-		$UserName
-	} 
-Catch
+	$AccountName = $User.'samAccountName'.ToUpper()
+	$FirstName = $User.'givenName'
+	$FullName = $User.'displayName'
+	$AccountStatus = $User.'enabled'
+	$mail = $User.'mail'
+	}
+Else
 	{
-	Write-Host "Username $UserName not found!"
 	Write-Host 'Press any key to exit'
 	[void][System.Console]::ReadKey($True)
 	Exit
 	}
-	
-$AccountName = $User.'samAccountName'.ToUpper()
-$FirstName = $User.'givenName'
-$FullName = $User.'displayName'
-$AccountStatus = $User.'enabled'
-$mail = $User.'mail'
-If ($UserPasswordPolicy.'MinPasswordLength' -ne $Null)
-	{$DomainPolicyPasswordLength = $UserPasswordPolicy.'MinPasswordLength'}
 
+# Get users password length else use default domain policy
+$UserPasswordPolicy = Get-ADUserResultantPasswordPolicy `
+	$UserName
+If ($?)
+	{
+	If ($UserPasswordPolicy.'MinPasswordLength' -ne $Null)
+		{$DomainPolicyPasswordLength = $UserPasswordPolicy.'MinPasswordLength'}
+	}
+Else {
+	$DomainPolicyPasswordLength = (Get-ADDefaultDomainPasswordPolicy).MinPasswordLength
+	}
+
+# Confirm user is correct before proceeding
 $CheckUser = "Reset password for $FullName ($AccountName) [y/n]"
 $ConfirmUser = Read-Host "$CheckUser"
 While($ConfirmUser -ne "y")
@@ -50,6 +65,7 @@ While($ConfirmUser -ne "y")
     ConfirmUser = Read-Host "$CheckUser"
 }
 
+# Check if user account is enabled else exit
 If ($AccountStatus -eq $False)
 		{
 		Write-Host "User account is disabled!"
@@ -59,6 +75,7 @@ If ($AccountStatus -eq $False)
 		Exit
 		}
 
+# Ensure password meets domain complexity requirements
 $AccountNameLength = $AccountName.Length
 Do { 
 	$AccountNamePasswordDoCount++
@@ -80,6 +97,7 @@ Until (
 	$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
 	)
 
+# Set new password and display on screen
 Set-ADAccountPassword `
 	-Identity $AccountName `
 	-Reset `
@@ -96,7 +114,7 @@ If ($?)
 	$MailSubject = "Reset password for 1 user account"
 	}
 
-	
+# Email technicians copy of password
 $User = Get-ADUser `
 	$RunAsUser `
 	-Properties Mail,displayName
@@ -124,7 +142,7 @@ Send-MailMessage `
 	-SmtpServer "$SmtpServer" `
 	-Body "$MailBody"
 
-
+# Email user copy of password
 If ($mail -ne $Null)
 		{$MailTo = "$FullName <$mail>"}
 		Else
