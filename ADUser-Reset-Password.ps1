@@ -16,7 +16,7 @@ t: 02 6071 5000 | f: 02 6071 2445
 e: ict.helpdesk@tallangatta-sc.vic.edu.au
 w: www.tallangatta-sc.vic.edu.au"
 
-$UserName = Read-Host -Prompt 'Enter Student Username'
+$UserName = Read-Host -Prompt 'Enter Username'
 
 Try
 	{
