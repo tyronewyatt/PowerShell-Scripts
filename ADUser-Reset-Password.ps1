@@ -1,7 +1,7 @@
 Import-Module ActiveDirectory   
 Add-Type -AssemblyName System.web
 
-$PasswordLength = '7'
+$DomainPolicyPasswordLength = (Get-ADDefaultDomainPasswordPolicy).MinPasswordLength
 $RunAsUser = $env:UserName.ToUpper()
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
@@ -23,6 +23,8 @@ Try
 	$User = Get-ADUser `
 		$UserName `
 		-Properties samAccountName,givenName,mail,displayName,enabled
+	$UserPasswordPolicy = Get-ADUserResultantPasswordPolicy `
+		$UserName
 	} 
 Catch
 	{
@@ -37,6 +39,8 @@ $FirstName = $User.'givenName'
 $FullName = $User.'displayName'
 $AccountStatus = $User.'enabled'
 $mail = $User.'mail'
+If ($UserPasswordPolicy.'MinPasswordLength' -ne $Null)
+	{$DomainPolicyPasswordLength = $UserPasswordPolicy.'MinPasswordLength'}
 
 $CheckUser = "Reset password for $FullName ($AccountName) [y/n]"
 $ConfirmUser = Read-Host "$CheckUser"
@@ -68,7 +72,7 @@ Do {
 	$FullNamePasswordArray += ("$FullNamePasswordVariable|")
 	} while($FullNamePasswordDoCount -ne $FullNameLength-2) 
 Do 	{
-	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($DomainPolicyPasswordLength,1)
 	}
 Until (
 	$ComplexPassword -match '[A-Z]' -And `
@@ -88,7 +92,6 @@ If ($?)
 	$ComplexPassword | Clip.exe
 	Write-Host "Password: $ComplexPassword"
 	Write-Host 'Password has been copied to clipboard'
-	Write-Host 'Temporary passwords will expire in 10 days if not changed'
 	$MailHeading = "AccountName: $AccountName FullName: $FullName Password: $ComplexPassword"
 	$MailSubject = "Reset password for 1 user account"
 	}
