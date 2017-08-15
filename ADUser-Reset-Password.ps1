@@ -77,17 +77,33 @@ If ($AccountStatus -eq $False)
 
 # Ensure password meets domain complexity requirements
 $AccountNameLength = $AccountName.Length
-Do { 
-	$AccountNamePasswordDoCount++
-	$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
-	$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
-	} while($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+If ($AccountNameLength -ge '3')
+	{
+	Do { 
+		$AccountNamePasswordDoCount++
+		$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
+		$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
+		} 
+	While ($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+Else
+	{
+	$AccountNamePasswordArray = $AccountName
+	}
+	}
 $FullNameLength = $FullName.Length
-Do { 
-	$FullNamePasswordDoCount++
-	$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
-	$FullNamePasswordArray += ("$FullNamePasswordVariable|")
-	} while($FullNamePasswordDoCount -ne $FullNameLength-2) 
+If ($FullNameLength -ge '3')
+	{
+	Do { 
+		$FullNamePasswordDoCount++
+		$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
+		$FullNamePasswordArray += ("$FullNamePasswordVariable|")
+		}
+	While ($FullNamePasswordDoCount -ne $FullNameLength-2)
+	}
+Else
+	{
+	$FullNamePasswordArray = $FullName
+	}
 Do 	{
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($DomainPolicyPasswordLength,1)
 	}
