@@ -4,7 +4,7 @@ Add-Type -AssemblyName System.web
 
 # Set variables
 $RunAsUser = $env:UserName.ToUpper()
-function Pause {[void][System.Console]::ReadKey($True)}
+Function Pause {[void][System.Console]::ReadKey($True)}
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailNoReply = 'No Reply <no-reply@tallangatta-sc.vic.edu.au>'
