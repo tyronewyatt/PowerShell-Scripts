@@ -4,7 +4,7 @@ Add-Type -AssemblyName System.web
 
 # Set variables
 $RunAsUser = $env:UserName.ToUpper()
-$Pause = [void][System.Console]::ReadKey($True)
+function Pause {[void][System.Console]::ReadKey($True)}
 $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 $MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailNoReply = 'No Reply <no-reply@tallangatta-sc.vic.edu.au>'
@@ -41,7 +41,7 @@ If ($?)
 Else
 	{
 	Write-Host 'Press any key to exit'
-	$Pause
+	Pause
 	Exit
 	}
 
@@ -72,7 +72,7 @@ If ($AccountStatus -eq $False)
 		Write-Host "User account is disabled!"
 		Write-Host 'Please enable account and try again or contact your Administrator'
 		Write-Host 'Press any key to exit'
-		$Pause
+		Pause
 		Exit
 		}
 
@@ -204,5 +204,5 @@ Send-MailMessage `
 
 Write-Host 'Password Reset Successful!'	
 Write-Host 'Press any key to exit'
-$Pause
+Pause
 Exit
