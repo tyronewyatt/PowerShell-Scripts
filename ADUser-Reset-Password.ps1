@@ -86,10 +86,10 @@ If ($AccountNameLength -ge '3')
 		$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
 		} 
 	While ($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+	}
 Else
 	{
 	$AccountNamePasswordArray = $AccountName
-	}
 	}
 $FullNameLength = $FullName.Length
 If ($FullNameLength -ge '3')
