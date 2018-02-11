@@ -43,20 +43,11 @@ Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	}
 Until (
-	# Compliance - English uppercase characters (A through Z)
-	$ComplexPassword -CMatch '[A-Z]' -And `
-	`
-	# Compliance - English lowercase characters (a through z)
-	$ComplexPassword -CMatch '[a-z]' -And `
-	`
-	# Compliance - Base 10 digits (0 through 9)
-	$ComplexPassword -Match '[0-9]' -And `
-	`
-	# Compliance - Easy to read
-	$ComplexPassword -CNotMatch '[0|O|I|1|1]' -And `
-	`
-	# Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
-	$ComplexPassword -NotMatch $NameCompliance
+	$ComplexPassword -CMatch '[A-Z]' -And ` # Compliance - English uppercase characters (A through Z)
+	$ComplexPassword -CMatch '[a-z]' -And ` # Compliance - English lowercase characters (a through z)
+	$ComplexPassword -Match '[0-9]' -And ` # Compliance - Base 10 digits (0 through 9)
+	$ComplexPassword -CNotMatch '[0|O|I|1|1]' -And ` # Easy to read password
+	$ComplexPassword -NotMatch $NameCompliance # Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
 	)
 ##
 
