@@ -109,8 +109,9 @@ Do 	{
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($DomainPolicyPasswordLength,1)
 	}
 Until (
-	$ComplexPassword -match '[A-Z]' -And `
+	$ComplexPassword -cmatch '[A-Z][a-z]' -And `
 	$ComplexPassword -match '[0-9]' -And `
+	$ComplexPassword -notmatch '[0|o|1|i|l]' -And `
 	$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
 	)
 

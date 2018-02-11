@@ -44,9 +44,10 @@ Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	}
 Until (
-	$ComplexPassword -match '[A-Z]' -And `
-	$ComplexPassword -match '[0-9]' -And `
-	$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
+	$ComplexPassword -Match '[0-9]' -And `
+	$ComplexPassword -CMatch '[a-z][A-Z]' -And `
+	$ComplexPassword -NotMatch '[0|o|1|i|l]' -And `
+	$ComplexPassword -NotMatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
 	)
 
 # Display password to screen
