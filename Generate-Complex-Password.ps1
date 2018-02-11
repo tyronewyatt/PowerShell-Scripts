@@ -11,7 +11,7 @@ Complexity requirements are enforced when passwords are changed or created.
  #>
  Param(
 	[String]$PasswordLength = '7',
-	[String]$AccountName = 'USER	',
+	[String]$AccountName = 'USER',
 	[String]$FullName = 'FirstName LastName'
 	)
 
