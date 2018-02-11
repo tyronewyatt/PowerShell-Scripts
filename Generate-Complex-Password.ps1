@@ -53,7 +53,7 @@ Until (
 	$ComplexPassword -Match '[0-9]' -And `
 	`
 	# Compliance - Easy to read
-	$ComplexPassword -CNotMatch '[0|o|I|l]' -And `
+	$ComplexPassword -CNotMatch '[0|O|I|1|1]' -And `
 	`
 	# Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
 	$ComplexPassword -NotMatch $NameCompliance
