@@ -9,15 +9,14 @@ Active Directory user account passwords must meet the following minimum requirem
 	d) Non-alphabetic characters (for example, !, $, #, %)
 Complexity requirements are enforced when passwords are changed or created.
  #>
+ Param(
+	[String]$PasswordLength = '7',
+	[String]$AccountName = 'USER	',
+	[String]$FullName = 'FirstName LastName'
+	)
 
 ## Import Module
 Add-Type -AssemblyName System.web
-##
-
-## Set Variables
-$PasswordLength = '7'
-$AccountName = 'DRA0003'
-$FullName = 'Daniel DRAGE'
 ##
 
 ## Compliance - Be at least six characters in length
