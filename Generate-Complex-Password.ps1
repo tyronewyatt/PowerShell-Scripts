@@ -37,7 +37,6 @@ Write-Output $NameCompliance3
 $NameCompliance = $(NameCompliance $AccountName) + $(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
 ##
 
-
 ## Generate password until compliance met
 Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
