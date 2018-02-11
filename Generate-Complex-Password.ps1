@@ -10,32 +10,36 @@ Active Directory user account passwords must meet the following minimum requirem
 Complexity requirements are enforced when passwords are changed or created.
  #>
 
-# Import module
+## Import Module
 Add-Type -AssemblyName System.web
+##
 
-# Set variables
+## Set Variables
 $PasswordLength = '7'
 $AccountName = 'DRA0003'
 $FullName = 'Daniel DRAGE'
+##
 
-# Compliance - Be at least six characters in length
+## Compliance - Be at least six characters in length
 If ($PasswordLength -NotIn 6..32) {$PasswordLength = '7'}
+##
 
-# Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
+## Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
 Function NameCompliance {
-$NameComplianceString = $Args[0]
-$NameComplianceLength = $NameComplianceString.Length
+$NameCompliance1 = $Args[0]
 Do { 
-	$NameComplianceDoCount++
-	$NameComplianceVariable = $NameComplianceString.Substring($NameComplianceDoCount-1,3)
-	$NameComplianceArray += ("$NameComplianceVariable|")
+	$NameCompliance0++
+	$NameCompliance2 = $NameCompliance1.Substring($NameCompliance0-1,3)
+	$NameCompliance3 += ("$NameCompliance2|")
 	} 
-While ($NameComplianceDoCount -ne $NameComplianceLength-2) 
-Write-Output $NameComplianceArray
+While ($NameCompliance0 -ne $NameCompliance1.Length-2) 
+Write-Output $NameCompliance3
 }
 $NameCompliance = $(NameCompliance $AccountName)+$(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
+##
 
-# Generate password until compliance met
+
+## Generate password until compliance met
 Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	}
@@ -55,7 +59,9 @@ Until (
 	# Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
 	$ComplexPassword -NotMatch $NameCompliance
 	)
+##
 
-# Display password to screen
+## Display password to screen
 Write-Host $ComplexPassword
+##
 
