@@ -18,36 +18,42 @@ $PasswordLength = '7'
 $AccountName = 'DRA0003'
 $FullName = 'Daniel DRAGE'
 
-# Ensure password length is met
-If ($PasswordLength -lt '6') {} Else {$PasswordLength = '6'}
+# Compliance - Be at least six characters in length
+If ($PasswordLength -NotIn 6..32) {$PasswordLength = '7'}
 
-# Ensure account name not exceed two consecutive characters
-$AccountNameLength = $AccountName.Length
+# Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
+Function NameCompliance {
+$NameComplianceString = $Args[0]
+$NameComplianceLength = $NameComplianceString.Length
 Do { 
-	$AccountNamePasswordDoCount++
-	$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
-	$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
+	$NameComplianceDoCount++
+	$NameComplianceVariable = $NameComplianceString.Substring($NameComplianceDoCount-1,3)
+	$NameComplianceArray += ("$NameComplianceVariable|")
 	} 
-While ($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+While ($NameComplianceDoCount -ne $NameComplianceLength-2) 
+Write-Output $NameComplianceArray
+}
+$NameCompliance = $(NameCompliance $AccountName)+$(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
 
-# Ensure full name not exceed two consecutive characters
-$FullNameLength = $FullName.Length
-Do { 
-	$FullNamePasswordDoCount++
-	$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
-	$FullNamePasswordArray += ("$FullNamePasswordVariable|")
-	}
-While ($FullNamePasswordDoCount -ne $FullNameLength-2) 
-
-# Generate password with at least 1 non-alphabetic characters and ensure all requirements are met
+# Generate password until compliance met
 Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
 	}
 Until (
+	# Compliance - English uppercase characters (A through Z)
+	$ComplexPassword -CMatch '[A-Z]' -And `
+	`
+	# Compliance - English lowercase characters (a through z)
+	$ComplexPassword -CMatch '[a-z]' -And `
+	`
+	# Compliance - Base 10 digits (0 through 9)
 	$ComplexPassword -Match '[0-9]' -And `
-	$ComplexPassword -CMatch '[a-z][A-Z]' -And `
-	$ComplexPassword -NotMatch '[0|o|1|i|l]' -And `
-	$ComplexPassword -NotMatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
+	`
+	# Compliance - Easy to read
+	$ComplexPassword -CNotMatch '[0|o|I|l]' -And `
+	`
+	# Compliance - Not contain the user's account name or parts of the user's full name that exceed two consecutive characters
+	$ComplexPassword -NotMatch $NameCompliance
 	)
 
 # Display password to screen
