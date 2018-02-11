@@ -35,7 +35,7 @@ Do {
 While ($NameCompliance0 -ne $NameCompliance1.Length-2) 
 Write-Output $NameCompliance3
 }
-$NameCompliance = $(NameCompliance $AccountName)+$(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
+$NameCompliance = $(NameCompliance $AccountName) + $(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
 ##
 
 
