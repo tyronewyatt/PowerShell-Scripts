@@ -81,16 +81,16 @@ While($ConfirmUser -Ne "y")
 If ($AccountStatus -eq $False)
 		{
 		Write-Host 'User account is disabled!'
-		Write-Host "UserAccount Description: $Description."
 		Write-Host 'Press any key to continue'
 		Pause
 		}
-		
+
 # Set Description
-If ($DistinguishedName -Match 'OU=Student,') {$Description = 'Student'}
-If ($DistinguishedName -Match 'OU=Staff,') {$Description = 'Staff'}
-If ($DistinguishedName -Match 'OU=Administration,') {$Description = 'Administration'}
-If ($DistinguishedName -Match 'OU=Services,') {$Description = 'Services'}	
+Write-Host "UserAccount Description: $Description"
+If ($DistinguishedName -Match 'OU=Student') {$Description = 'Student'}
+If ($DistinguishedName -Match 'OU=Staff') {$Description = 'Staff'}
+If ($DistinguishedName -Match 'OU=Administration') {$Description = 'Administration'}
+If ($DistinguishedName -Match 'OU=Service') {$Description = 'Services'}	
 
 # Ensure password meets domain complexity requirements
 Function NameCompliance {
