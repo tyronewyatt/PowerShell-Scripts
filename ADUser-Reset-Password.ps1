@@ -69,7 +69,7 @@ Else {
 	}
 
 # Confirm user is correct before proceeding
-$CheckUser = "Reset password for $FullName ($AccountName) [y/n]"
+$CheckUser = "FullName: $FullName [y/n]"
 $ConfirmUser = Read-Host "$CheckUser"
 While($ConfirmUser -Ne "y")
 {
@@ -79,18 +79,20 @@ While($ConfirmUser -Ne "y")
 
 # Check if user account is enabled else exit
 If ($AccountStatus -eq $False)
-		{
-		Write-Host 'User account is disabled!'
-		Write-Host 'Press any key to continue'
-		Pause
-		}
+	{
+	Write-Host 'Status: Disabled -> Enabled'
+	}
 
 # Set Description
-Write-Host "UserAccount Description: $Description"
+$OldDescription = $Description
 If ($DistinguishedName -Match 'OU=Student') {$Description = 'Student'}
 If ($DistinguishedName -Match 'OU=Staff') {$Description = 'Staff'}
 If ($DistinguishedName -Match 'OU=Administration') {$Description = 'Administration'}
 If ($DistinguishedName -Match 'OU=Service') {$Description = 'Services'}	
+If ($OldDescription -Ne $Description)
+	{
+	Write-Host "Description: $OldDescription -> $Description"
+	}
 
 # Ensure password meets domain complexity requirements
 Function NameCompliance {
@@ -130,12 +132,12 @@ If ($?)
 		-Description $Description `
 		-Enabled $true
 	$ComplexPassword | Clip.exe
-	Write-Host "Password:	$ComplexPassword"
+	Write-Host "Password: $ComplexPassword"
 	Write-Host 'Password has been copied to clipboard'
 	$MailHeading = `
-"AccountName:	$AccountName
-FullName:	$FullName
-Password:	$ComplexPassword"
+"AccountName: $AccountName
+FullName: $FullName
+Password: $ComplexPassword"
 	$MailSubject = "Reset password for 1 user account"
 	}
 
@@ -152,11 +154,9 @@ If ($RunAsUserMail -ne $Null)
 	
 $MailBody = `
 "Hello Administrator,
-
 $MailHeading
 $MailBody
 Reset by $RunAsUser.
-
 $MailSignature"	
 		
 Send-MailMessage `
@@ -182,11 +182,8 @@ Your school password has been reset. Please note your temporary school password 
 School Password: $ComplexPassword
  	 
 For security purposes, you must change your password. To change your password, logon to a school computer and follow the prompts.
-
 Important:
-
 When you change your password, you must also update any other PC or device with your school username and password stored on it. Devices may include a notebook, iPad, other tablet, mobile phone and any other PC you use, including those at home.
-
 Your new password must meet the following complexity requirements:
 	1)	Unique password not matching your past eight passwords
 	2)	Be at least seven characters in length
@@ -196,11 +193,9 @@ Your new password must meet the following complexity requirements:
 		c)	Base 10 digits (0 through 9)
 		d)	Non-alphabetic characters (for example, !, $, #, %)
 	4)	Not contain your username or parts of your full name that exceed two consecutive characters
-
 For further assistance:
 	1)	Speak to the school ICT technician and school staff only.
 	2)	Log a request on the school ICT Helpdesk, see: ($SupportURL).
-
 $MailSignature"
 
 Send-MailMessage `
