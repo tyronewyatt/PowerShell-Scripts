@@ -1,5 +1,6 @@
 Param(
-	[String]$UserName = $(Read-Host -Prompt 'Enter Username')
+	[String]$UserName = $(Read-Host -Prompt 'Enter Username'),
+	[String]$Force = ""
 	)
 
 # Import module
@@ -69,13 +70,16 @@ Else {
 	}
 
 # Confirm user is correct before proceeding
-$CheckUser = "FullName: $FullName [y/n]"
-$ConfirmUser = Read-Host "$CheckUser"
-While($ConfirmUser -Ne "y")
-{
-    If ($ConfirmUser -Match 'n|') {Exit}
-    ConfirmUser = Read-Host "$CheckUser"
-}
+$CheckUser = "FullName: $FullName `nConfirm [y/n]"
+If ($Force -Ne 'y') 
+	{
+	$ConfirmUser = Read-Host "$CheckUser"
+	While($ConfirmUser -Ne "y")
+		{
+		If ($ConfirmUser -Match 'n|') {Exit}
+		ConfirmUser = Read-Host "$CheckUser"
+		}
+	}
 
 # Check if user account is enabled else exit
 If ($AccountStatus -eq $False)
