@@ -1,6 +1,5 @@
 Param(
-	[String]$UserName = $(Read-Host -Prompt 'Enter Username'),
-	[String]$Force = ""
+	[String]$UserName = $(Read-Host -Prompt 'Enter Username')
 	)
 
 # Import module
@@ -22,7 +21,7 @@ t: 02 6076 1566
 e: ict.helpdesk@corryong.vic.edu.au
 w: www.corryong.vic.edu.au"
 
-#Check if domain admin
+# Check if domain admin
 If(-Not((Get-ADPrincipalGroupMembership $env:USERNAME).name -Match "Domain Admins|Account Password Reset Operators"))
 {
     Write-Warning "Not a Domain Admin! Goodbye"
@@ -60,9 +59,9 @@ Else
 # Get users password length else use default domain policy
 $UserPasswordPolicy = Get-ADUserResultantPasswordPolicy `
 	$UserName
-If ($?)
+If ($UserPasswordPolicy -Ne $Null)
 	{
-	If ($UserPasswordPolicy.'MinPasswordLength' -ne $Null)
+	If ($UserPasswordPolicy.'MinPasswordLength' -Ne $Null)
 		{$DomainPolicyPasswordLength = $UserPasswordPolicy.'MinPasswordLength'}
 	}
 Else {
@@ -70,21 +69,24 @@ Else {
 	}
 
 # Confirm user is correct before proceeding
-$CheckUser = "FullName: $FullName `nConfirm [y/n]"
-If ($Force -Ne 'y') 
+$Confirm = Read-Host -Prompt "Reset Password for $FullName ($AccountName) ? [y/N]" 
+If ($Confirm -NotMatch '[y]')
 	{
-	$ConfirmUser = Read-Host "$CheckUser"
-	While($ConfirmUser -Ne "y")
-		{
-		If ($ConfirmUser -Match 'n|') {Exit}
-		ConfirmUser = Read-Host "$CheckUser"
-		}
+	Write-Host 'Goodbye!'
+    Pause
+	Exit
 	}
 
 # Check if user account is enabled else exit
 If ($AccountStatus -eq $False)
 	{
-	Write-Host 'Status: Disabled -> Enabled'
+	$Confirm = Read-Host -Prompt "Update Account Status: Disabled -> Enabled ? [y/N]"
+	If ($Confirm -NotMatch '[y]')
+		{
+		Write-Host 'Goodbye!'
+		Pause
+		Exit
+		}
 	}
 
 # Set Description
@@ -95,18 +97,29 @@ If ($DistinguishedName -Match 'OU=Administration') {$Description = 'Administrati
 If ($DistinguishedName -Match 'OU=Service') {$Description = 'Services'}	
 If ($OldDescription -Ne $Description)
 	{
-	Write-Host "Description: $OldDescription -> $Description"
+	$Confirm = Read-Host -Prompt "Update Account Description: $OldDescription -> $Description ? [y/N]"
+	If ($Confirm -NotMatch '[y]') 
+		{
+		Write-Host 'Goodbye!'
+		Pause
+		Exit
+		}
 	}
 
 # Ensure password meets domain complexity requirements
 Function NameCompliance {
 $NameCompliance1 = $Args[0]
-Do { 
-	$NameCompliance0++
-	$NameCompliance2 = $NameCompliance1.Substring($NameCompliance0-1,3)
-	$NameCompliance3 += ("$NameCompliance2|")
-	} 
-While ($NameCompliance0 -ne $NameCompliance1.Length-2) 
+If ($NameCompliance1.Length -Gt '2')
+	{
+	Do { 
+		$NameCompliance0++
+		$NameCompliance2 = $NameCompliance1.Substring($NameCompliance0-1,3)
+		$NameCompliance3 += ("$NameCompliance2|")
+		} 
+	While ($NameCompliance0 -ne $NameCompliance1.Length-2)
+	}
+Else
+	{$NameCompliance3 = $NameCompliance1}
 Write-Output $NameCompliance3
 }
 $NameCompliance = $(NameCompliance $AccountName) + $(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
@@ -138,6 +151,7 @@ If ($?)
 	$ComplexPassword | Clip.exe
 	Write-Host "Password: $ComplexPassword"
 	Write-Host 'Password has been copied to clipboard'
+	Pause
 	$MailHeading = `
 "AccountName: $AccountName
 FullName: $FullName
