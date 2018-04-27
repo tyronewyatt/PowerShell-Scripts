@@ -1,3 +1,8 @@
+ Param(
+	[String]$AccountName,
+	[String]$FullName
+	)
+
 # Import module
 Import-Module ActiveDirectory   
 Add-Type -AssemblyName System.web
