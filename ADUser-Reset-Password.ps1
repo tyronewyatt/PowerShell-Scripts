@@ -1,30 +1,38 @@
+<<<<<<< HEAD
  Param(
 	[String]$AccountName,
 	[String]$FullName
+=======
+Param(
+	[String]$UserName = $(Read-Host -Prompt 'Enter Username')
+>>>>>>> 6b24925ae2ac3a7786b2b818f2dd5b492d7727b9
 	)
 
 # Import module
-Import-Module ActiveDirectory   
 Add-Type -AssemblyName System.web
 
 # Set variables
 $RunAsUser = $env:UserName.ToUpper()
 Function Pause {[void][System.Console]::ReadKey($True)}
-$SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
-$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
+$SmtpServer = 'cormx01.corryong.vic.edu.au'
+$MailTo = 'DL ICT Staff <dl.ictstaff@corryong.vic.edu.au>'
 $MailNoReply = 'No Reply <no-reply@tallangatta-sc.vic.edu.au>'
-$MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
-$SupportURL = 'https://helpdesk.tallangatta-sc.vic.edu.au'
+$MailFrom = 'ICT Helpdesk <ict.helpdesk@corryong.vic.edu.au>'
+$SupportURL = 'https://helpdesk.corryong.vic.edu.au'
 $MailSignature = `
 "ICT Helpdesk
-Tallangatta Secondary College
-145 Towong Street Tallangatta, 3700, VIC
-t: 02 6071 5000 | f: 02 6071 2445
-e: ict.helpdesk@tallangatta-sc.vic.edu.au
-w: www.tallangatta-sc.vic.edu.au"
+Corryong College
+27-45 Towong Road Corryong, 3707, VIC
+t: 02 6076 1566 
+e: ict.helpdesk@corryong.vic.edu.au
+w: www.corryong.vic.edu.au"
 
-# Get username
-$UserName = Read-Host -Prompt 'Enter Username'
+# Check if domain admin
+If(-Not((Get-ADPrincipalGroupMembership $env:USERNAME).name -Match "Domain Admins|Account Password Reset Operators"))
+{
+    Write-Warning "Not a Domain Admin! Goodbye"
+    Break
+}
 
 # Get users details from AD if exists else exit
 $User = Get-ADUser `
@@ -34,6 +42,8 @@ $User = Get-ADUser `
 		givenName, `
 		mail, `
 		displayName, `
+		Description, `
+		DistinguishedName, `
 		enabled
 If ($?)
 	{
@@ -41,6 +51,8 @@ If ($?)
 	$FirstName = $User.'givenName'
 	$FullName = $User.'displayName'
 	$AccountStatus = $User.'enabled'
+	$Description = $User.'Description'
+	$DistinguishedName = $User.'DistinguishedName'
 	$mail = $User.'mail'
 	}
 Else
@@ -53,9 +65,9 @@ Else
 # Get users password length else use default domain policy
 $UserPasswordPolicy = Get-ADUserResultantPasswordPolicy `
 	$UserName
-If ($?)
+If ($UserPasswordPolicy -Ne $Null)
 	{
-	If ($UserPasswordPolicy.'MinPasswordLength' -ne $Null)
+	If ($UserPasswordPolicy.'MinPasswordLength' -Ne $Null)
 		{$DomainPolicyPasswordLength = $UserPasswordPolicy.'MinPasswordLength'}
 	}
 Else {
@@ -63,61 +75,71 @@ Else {
 	}
 
 # Confirm user is correct before proceeding
-$CheckUser = "Reset password for $FullName ($AccountName) [y/n]"
-$ConfirmUser = Read-Host "$CheckUser"
-While($ConfirmUser -ne "y")
-{
-    If ($ConfirmUser -eq 'n') {Exit}
-    ConfirmUser = Read-Host "$CheckUser"
-}
+$Confirm = Read-Host -Prompt "Reset Password for $FullName ($AccountName) ? [y/N]" 
+If ($Confirm -NotMatch '[y]')
+	{
+	Write-Host 'Goodbye!'
+    Pause
+	Exit
+	}
 
 # Check if user account is enabled else exit
 If ($AccountStatus -eq $False)
+	{
+	$Confirm = Read-Host -Prompt "Update Account Status: Disabled -> Enabled ? [y/N]"
+	If ($Confirm -NotMatch '[y]')
 		{
-		Write-Host "User account is disabled!"
-		Write-Host 'Please enable account and try again or contact your Administrator'
-		Write-Host 'Press any key to exit'
+		Write-Host 'Goodbye!'
 		Pause
 		Exit
 		}
+	}
+
+# Set Description
+$OldDescription = $Description
+If ($DistinguishedName -Match 'OU=Student') {$Description = 'Student'}
+If ($DistinguishedName -Match 'OU=Staff') {$Description = 'Staff'}
+If ($DistinguishedName -Match 'OU=Administration') {$Description = 'Administration'}
+If ($DistinguishedName -Match 'OU=Service') {$Description = 'Services'}	
+If ($OldDescription -Ne $Description)
+	{
+	$Confirm = Read-Host -Prompt "Update Account Description: $OldDescription -> $Description ? [y/N]"
+	If ($Confirm -NotMatch '[y]') 
+		{
+		Write-Host 'Goodbye!'
+		Pause
+		Exit
+		}
+	}
 
 # Ensure password meets domain complexity requirements
-$AccountNameLength = $AccountName.Length
-If ($AccountNameLength -ge '3')
+Function NameCompliance {
+$NameCompliance1 = $Args[0]
+If ($NameCompliance1.Length -Gt '2')
 	{
 	Do { 
-		$AccountNamePasswordDoCount++
-		$AccountNamePasswordVariable = $AccountName.Substring($AccountNamePasswordDoCount-1,3)
-		$AccountNamePasswordArray += ("$AccountNamePasswordVariable|")
+		$NameCompliance0++
+		$NameCompliance2 = $NameCompliance1.Substring($NameCompliance0-1,3)
+		$NameCompliance3 += ("$NameCompliance2|")
 		} 
-	While ($AccountNamePasswordDoCount -ne $AccountNameLength-2) 
+	While ($NameCompliance0 -ne $NameCompliance1.Length-2)
 	}
 Else
-	{
-	$AccountNamePasswordArray = $AccountName
-	}
-$FullNameLength = $FullName.Length
-If ($FullNameLength -ge '3')
-	{
-	Do { 
-		$FullNamePasswordDoCount++
-		$FullNamePasswordVariable = $FullName.Substring($FullNamePasswordDoCount-1,3)
-		$FullNamePasswordArray += ("$FullNamePasswordVariable|")
-		}
-	While ($FullNamePasswordDoCount -ne $FullNameLength-2)
-	}
-Else
-	{
-	$FullNamePasswordArray = $FullName
-	}
-Do 	{
+	{$NameCompliance3 = $NameCompliance1}
+Write-Output $NameCompliance3
+}
+$NameCompliance = $(NameCompliance $AccountName) + $(NameCompliance $FullName).Substring(0,$(NameCompliance $FullName).Length-1)
+
+# Generate password until compliance met
+Do {
 	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($DomainPolicyPasswordLength,1)
 	}
 Until (
-	$ComplexPassword -cmatch '[A-Z][a-z]' -And `
-	$ComplexPassword -match '[0-9]' -And `
-	$ComplexPassword -notmatch '[0|o|1|i|l]' -And `
-	$ComplexPassword -notmatch "[$AccountNamePasswordArray]|[$FullNamePasswordArray]"
+	$ComplexPassword -CMatch '[A-Z]' -And ` 
+	$ComplexPassword -CMatch '[a-z]' -And ` 
+	$ComplexPassword -Match '[0-9]' -And ` 
+	$ComplexPassword -CNotMatch '[0|O|I|1|1]' -And ` 
+	$ComplexPassword -NotMatch $NameCompliance 
 	)
 
 # Set new password and display on screen
@@ -129,11 +151,17 @@ If ($?)
 	{
 	Set-AdUser `
 		-Identity $AccountName `
-		-ChangePasswordAtLogon $true
+		-ChangePasswordAtLogon $true `
+		-Description $Description `
+		-Enabled $true
 	$ComplexPassword | Clip.exe
 	Write-Host "Password: $ComplexPassword"
 	Write-Host 'Password has been copied to clipboard'
-	$MailHeading = "AccountName: $AccountName FullName: $FullName Password: $ComplexPassword"
+	Pause
+	$MailHeading = `
+"AccountName: $AccountName
+FullName: $FullName
+Password: $ComplexPassword"
 	$MailSubject = "Reset password for 1 user account"
 	}
 
@@ -150,11 +178,9 @@ If ($RunAsUserMail -ne $Null)
 	
 $MailBody = `
 "Hello Administrator,
-
 $MailHeading
 $MailBody
 Reset by $RunAsUser.
-
 $MailSignature"	
 		
 Send-MailMessage `
@@ -180,11 +206,8 @@ Your school password has been reset. Please note your temporary school password 
 School Password: $ComplexPassword
  	 
 For security purposes, you must change your password. To change your password, logon to a school computer and follow the prompts.
-
 Important:
-
 When you change your password, you must also update any other PC or device with your school username and password stored on it. Devices may include a notebook, iPad, other tablet, mobile phone and any other PC you use, including those at home.
-
 Your new password must meet the following complexity requirements:
 	1)	Unique password not matching your past eight passwords
 	2)	Be at least seven characters in length
@@ -194,11 +217,9 @@ Your new password must meet the following complexity requirements:
 		c)	Base 10 digits (0 through 9)
 		d)	Non-alphabetic characters (for example, !, $, #, %)
 	4)	Not contain your username or parts of your full name that exceed two consecutive characters
-
 For further assistance:
 	1)	Speak to the school ICT technician and school staff only.
 	2)	Log a request on the school ICT Helpdesk, see: ($SupportURL).
-
 $MailSignature"
 
 Send-MailMessage `
@@ -207,8 +228,7 @@ Send-MailMessage `
 	-Subject "$MailSubject" `
 	-SmtpServer "$SmtpServer" `
 	-Body "$MailBody"
-
-Write-Host 'Password Reset Successful!'	
+	
 Write-Host 'Press any key to exit'
 Pause
 Exit

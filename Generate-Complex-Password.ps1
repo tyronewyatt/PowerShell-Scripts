@@ -39,7 +39,7 @@ $NameCompliance = $(NameCompliance $AccountName) + $(NameCompliance $FullName).S
 
 ## Generate password until compliance met
 Do {
-	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1)
+	$ComplexPassword = [System.Web.Security.Membership]::GeneratePassword($PasswordLength,1) Compliance - Non-alphabetic characters (for example, !, $, #, %)
 	}
 Until (
 	$ComplexPassword -CMatch '[A-Z]' -And ` # Compliance - English uppercase characters (A through Z)
