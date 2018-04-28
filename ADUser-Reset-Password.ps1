@@ -1,11 +1,5 @@
-<<<<<<< HEAD
- Param(
-	[String]$AccountName,
-	[String]$FullName
-=======
 Param(
 	[String]$UserName = $(Read-Host -Prompt 'Enter Username')
->>>>>>> 6b24925ae2ac3a7786b2b818f2dd5b492d7727b9
 	)
 
 # Import module
