@@ -24,7 +24,7 @@ Param(
 	[String]$NewSchoolID = $(Read-Host 'Enter New School ID (XXXX)'),
 	[String]$TestCycleStart = $(Read-Host 'Enter Test Cycle Start Date (YYYY-MM-DD)'),
 	[String]$TestCycleEnd = $(Read-Host 'Enter Test Cycle End Date (YYYY-MM-DD)'),
-	[String]$AppendOutPut = $(Read-Host 'Append Out Put CSV (Yes/NO)')
+	[String]$AppendOutPut = $(Read-Host 'Append Out Put CSV (YES/No)')
 	)
 
 $Path = (Resolve-Path .\).Path
@@ -46,8 +46,10 @@ Else
 	$OldODStudents = Import-Csv -Delimiter "," -Path $OldODCSV -Header 'STDNT_XID', 'TEST_XID', 'TEST_SCORE', 'csf_score', 'TEST_FNSH_DT_TM' | Where-Object {$_.TEST_FNSH_DT_TM -Gt $TestCycleStart -And $_.TEST_FNSH_DT_TM -Lt $TestCycleEnd}
 	}
 
-If ($AppendOutPut -Match 'True|Yes|1')
+If ($AppendOutPut -Match 'False|No|0')
 	{Clear-Content -Path $NewODCSV}
+ElseIf ($AppendOutPut -Match 'True|Yes|1')
+	{}
 	
 #Write-Host 'OldSTStudentKey NewSTStudentKey NewSTStudentVSN'
 ForEach ($NewSTStudent In $NewSTStudents)
@@ -62,7 +64,7 @@ ForEach ($NewSTStudent In $NewSTStudents)
 			$OldSTStudentVSN = $OldSTStudent.'VSN'
 			If (($NewSTStudents | Where-Object {$OldSTStudentVSN -Eq $NewSTStudentVSN}) -Ne $Null)
 				{
-				#Write-Host "$OldSTStudentKey $NewSTStudentKey $NewSTStudentVSN"
+				Write-Host "$OldSTStudentKey $NewSTStudentKey $NewSTStudentVSN"
 				ForEach ($OldODStudent In $OldODStudents)
 					{
 					$OldODStudentKey = $OldODStudent.'STDNT_XID'
@@ -70,7 +72,6 @@ ForEach ($NewSTStudent In $NewSTStudents)
 					$OldODStudentTestScore = $OldODStudent.'TEST_SCORE'
 					$OldODStudentCSFScore = $OldODStudent.'csf_score'
 					$OldODStudentDateTime = $OldODStudent.'TEST_FNSH_DT_TM'
-					
 					If ($OldODStudentKey -Eq $OldSTStudentKey)
 						{
 						#Write-Host $NewSTStudentKey $OldODStudentTestID $OldODStudentTestScore $OldODStudentCSFScore $OldODStudentDateTime
