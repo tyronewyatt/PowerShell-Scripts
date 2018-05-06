@@ -16,8 +16,6 @@
     .\ST_NAPLAN-Questions.ps1 
 .EXAMPLE
     .\ST_NAPLAN-Questions.ps1 -oldschoolid 6229 -newschoolid 8370 
-.EXAMPLE
-    .\ST_NAPLAN-Questions.ps1 -oldschoolid 6229 -newschoolid 8370
  #>
 Param(
 	[String]$OldSchoolID = $(Read-Host 'Enter Old School ID (XXXX)'),
@@ -50,7 +48,7 @@ ElseIf ($AppendOutPut -Match 'True|Yes|1')
 	{}
 Write-Output 'APS Year,Reporting Test,Question Number,Dimension Name,Student Score,Cases ID' | Out-File -FilePath $NewNAPCSV -Append
 	
-#Write-Host 'OldSTStudentKey NewSTStudentKey NewSTStudentVSN'
+Write-Host 'OldSTStudentKey NewSTStudentKey NewSTStudentVSN'
 ForEach ($NewSTStudent In $NewSTStudents)
     {
 	$NewSTStudentKey = $NewSTStudent.'STKEY'

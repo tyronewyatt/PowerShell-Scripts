@@ -16,22 +16,18 @@
     .\ST_OnDemand-Results.ps1 
 .EXAMPLE
     .\ST_OnDemand-Results.ps1 -oldschoolid 6229 -newschoolid 8370 
-.EXAMPLE
-    .\ST_OnDemand-Results.ps1 -oldschoolid 6229 -newschoolid 8370 -testcyclestart 2017-06-01 -testcycleend 2017-12-12
  #>
 Param(
 	[String]$OldSchoolID = $(Read-Host 'Enter Old School ID (XXXX)'),
 	[String]$NewSchoolID = $(Read-Host 'Enter New School ID (XXXX)'),
-	[String]$TestCycleStart = $(Read-Host 'Enter Test Cycle Start Date (YYYY-MM-DD)'),
-	[String]$TestCycleEnd = $(Read-Host 'Enter Test Cycle End Date (YYYY-MM-DD)'),
 	[String]$AppendOutPut = $(Read-Host 'Append Out Put CSV (YES/No)')
 	)
 
 $Path = (Resolve-Path .\).Path
 $OldSTCSV = $Path + '\ST_' + $OldSchoolID + '.csv'
 $NewSTCSV = $Path + '\ST_' + $NewSchoolID + '.csv'
-$OldODCSV = $Path + '\OD_' + $OldSchoolID + '.csv'
-$NewODCSV = $Path + '\OD_' + $NewSchoolID + '.csv'
+$OldODCSV = $Path + '\OD_' + $OldSchoolID + '_Results.csv'
+$NewODCSV = $Path + '\OD_' + $NewSchoolID + '_Results.csv'
 
 If (-Not($OldSTCSV | Test-Path))
 	{Write-Error "$OldSTCSV not found"}
@@ -43,7 +39,7 @@ Else
 	{
 	$OldSTStudents = Import-Csv -Delimiter "," -Path $OldSTCSV | Where-Object {$_.STATUS -Match 'LVNG|LEFT' -And $_.SCHOOL_YEAR -Eq '06' -And $_.VSN -NotMatch 'NEW|UNKNOWN'}
 	$NewSTStudents = Import-Csv -Delimiter "," -Path $NewSTCSV | Where-Object {$_.STATUS -Match 'FUT|ACTV' -And $_.SCHOOL_YEAR -Eq '07' -And $_.VSN -NotMatch 'NEW|UNKNOWN'} 
-	$OldODStudents = Import-Csv -Delimiter "," -Path $OldODCSV -Header 'STDNT_XID', 'TEST_XID', 'TEST_SCORE', 'csf_score', 'TEST_FNSH_DT_TM' | Where-Object {$_.TEST_FNSH_DT_TM -Gt $TestCycleStart -And $_.TEST_FNSH_DT_TM -Lt $TestCycleEnd}
+	$OldODStudents = Import-Csv -Delimiter "," -Path $OldODCSV -Header 'STDNT_XID', 'TEST_XID', 'TEST_SCORE', 'csf_score', 'TEST_FNSH_DT_TM'
 	}
 
 If ($AppendOutPut -Match 'False|No|0')
@@ -51,7 +47,7 @@ If ($AppendOutPut -Match 'False|No|0')
 ElseIf ($AppendOutPut -Match 'True|Yes|1')
 	{}
 	
-#Write-Host 'OldSTStudentKey NewSTStudentKey NewSTStudentVSN'
+Write-Host 'OldSTStudentKey NewSTStudentKey NewSTStudentVSN'
 ForEach ($NewSTStudent In $NewSTStudents)
     {
 	$NewSTStudentKey = $NewSTStudent.'STKEY'
