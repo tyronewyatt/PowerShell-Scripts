@@ -20,7 +20,7 @@
 Param(
 	[String]$OldSchoolID = $(Read-Host 'Enter Old School ID (XXXX)'),
 	[String]$NewSchoolID = $(Read-Host 'Enter New School ID (XXXX)'),
-	[String]$AppendOutPut = $(Read-Host 'Append Out Put CSV (YES/No)')
+	[String]$AppendOutput = $(Read-Host 'Append Output File? (YES/No)')
 	)
 
 $Path = (Resolve-Path .\).Path
@@ -42,12 +42,10 @@ Else
 	$OldNAPStudents = Import-Csv -Delimiter "," -Path $OldNAPCSV
 	}
 
-If ($AppendOutPut -Match 'False|No|0')
-	{Clear-Content -Path $NewNAPCSV}
-ElseIf ($AppendOutPut -Match 'True|Yes|1')
-	{}
-Write-Output 'APS Year,Reporting Test,READING_nb,WRITING_nb,SPELLING_nb,NUMERACY_nb,GRAMMAR & PUNCTUATION_nb,Cases ID' | Out-File -FilePath $NewNAPCSV -Append
-
+If ($AppendOutput -Match 'False|No|0')
+	{
+	Write-Output 'APS Year,Reporting Test,READING_nb,WRITING_nb,SPELLING_nb,NUMERACY_nb,GRAMMAR & PUNCTUATION_nb,Cases ID' | Out-File -FilePath $NewNAPCSV
+	}
 	
 Write-Host 'OldSTStudentKey NewSTStudentKey NewSTStudentVSN'
 ForEach ($NewSTStudent In $NewSTStudents)
