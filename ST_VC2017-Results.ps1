@@ -39,7 +39,7 @@ Else
 	{
 	$OldSTStudents = Import-Csv -Delimiter "," -Path $OldSTCSV | Where-Object {$_.STATUS -Match 'LVNG|LEFT' -And $_.SCHOOL_YEAR -Eq '06' -And $_.VSN -NotMatch 'NEW|UNKNOWN'}
 	$NewSTStudents = Import-Csv -Delimiter "," -Path $NewSTCSV | Where-Object {$_.STATUS -Match 'FUT|ACTV' -And $_.SCHOOL_YEAR -Eq '07' -And $_.VSN -NotMatch 'NEW|UNKNOWN'} 
-	$OldVCStudents = [Xml] (Get-Content $OldVCXML)
+	$OldVCStudents = [Xml] (Get-Content $OldVCXML) #| Where-Object $_.'SCHOOL_YEAR' -Match '06'
 	}
 
 If ($AppendOutPut -Match 'False|No|0')
@@ -51,24 +51,20 @@ ForEach ($NewSTStudent In $NewSTStudents)
     {
 	$NewSTStudentKey = $NewSTStudent.'STKEY'
 	$NewSTStudentVSN = $NewSTStudent.'VSN'
+	$NewSTStudentReg = $NewSTStudent.'REGISTRATION'
 		If (($OldSTStudents | Where-Object {$_.VSN -Eq $NewSTStudentVSN}) -Ne $Null)
 		{
-		ForEach ($OldSTStudent In $OldSTStudents)
+		ForEach ($OldVCStudent In $OldVCStudents.CASES21_message.body.student.studentresults.domainresult)
 			{
 			$OldSTStudentKey = $OldSTStudent.'STKEY'
 			$OldSTStudentVSN = $OldSTStudent.'VSN'
+			$OldSTStudentReg = $OldSTStudent.'REGISTRATION'
 			If (($NewSTStudents | Where-Object {$OldSTStudentVSN -Eq $NewSTStudentVSN}) -Ne $Null)
 				{
-				Write-Host "$OldSTStudentKey $NewSTStudentKey $NewSTStudentVSN"
+				Write-Host "$OldSTStudentKey $NewSTStudentKey $NewSTStudentVSN $OldSTStudentReg $NewSTStudentReg"
 				
 				}
 			}
 		}
 	}
 	
-ForEach ($Students in $OldVCStudents.CASES21_message.body) {
-  #initialize an ordered hashtable with the computername
-$Students.student
-#$OldVCStudents.CASES21_message.body.student.REGISTRATION
-}
-
