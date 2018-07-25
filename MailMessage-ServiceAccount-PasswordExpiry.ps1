@@ -25,12 +25,12 @@ ForEach ($User In $Users)
 	$pwdLastSet = $User.'pwdLastSet'
 	$UserPasswordExpiryTimeComputed = $User.'msDS-UserPasswordExpiryTimeComputed'
 	
-	If ($UserPasswordExpiryTimeComputed -notmatch '9223372036854775807|0')
+	If ($UserPasswordExpiryTimeComputed -ne $Null)
 	{
 	$UserPasswordExpiryTime = [datetime]::fromFileTime($UserPasswordExpiryTimeComputed)
 	$DaysToExipre = (New-TimeSpan -Start (Get-Date) -End $UserPasswordExpiryTime).Days
 	}
-	ElseIf ($DomainPolicyMaxPasswordAge -ne '0')
+	ElseIf ($DomainPolicyMaxPasswordAge -ne $Null)
 	{
 	$pwdLastSet = [datetime]::fromFileTime($pwdLastSet)
 	$PasswordAgeDays = (New-TimeSpan -Start $pwdLastSet -End (Get-Date)).Days
