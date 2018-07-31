@@ -44,7 +44,10 @@ New-PSDrive -Name $Drive.Substring(0,$Drive.Length-1) -Root $Destination -Persis
 
 # Copy eduHub$ folder to destination server
 If (Test-Path $Drive)
-    {Start-Process RoboCopy -ArgumentList "$Source $Drive /log+:$Log" -wait -NoNewWindow -PassThru}
+    {
+    Start-Process RoboCopy -ArgumentList "$Source $Drive /xf *.csv /log+:$Log" -wait -NoNewWindow -PassThru
+    Start-Process RoboCopy -ArgumentList "$Source $Drive *.csv /mir /log+:$Log" -wait -NoNewWindow -PassThru
+    }
 Else
     {Send-MailMessage -To $ToEMail -From $FromEMail -Subject "eduHubtoCurric Failed" -SmtpServer $SmtpServer}
 
