@@ -6,11 +6,11 @@ Get-ADUser `
 	-SearchScope Subtree -SearchBase $SearchBase `
 	-filter {Enabled -Eq $True -And mail -Like '*' -And extensionAttribute5 -Like $SchoolID} `
 	-properties `
-			displayName, `
-            Title, `
-			mail | `
+		displayName, `
+		Title, `
+		mail | `
 	sort-object `
-			Surname | `
+		Surname | `
 	select-object `
 		SamAccountName, `
 		Surname, `
