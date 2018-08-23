@@ -1,5 +1,22 @@
+<#
+.SYNOPSIS
+    Export staff details from active directory.
+.DESCRIPTION
+    Export staff firstname, lastname, email address and title from active directory.
+.NOTES
+    File Name      : eduMail-Staff-List.ps1
+    Author         : T Wyatt (wyatt.tyrone.e@edumail.vic.gov.au)
+    Prerequisite   : PowerShell V2 over Vista and upper.
+    Copyright      : 2018 - Tyrone Wyatt / Department of Education Victoria
+.LINK
+    Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
+.EXAMPLE
+    .\eduMail-Staff-List.ps1
+ #>
+
 # School ID
-[ValidateLength(4,4)]$SchoolID = [string](Read-Host -Prompt 'Enter school number')
+Do {$SchoolID = Read-Host 'Enter school number'}
+Until ($SchoolID -Match '^[0-9]{4}$')
 
 # Domain
 $Domain = 'edu001'
@@ -11,16 +28,11 @@ Try
     {$ResolveDnsName = Resolve-DnsName $DomainControllerFQDN -Server 10.10.22.11,10.10.22.12 -ErrorAction Stop}
 Catch 
     {
-    Write-Warning -Message "$DomainControllerFQDN DNS name does not exist."
-    Write-Host -ForegroundColor Red "Goodbye!"
-    Exit
+	Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+	Break 
     }
-Finally 
-    {
-    $DomainControllerIP = ($ResolveDnsName).IPAddress
-    }
+$DomainControllerIP = ($ResolveDnsName).IPAddress
 Write-Host -ForegroundColor Green "Domain controller set to $DomainControllerFQDN [$DomainControllerIP]."
-
 
 # Credentials
 $Username = Read-Host "Enter Username [$Domain]"
@@ -41,16 +53,12 @@ Try
     }
 Catch 
     {
-    Write-Warning -Message "Error getting user $Domain\$Username"
-    Write-Host -ForegroundColor Red "Goodbye!"
-    Exit
+    Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+    Break
     }
-Finally 
-    {
-    $SchoolAccountDN = $SchoolAccount.DistinguishedName
-    $SchoolOffice = $SchoolAccount.Office
-    $SearchBase = $SchoolAccountDN.Substring($SchoolAccountDN.IndexOf(',OU=')+1)
-    }
+$SchoolAccountDN = $SchoolAccount.DistinguishedName
+$SchoolOffice = $SchoolAccount.Office
+$SearchBase = $SchoolAccountDN.Substring($SchoolAccountDN.IndexOf(',OU=')+1)
 Write-Host -ForegroundColor Green "Search base set to $SearchBase."
 
 # Get AD Users
@@ -79,11 +87,11 @@ Try
     }
 Catch 
     {
-    Write-Warning -Message "Error getting users"
-    Write-Host -ForegroundColor Red "Goodbye!"
-    Exit
+    Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+	Break
     }
-If ($?) {Write-Host -ForegroundColor Green "Found" ($ADUsers).Count "users."} Else {Break}
+Write-Host -ForegroundColor Green "Found" ($ADUsers).Count "users."
+
 
 # Export CSV
 Write-Host 'Exporting CSV...'
