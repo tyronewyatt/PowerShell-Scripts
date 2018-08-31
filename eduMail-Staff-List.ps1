@@ -28,7 +28,7 @@ Try
     {$ResolveDnsName = Resolve-DnsName $DomainControllerFQDN -Server 10.10.22.11,10.10.22.12 -ErrorAction Stop}
 Catch 
     {
-	Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+	Write-Host -ForegroundColor Red -BackgroundColor Black 'ERROR:' $Error[0]
 	Break 
     }
 $DomainControllerIP = ($ResolveDnsName).IPAddress
@@ -53,7 +53,7 @@ Try
     }
 Catch 
     {
-    Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+    Write-Host -ForegroundColor Red -BackgroundColor Black 'ERROR:' $Error[0]
     Break
     }
 $SchoolAccountDN = $SchoolAccount.DistinguishedName
@@ -87,7 +87,7 @@ Try
     }
 Catch 
     {
-    Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+    Write-Host -ForegroundColor Red -BackgroundColor Black 'ERROR:' $Error[0]
 	Break
     }
 If (($ADUsers).Count -Eq '0') {Write-Warning "No users found"}
@@ -111,7 +111,7 @@ Try
 	}
 Catch 
     {
-    Write-Host -ForegroundColor Red -BackgroundColor Black $Error[0]
+    Write-Host -ForegroundColor Red -BackgroundColor Black 'ERROR:' $Error[0]
 	Break
     }
 If ((Test-Path $Path)) {Write-Host -ForegroundColor Green "Exported $(Get-Location)\$Path"}
