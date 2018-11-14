@@ -1,22 +1,39 @@
 ﻿<#
-.SYNOPSIS
+.Synopsis
     Commandline interface for dinopass.com
-.DESCRIPTION
+	
+.Description
     Create multiple simple or strong passwords and display on screen or export to file.
-.NOTES
+
+.Notes
     File Name      : dinopass.ps1
-    Author         : T Wyatt (tyrone.wyatt@gmail.com)
+    Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V2 over Vista and upper.
-    Copyright      : 2018 - Tyrone Wyatt
-.LINK
+    Copyright      : Tyrone Wyatt 2018
+	Version        : 1.1
+	Creation Date  : 14/11/2018
+	Purpose/Change : First stable build with added function module
+
+.link
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
-.EXAMPLE
-    .\dinopass.ps1 -quantity 5 -strength strong 
+
+.Example
+	# Create 1 simple password
+    dinopass.ps1 -quantity 1 -strength simple
+
+.Example
+	# Create 5 strong passwords
+    dinopass.ps1 -quantity 5 -strength strong 
+
+.Example
+	# Create 30 strong passwords and export to CSV
+    dinopass.ps1 -quantity 30 -strength strong -export yes
  #>
 # Set varibles
 Param(
 	[String]$Quantity = $(Read-Host 'Password Quantity [1]'),
-    [String]$Strength = $(Read-Host 'Password Strength [SIMPLE/Strong]')
+    [String]$Strength = $(Read-Host 'Password Strength [SIMPLE/Strong]'),
+    [String]$Export = $(Read-Host 'Export to CSV [Yes/NO]')
 )
 
 # Set default password quantity
@@ -24,6 +41,9 @@ If (!$Quantity) {$Quantity = '1'}
 
 # Set default password strength
 If ($Strength -Ne 'strong') {$Strength = 'simple'}
+
+# Set default export rule
+If ($Export -Ne 'yes') {$Export = 'no'}
 
 # Set dinopass API URL
 $DinoPassURL = 'https://dinopass.com/password'
@@ -38,11 +58,12 @@ $Passwords = For($Counter=1
 # Change title from Content to Password
 $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name Password -Value Content -PassThru
 
-# Change titlw from RawContentLength to PasswordLength
+# Change title from RawContentLength to PasswordLength
 $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name PasswordLength -Value RawContentLength -PassThru
 
 # Export to CSV
-$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path .\dinopass.csv
+If ($Export -Eq 'yes')
+    {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path .\dinopass.csv}
 
 # Write to Screen
-$Passwords | Select-Object Password
+Write-Output $Passwords | Select-Object Password
