@@ -12,9 +12,9 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.4
-	Creation Date  : 16/11/2018
-	Purpose/Change : First stable build cmdlet with general enhancements
+	Version        : 1.5
+	Creation Date  : 17/11/2018
+	Purpose/Change : Finalized paramaters and output to screen or CSV but not both
 
 .link
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
@@ -25,21 +25,24 @@
 
 .Example
 	# Create 5 strong passwords
-    dinopass.ps1 -quantity 5 -strong
+    dinopass.ps1 -count 5 -strong
 
 .Example
 	# Create 30 strong passwords and export to CSV
-    dinopass.ps1 -quantity 30 -strong -outfile '.\passwords.csv'
+    dinopass.ps1 -count 30 -strong -outfile '.\passwords.csv'
  #>
 # Set varibles
 Param(
-	[Int]$Quantity = '1',
+	[Int]$Count = '1',
     [switch]$Strong,
     [string]$OutFile
 )
 
 # Set default password strength
-If ($Strong -Eq $True) {$Strength = 'strong'} Else {$Strength = 'simple'}
+If ($Strong) 
+    {$Strength = 'strong'}
+Else 
+    {$Strength = 'simple'}
 
 # Set dinopass API URL
 $DinoPassURL = 'https://dinopass.com/password'
@@ -47,7 +50,7 @@ $DinoPassURL = 'https://dinopass.com/password'
 # Generate multiple passwords from website
 $Passwords = For( ` 
         $Counter=1
-        $Counter -le $Quantity
+        $Counter -le $Count
         $Counter++ `
         ) {Invoke-WebRequest $DinoPassURL/$Strength}
 
@@ -57,8 +60,8 @@ $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name Password -V
 # Change title from RawContentLength to PasswordLength
 $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name PasswordLength -Value RawContentLength -PassThru
 
-# Export to CSV
-If ($OutFile) {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path $OutFile}
-
-# Write to Screen
-If (!$OutFile) {Write-Output $Passwords | Select-Object Password}
+# Export to CSV or Write to Screen
+If ($OutFile) 
+    {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path $OutFile}
+Else
+    {Write-Output $Passwords | Select-Object Password}
