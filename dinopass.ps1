@@ -12,7 +12,7 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.3
+	Version        : 1.4
 	Creation Date  : 16/11/2018
 	Purpose/Change : First stable build cmdlet with general enhancements
 
@@ -25,21 +25,21 @@
 
 .Example
 	# Create 5 strong passwords
-    dinopass.ps1 -quantity 5 -complex
+    dinopass.ps1 -quantity 5 -strong
 
 .Example
 	# Create 30 strong passwords and export to CSV
-    dinopass.ps1 -quantity 30 -complex -outfile '.\passwords.csv'
+    dinopass.ps1 -quantity 30 -strong -outfile '.\passwords.csv'
  #>
 # Set varibles
 Param(
 	[Int]$Quantity = '1',
-    [switch]$Complex,
+    [switch]$Strong,
     [string]$OutFile
 )
 
 # Set default password strength
-If ($Complex -Eq $True) {$Strength = 'strong'} Else {$Strength = 'simple'}
+If ($Strong -Eq $True) {$Strength = 'strong'} Else {$Strength = 'simple'}
 
 # Set dinopass API URL
 $DinoPassURL = 'https://dinopass.com/password'
