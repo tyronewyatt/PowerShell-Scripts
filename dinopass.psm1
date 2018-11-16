@@ -8,7 +8,7 @@
 .Notes
     File Name      : dinopass.psm1
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
-    Prerequisite   : PowerShell V2 over Vista and upper.
+    Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
 	Version        : 1.2
 	Creation Date  : 16/11/2018
