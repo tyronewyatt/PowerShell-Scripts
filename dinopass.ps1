@@ -10,8 +10,8 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V2 over Vista and upper.
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.1
-	Creation Date  : 14/11/2018
+	Version        : 1.2
+	Creation Date  : 16/11/2018
 	Purpose/Change : First stable build with added function module
 
 .link
@@ -19,31 +19,27 @@
 
 .Example
 	# Create 1 simple password
-    dinopass.ps1 -quantity 1 -strength simple
+    dinopass.ps1 -quantity 1
 
 .Example
 	# Create 5 strong passwords
-    dinopass.ps1 -quantity 5 -strength strong 
+    dinopass.ps1 -quantity 5 -complex
 
 .Example
 	# Create 30 strong passwords and export to CSV
-    dinopass.ps1 -quantity 30 -strength strong -export yes
+    dinopass.ps1 -quantity 30 -complex -export
  #>
 # Set varibles
 Param(
-	[String]$Quantity = $(Read-Host 'Password Quantity [1]'),
-    [String]$Strength = $(Read-Host 'Password Strength [SIMPLE/Strong]'),
-    [String]$Export = $(Read-Host 'Export to CSV [Yes/NO]')
+	[Int]$Quantity = '1',
+    [switch]$Complex,
+    [switch]$Export
 )
 
-# Set default password quantity
-If (!$Quantity) {$Quantity = '1'}
-
 # Set default password strength
-If ($Strength -Ne 'strong') {$Strength = 'simple'}
-
-# Set default export rule
-If ($Export -Ne 'yes') {$Export = 'no'}
+If ($Complex -Eq $True) {$Strength = 'strong'}
+Else
+{$Strength = 'simple'}
 
 # Set dinopass API URL
 $DinoPassURL = 'https://dinopass.com/password'
@@ -62,7 +58,7 @@ $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name Password -V
 $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name PasswordLength -Value RawContentLength -PassThru
 
 # Export to CSV
-If ($Export -Eq 'yes')
+If ($Export -Eq $True)
     {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path .\dinopass.csv}
 
 # Write to Screen
