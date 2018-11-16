@@ -29,13 +29,13 @@
 
 .Example
 	# Create 30 strong passwords and export to CSV
-    dinopass.ps1 -quantity 30 -complex -path '.\passwords.csv'
+    dinopass.ps1 -quantity 30 -complex -outfile '.\passwords.csv'
  #>
 # Set varibles
 Param(
 	[Int]$Quantity = '1',
     [switch]$Complex,
-    [string]$Path
+    [string]$OutFile
 )
 
 # Set default password strength
@@ -58,7 +58,7 @@ $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name Password -V
 $Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name PasswordLength -Value RawContentLength -PassThru
 
 # Export to CSV
-If ($Path) {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path $Path}
+If ($OutFile) {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path $OutFile}
 
 # Write to Screen
-If (!$Path) {Write-Output $Passwords | Select-Object Password}
+If (!$OutFile) {Write-Output $Passwords | Select-Object Password}
