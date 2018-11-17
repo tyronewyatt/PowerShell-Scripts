@@ -12,24 +12,24 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.5
+	Version        : 1.6
 	Creation Date  : 17/11/2018
-	Purpose/Change : Finalized paramaters and output to screen or CSV but not both
+	Purpose/Change : Finalized paramaters, output to screen or CSV but not both and progress bar
 
 .link
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
 
 .Example
 	# Create a simple password
-    dinopass.ps1
+    dinopass
 
 .Example
 	# Create 5 strong passwords
-    dinopass.ps1 -count 5 -strong
+    dinopass -count 5 -strong
 
 .Example
 	# Create 30 strong passwords and export to CSV
-    dinopass.ps1 -count 30 -strong -outfile '.\passwords.csv'
+    dinopass -count 30 -strong -outfile '.\passwords.csv'
  #>
 Function dinopass
 {
@@ -50,11 +50,13 @@ Function dinopass
 	$DinoPassURL = 'https://dinopass.com/password'
 
 	# Generate multiple passwords from website
-	$Passwords = For( ` 
-			$Counter=1
-			$Counter -le $Count
-			$Counter++ `
-			) {Invoke-WebRequest $DinoPassURL/$Strength}
+	$Passwords = For($Counter=1;$Counter -le $Count;$Counter++) 
+			{
+			Write-Progress -Activity 'Generating' -Status "$Counter/$Count" -PercentComplete ($Counter/$Count*100)
+			$ProgressPreference = "SilentlyContinue"
+			Invoke-WebRequest $DinoPassURL/$Strength -InformationAction SilentlyContinue
+			$ProgressPreference = $OriginalPref
+			}
 
 	# Change title from Content to Password
 	$Passwords = $Passwords | Add-Member -MemberType AliasProperty -Name Password -Value Content -PassThru
