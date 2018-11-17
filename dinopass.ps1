@@ -12,7 +12,7 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.6
+	Version        : 1.6.1
 	Creation Date  : 17/11/2018
 	Purpose/Change : Finalized paramaters, output to screen or CSV but not both and progress bar
 
@@ -50,10 +50,10 @@ $DinoPassURL = 'https://dinopass.com/password'
 # Generate multiple passwords from website
 $Passwords = For($Counter=1;$Counter -le $Count;$Counter++) 
         {
+        $ProgressPreference = $OriginalPref
         Write-Progress -Activity 'Generating' -Status "$Counter/$Count" -PercentComplete ($Counter/$Count*100)
         $ProgressPreference = "SilentlyContinue"
-        Invoke-WebRequest $DinoPassURL/$Strength -InformationAction SilentlyContinue
-        $ProgressPreference = $OriginalPref
+        Invoke-WebRequest $DinoPassURL/$Strength
         }
 
 # Change title from Content to Password
