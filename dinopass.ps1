@@ -12,11 +12,11 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.6.1
+	Version        : 1.6.2
 	Creation Date  : 17/11/2018
 	Purpose/Change : Finalized paramaters, output to screen or CSV but not both and progress bar
 
-.link
+.Link
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
 
 .Example
