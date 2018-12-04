@@ -1,19 +1,25 @@
 <#
-.SYNOPSIS
-    Export staff details from active directory.
-.DESCRIPTION
+.Synopsis
+    Gets staff list from active directory.
+	
+.Description
     Export staff firstname, lastname, email address and title from active directory.
-.NOTES
+
+.Notes
     File Name      : eduMail-Staff-List.ps1
     Author         : T Wyatt (wyatt.tyrone.e@edumail.vic.gov.au)
-    Prerequisite   : PowerShell V2 over Vista and upper.
-    Copyright      : 2018 - Tyrone Wyatt / Department of Education Victoria
-.LINK
+    Prerequisite   : PowerShell V3 over Windows 7 and upper
+    Copyright      : 2018 - Tyrone Wyatt - Department of Education & Training Victoria
+	Version        : 1.1
+	Creation Date  : 29/11/2018
+	Purpose/Change : Finalized paramaters, output to screen or CSV but not both and progress bar
+.Link
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
-.EXAMPLE
-    .\eduMail-Staff-List.ps1
- #>
 
+.Example
+	# Create a simple password
+    eduMail-Staff-List.ps1
+ #>
 # School ID
 Do {$SchoolID = Read-Host 'Enter school number'}
 Until ($SchoolID -Match '^[0-9]{4}$')
