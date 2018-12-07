@@ -10,7 +10,7 @@
     Author         : Tyrone Wyatt (tyrone.wyatt@gmail.com)
     Prerequisite   : PowerShell V3 over Windows 7 and upper
     Copyright      : Tyrone Wyatt 2018
-	Version        : 1.1
+	Version        : 1.1.1
 	Creation Date  : 07/12/2018
 	Purpose/Change : Check key and activate with switch
 
@@ -18,7 +18,12 @@
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
 
 .Example
+    # Install Product Key
     SetOEMProductKey.ps1
+
+.Example
+    # Install Product Key and Activate Windows
+    SetOEMProductKey.ps1 -activate
  #>
 Param(
     [switch]$Activate
