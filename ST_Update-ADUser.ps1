@@ -139,24 +139,21 @@ ForEach ($CSVUser In $CSVUsers)
 		{$TimetableGroup = $Null}
 	Else
 		{$TimetableGroup = $CSVUser.'TAG'}
-    #Enabled
-	If ($CSVUser.'STATUS' -Match 'FUT|ACTV|LVNG')
-		{$Enabled = $True}
-	ElseIf ($CSVUser.'STATUS' -Match 'LEFT|DEL')
-		{$Enabled = $False}
 	#AccountExpirationDate
 	If ($CSVUser.'STATUS' -Match 'FUT')
-		{$AccountExpirationDate = $CSVUser.'ENTRY'}
+		{$AccountExpirationDate = $Null}
 	ElseIf ($CSVUser.'STATUS' -Match 'ACTV')
 		{$AccountExpirationDate = $Null}
-	ElseIf ($CSVUser.'STATUS' -Match 'LVNG' -And $CSVUser.'DEPARTURE_DATE'.Length -Ne '0')
-		{$AccountExpirationDate = $CSVUser.'DEPARTURE_DATE'}
+	ElseIf (($CSVUser.'STATUS' -Match 'LVNG') -And ($CSVUser.'DEPARTURE_DATE'.Length -Ne '0'))
+		{$AccountExpirationDate = (Get-Date($CSVUser.'DEPARTURE_DATE')).AddDays(1)}
 	ElseIf ($CSVUser.'STATUS' -Match 'LVNG')
 		{$AccountExpirationDate = $Null}
-	ElseIf ($CSVUser.'STATUS' -Match 'LEFT|DEL')
-		{$AccountExpirationDate = $Null}
-	Else 
-		{$AccountExpirationDate = $Null}
+	ElseIf (($CSVUser.'STATUS' -Match 'LEFT') -And ($CSVUser.'EXIT_DATE'.Length -Ne '0'))
+		{$AccountExpirationDate = (Get-Date($CSVUser.'EXIT_DATE')).AddDays(1)}
+	ElseIf (($CSVUser.'STATUS' -Match 'DEL') -And ($CSVUser.'DATELEFT'.Length -Ne '0'))
+		{$AccountExpirationDate = (Get-Date($CSVUser.'DATELEFT')).AddDays(1)}
+	Else
+		{$AccountExpirationDate = (Get-Date).AddDays(-1)}
 
     ### If AD user found in CSV, set variables from CSV ###
 	If (($ADUsers | Where-Object {$_.sAMAccountName -Eq $Identity}) -Ne $Null)
@@ -180,9 +177,8 @@ ForEach ($CSVUser In $CSVUsers)
             -PostalCode $PostalCode `
             -Country $Country `
             -OfficePhone $OfficePhone `
-            –PasswordNeverExpires $False `
+            -PasswordNeverExpires $False `
 			-AllowReversiblePasswordEncryption $False `
-			-Enabled $Enabled `
 			-AccountExpirationDate $AccountExpirationDate `
             -PassThru
 		}
