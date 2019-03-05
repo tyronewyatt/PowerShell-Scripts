@@ -13,10 +13,11 @@
 .EXAMPLE
     .\ST_Update-ADUser.ps1 
 .EXAMPLE
-    .\ST_Update-ADUser.ps1 -Delta Yes 
+	# Use delta import CSV file
+    .\ST_Update-ADUser.ps1 -Delta
  #>
 Param(
-	[String]$Delta = $(Read-Host 'Update users based on data differencing? Yes/NO')
+	[Switch]$Delta
 	)
 
 ### Modules ###
@@ -45,7 +46,7 @@ $PostalCode = '3707'
 $Country = 'AU'
 $OfficePhone = '0260761566'
 
-If ($Delta -Match 'Yes|True|1')
+If ($Delta)
 	{$CSVPath = $eduHub + '\ST_' + $SchoolID + '_D.csv'}
 Else 
 	{$CSVPath = $eduHub + '\ST_' + $SchoolID + '.csv'}

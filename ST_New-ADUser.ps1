@@ -11,10 +11,13 @@
 .LINK
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
 .EXAMPLE
-    .\ST_Add-ADUser.ps1 s 
+    .\ST_Add-ADUser.ps1
+.EXAMPLE
+	# Use delta import CSV file
+    .\ST_Add-ADUser.ps1 -Delta
  #>
 Param(
-	[String]$Delta = $(Read-Host 'Update users based on data differencing? Yes/NO')
+	[Switch]$Delta
 	)
 
 ### Modules ###
@@ -49,7 +52,7 @@ t: 02 6076 1566
 e: ict.helpdesk@corryong.vic.edu.au
 w: www.corryong.vic.edu.au"
 
-If ($Delta -Match 'Yes|True|1')
+If ($Delta)
 	{$CSVPath = $eduHub + '\ST_' + $SchoolID + '_D.csv'}
 Else 
 	{$CSVPath = $eduHub + '\ST_' + $SchoolID + '.csv'}
