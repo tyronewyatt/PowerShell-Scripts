@@ -18,7 +18,7 @@ w: www.tallangatta-sc.vic.edu.au"
 
 $Users = Get-ADUser `
 	-SearchBase $OrganisationalUnit `
-	-Filter {mail -like "dra0003@tallangatta-sc.vic.edu.au"} `
+	-Filter {mail -like "*@tallangatta-sc.vic.edu.au"} `
 	-Properties samAccountName,accountExpires,mail,givenName,displayName
 
 ForEach ($User In $Users)
@@ -41,12 +41,17 @@ ForEach ($User In $Users)
 	
 	If 	($Users | Where-Object `
 		{ `
-		$DaysToExipre -ge '1' -And `
+		$DaysToExipre -ge '0' -And `
 		$DaysToExipre -le $WarningPasswordAge
 		}
 		)
 	{
-	If ($DaysToExipre -eq '1')
+	If ($DaysToExipre -eq '0')
+		{
+		Write-Host "$AccountName user account expires today."
+		$MailSubject = "Your user account will expire today"
+		}
+	ElseIf ($DaysToExipre -eq '1')
 		{
 		Write-Host "$AccountName user account expires tomorrow."
 		$MailSubject = "Your user account will expire tomorrow"
