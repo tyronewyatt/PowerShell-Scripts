@@ -7,6 +7,7 @@ $SmtpServer = 'tscmx01.tallangatta-sc.vic.edu.au'
 #$MailTo = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
 $SupportURL = 'https://helpdesk@tallangatta-sc.vic.edu.au'
+$PasswordPortalURL = 'https://sso.tallangatta-sc.vic.edu.au/adfs/portal/updatepassword'
 $SchoolHostedSystems = 'Computers, Outlook and LMS'
 $SchoolCloudSystems = 'Compass'
 $MailSignature = `
@@ -64,6 +65,11 @@ ForEach ($User In $Users)
 		Write-Host "$AccountName password expires in $DaysToExipre days."
 		$MailSubject = "Your password will expire in $DaysToExipre days"
 		}
+
+If ($PasswordPortalURL)
+    {$ChangePasswordInstructions = "To change your password, open a web browser and navigate to $PasswordPortalURL"}
+Else
+    {$ChangePasswordInstructions = 'To change your password, logon to a school computer, press CTRL+ALT+DELETE and then click Change Password.'}
 		
 $MailBody = `
 "Hello $FirstName,
@@ -74,7 +80,7 @@ Your password will expire soon, please change your password now.
 
 Passwords are valid for twelve months, so you must change your password at least once a year. This helps protect you and the schools network from possible breach of IT security. It is important that you keep your password private and not share it with anyone.
 
-To change your password, logon to a school computer, press CTRL+ALT+DELETE and then click Change Password.
+$ChangePasswordInstructions
 
 Important:
 
