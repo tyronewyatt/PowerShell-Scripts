@@ -75,6 +75,8 @@ ForEach ($CSVUser In $CSVUsers)
 		{$Description = 'Active'}
 	ElseIf ($CSVUser.'STATUS' -Match 'LVNG')
 		{$Description = 'Leaving'}
+	ElseIf ($CSVUser.'STATUS' -Match 'INAC')
+		{$Description = 'Inactive'}
 	ElseIf ($CSVUser.'STATUS' -Match 'LEFT')
 		{$Description = 'Left'}
 	ElseIf ($CSVUser.'STATUS' -Match 'DEL')
@@ -149,12 +151,14 @@ ForEach ($CSVUser In $CSVUsers)
 		{$AccountExpirationDate = (Get-Date($CSVUser.'DEPARTURE_DATE')).AddDays(1)}
 	ElseIf ($CSVUser.'STATUS' -Match 'LVNG')
 		{$AccountExpirationDate = $Null}
+	ElseIf ($CSVUser.'STATUS' -Match 'INAC')
+		{$AccountExpirationDate = Get-Date}
 	ElseIf (($CSVUser.'STATUS' -Match 'LEFT') -And ($CSVUser.'EXIT_DATE'.Length -Ne '0'))
 		{$AccountExpirationDate = (Get-Date($CSVUser.'EXIT_DATE')).AddDays(1)}
 	ElseIf (($CSVUser.'STATUS' -Match 'DEL') -And ($CSVUser.'DATELEFT'.Length -Ne '0'))
 		{$AccountExpirationDate = (Get-Date($CSVUser.'DATELEFT')).AddDays(1)}
 	Else
-		{$AccountExpirationDate = (Get-Date).AddDays(-1)}
+		{$AccountExpirationDate = Get-Date}
 
     ### If AD user found in CSV, set variables from CSV ###
 	If (($ADUsers | Where-Object {$_.sAMAccountName -Eq $Identity}) -Ne $Null)
