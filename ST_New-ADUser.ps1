@@ -171,7 +171,7 @@ FullName: $DisplayName `
 Status: $Status `
 GroupMember: $GroupMember `
 Year Level: $Department `
-Initial Password: $ComplexPassword `
+Initial Password: $AccountPassword `
 
 				")
 				}
