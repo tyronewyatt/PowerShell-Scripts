@@ -75,9 +75,6 @@ $Passwords = $Passwords |
 
 # Export to CSV or write to screen
 If ($OutFile) 
-    {
-    Write-Output $Passwords | Select-Object Password
-    $Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path $OutFile
-    }
+    {$Passwords | Select-Object Password, PasswordLength | Export-CSV -NoTypeInformation -Path $OutFile -Confirm}
 Else
     {Write-Output $Passwords | Select-Object Password}
