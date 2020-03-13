@@ -51,9 +51,13 @@ $DinoPassURI = 'https://dinopass.com/password'
 $Passwords = For($Counter=1;$Counter -le $Count;$Counter++) 
         {
         $ProgressPreference = 'Continue'
-        Write-Progress -Activity 'Generating' -Status "$Counter/$Count" -PercentComplete ($Counter/$Count*100)
+        Write-Progress `
+            -Activity 'Generating' `
+            -Status "$Counter/$Count" `
+            -PercentComplete ($Counter/$Count*100)
         $ProgressPreference = 'SilentlyContinue'
-        Invoke-WebRequest -uri "$DinoPassURI/$Strength"
+        Invoke-WebRequest `
+            -URI "$DinoPassURI/$Strength"
         }
 
 # Rename titles
