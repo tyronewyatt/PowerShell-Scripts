@@ -14,7 +14,7 @@
     Copyright      : Tyrone Wyatt 2020
 	Version        : 1.6.4
 	Creation Date  : 14/03/2020
-	Purpose/Change : Finalized paramaters, output to screen or CSV but not both and progress bar and improve title renaming
+	Purpose/Change : Finalized paramaters, output to screen or CSV but not both, progress bar and improve title renaming
 
 .Link
     Repository     : https://github.com/tyronewyatt/PowerShell-Scripts/
