@@ -38,7 +38,7 @@ Param(
     [string]$OutFile
 )
 
-# Set default password strength
+# Set password strength
 If ($Strong) 
     {$Strength = 'strong'}
 Else 
