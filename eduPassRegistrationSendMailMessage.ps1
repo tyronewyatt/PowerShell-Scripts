@@ -26,7 +26,8 @@ ForEach ($User In $Users)
     $Email = $User.'Login'.ToLower() + '@schools.vic.edu.au'
 	$NewPassword = $User.'New Password'
 	$HomeGroup = $User.'Home Group'
-	$MailTo = "$User.'First Name' $User.'Last Name' <$STKEY@$FQDN>"
+	$DisplayName = $User.'First Name' + ' ' + $User.'Last Name'
+	$MailTo = "$DisplayName <$STKEY@$FQDN>"
 
 $MailBody = `
 "<span style='font-family:Tahoma;'>
