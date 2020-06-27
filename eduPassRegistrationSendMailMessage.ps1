@@ -26,7 +26,7 @@ ForEach ($User In $Users)
     $Email = $User.'Login'.ToLower() + '@schools.vic.edu.au'
 	$NewPassword = $User.'New Password'
 	$HomeGroup = $User.'Home Group'
-	$MailTo = "$User.'First Name' + ' ' + $User.'Last Name' ' <$STKEY@$FQDN>"
+	$MailTo = $User.'First Name' + ' ' + $User.'Last Name' + " <$STKEY@$FQDN>"
 
 $MailBody = `
 "<span style='font-family:Tahoma;'>
@@ -57,8 +57,7 @@ $MailBody = `
 	<p style='margin-left:60px;'>For assistance in registering for Self-Service Password Reset please view the following link: <b><u>How to register for Self-Service Password Reset</b></u></p>
 	<p>For further information or questions, please contact your Teacher or appropriate School eduPass Administrator.</p>
 	<br />
-	<p style='font-weight:bold'>Before using the system it is recommended to read some important privacy information in the following document: 
-		<a style='font-weight:bold' href='http://www.education.vic.gov.au/Pages/privacy.aspx'>http://www.education.vic.gov.au/Pages/privacy.aspx</a></p>
+	<p style='font-weight:bold'>Before using the system it is recommended to read some important privacy information in the following document: <a style='font-weight:bold' href='http://www.education.vic.gov.au/Pages/privacy.aspx'>http://www.education.vic.gov.au/Pages/privacy.aspx</a></p>
 	<br />
 	<p>$MailSignature</p>
 </span>"
