@@ -60,7 +60,7 @@ $MailBody = `
 	<p style='font-weight:bold'>Before using the system it is recommended to read some important privacy information in the following document: 
 		<a style='font-weight:bold' href='http://www.education.vic.gov.au/Pages/privacy.aspx'>http://www.education.vic.gov.au/Pages/privacy.aspx</a></p>
 	<br />
-    <p>$MailSignature</p>
+	<p>$MailSignature</p>
 </span>"
 
 Send-MailMessage `
