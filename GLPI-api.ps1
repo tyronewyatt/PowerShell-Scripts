@@ -21,17 +21,18 @@ $Users = Invoke-RestMethod `
 
 ForEach ($Computer In $Computers)
     {
-    $ComputerName = $Computer.'Name'
-    $ComputerUserid = $Computer.'users_id'
-    $UserName = $Users | Where-Object {$_.'Name' -Eq $Computer.'users_id'} | Select-Object -ExpandProperty 'Name'
-    $UserComment = $Users | Where-Object {$_.'Name' -Eq $Computer.'users_id'} | Select-Object -ExpandProperty 'Comment'
+    $Computer_Name = $Computer.'Name'
+    $Computer_Username = $Computer.'users_id'
+    $User_Username = $Users | Where-Object {$_.'Name' -Eq $Computer.'users_id'} | Select-Object -ExpandProperty 'Name'
+    $User_Comment = $Users | Where-Object {$_.'Name' -Eq $Computer.'users_id'} | Select-Object -ExpandProperty 'Comment'
 
-    If ($UserName -Like $ComputerUserid -And $userComment -Match 'Leaving') 
+    If ($User_Username -Like $Computer_Username -And $User_Comment -Match 'Leaving') 
         {
-        New-Object psobject -Property @{'Username'=$UserName; 'User Comment'=$UserComment; 'Computer'=$ComputerName} | 
+        New-Object psobject -Property @{'Username'=$User_Username; 'User Comment'=$User_Comment; 'Computer'=$Computer_Name} | 
         Select-Object 'Username', 'Computer', 'User Comment'
         }
     }
+    
 
 #killSession
 Invoke-RestMethod `
