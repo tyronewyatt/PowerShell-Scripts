@@ -9,12 +9,12 @@ $SmtpServer = 'mail.tallangatta-sc.vic.edu.au'
 $MailBCC = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
 $MailSignature = `
-"ICT Helpdesk<br />
-Tallangatta Secondary College<br />
-145 Towong Street Tallangatta, 3700, VIC<br />
-t: <a href='tel://+612607150000'>02 6071 5000</a><br />
-e: <a href='mailto://ict.helpdesk@tallangatta-sc.vic.edu.au'>ict.helpdesk@tallangatta-sc.vic.edu.au</a><br />
-w: <a href='https://www.tallangatta-sc.vic.edu.au'>www.tallangatta-sc.vic.edu.au</a>"
+    "ICT Helpdesk<br />
+    Tallangatta Secondary College<br />
+    145 Towong Street Tallangatta, 3700, VIC<br />
+    t: <a href='tel://+612607150000'>02 6071 5000</a><br />
+    e: <a href='mailto://ict.helpdesk@tallangatta-sc.vic.edu.au'>ict.helpdesk@tallangatta-sc.vic.edu.au</a><br />
+    w: <a href='https://www.tallangatta-sc.vic.edu.au'>www.tallangatta-sc.vic.edu.au</a>"
 
 #Import data and generate email for each user
 $Users = Import-Csv -Delimiter "," -Path $CSVPath
@@ -26,6 +26,7 @@ ForEach ($User In $Users)
     $Email = $User.'Login'.ToLower() + '@schools.vic.edu.au'
 	$NewPassword = $User.'New Password'
 	$HomeGroup = $User.'Home Group'
+    $STKEY = $User.'STKEY'
 	$DisplayName = $User.'First Name' + ' ' + $User.'Last Name'
 	$MailTo = "$DisplayName <$STKEY@$FQDN>"
 
@@ -60,7 +61,9 @@ $MailBody = `
 	<br />
 	<p style='font-weight:bold'>Before using the system it is recommended to read some important privacy information in the following document: <a style='font-weight:bold' href='http://www.education.vic.gov.au/Pages/privacy.aspx'>http://www.education.vic.gov.au/Pages/privacy.aspx</a></p>
 	<br />
-	<p>$MailSignature</p>
+	<p>
+    $MailSignature
+    </p>
 </span>"
 
 Send-MailMessage `
