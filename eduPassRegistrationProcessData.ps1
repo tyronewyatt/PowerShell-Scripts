@@ -6,7 +6,7 @@ $NewEduPassCSVPath = 'z:\8370_pwd_reset_log_yr8_new.csv' #Export CSV
 
 #Import CSVs
 $EduPassUsers = Import-Csv -Delimiter "," -Path $EduPassCSVPath
-$EduHubUsers = Import-Csv -Delimiter "," -Path $EduHubCSVPath | Where-Object {$_.STATUS -NotMatch 'LEFT|DEL'} 
+$EduHubUsers = Import-Csv -Delimiter "," -Path $EduHubCSVPath | Where-Object {$_.STATUS -Match 'FUT|ACTV|INAC|LVNG'} 
 $PwdResetUsers = Import-Csv -Delimiter "," -Path $PwdResetCSVPath
 
 #Create empty array
