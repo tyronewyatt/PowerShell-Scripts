@@ -1,13 +1,11 @@
 ﻿#Set details
 $CSVPath = '.\8370_pwd_reset_log_yr8_new.csv'
-$MailSubject = 'eduPass Registration Email'
 $SchoolCode = '8370'
 $FQDN = 'tallangatta-sc.vic.edu.au'
-$Date = (Get-Date).ToString("dd MMMM, yyyy")
-$Expiry = (Get-Date -Day 26 -Month 06 -Year 2021).ToString("dd MMMM, yyyy")
 $SmtpServer = 'mail.tallangatta-sc.vic.edu.au'
 $MailBCC = 'Netbook Admin <netbookadmin@tallangatta-sc.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@tallangatta-sc.vic.edu.au>'
+$MailSubject = 'eduPass Registration Email'
 $MailSignature = `
     "ICT Helpdesk<br />
     Tallangatta Secondary College<br />
@@ -15,6 +13,8 @@ $MailSignature = `
     t: <a href='tel://+612607150000'>02 6071 5000</a><br />
     e: <a href='mailto://ict.helpdesk@tallangatta-sc.vic.edu.au'>ict.helpdesk@tallangatta-sc.vic.edu.au</a><br />
     w: <a href='https://www.tallangatta-sc.vic.edu.au'>www.tallangatta-sc.vic.edu.au</a>"
+$Date = (Get-Date).ToString("dd MMMM, yyyy")
+$PasswordExpiryDate = (Get-Date -Day 26 -Month 06 -Year 2021).ToString("dd MMMM, yyyy")
 
 #Import data and generate email for each user
 $Users = Import-Csv -Delimiter "," -Path $CSVPath
@@ -24,7 +24,7 @@ ForEach ($User In $Users)
 	$LastName = $User.'Last Name'
     $UserName = $User.'Login'.ToUpper()
     $Email = $User.'Login'.ToLower() + '@schools.vic.edu.au'
-	$NewPassword = $User.'New Password'
+	$Password = $User.'New Password'
 	$HomeGroup = $User.'Home Group'
     $STKEY = $User.'STKEY'
 	$DisplayName = $User.'First Name' + ' ' + $User.'Last Name'
@@ -38,12 +38,12 @@ $MailBody = `
 	<p style='text-align:right'>Home Group: $HomeGroup<br />School Code: $SchoolCode</p>
 	<p style='font-weight:bold'>Dear $FirstName</p>
 	<p>Welcome to eduPass!</p>
-	<p>Your eduPass account provides you with secure access to Information and Technology resources provided by our school and the Department i.e. Minecraft, ClickView, Adobe, Career e-Portfolio, Linked In and many more packages.</p>
+	<p>Your eduPass account provides you with secure access to Information and Technology resources provided by our school and the Department, i.e. Minecraft, ClickView, Adobe, Career e-Portfolio, Linked In and many more packages.</p>
 	<p style='font-weight:bold'>Your eduPass User Name and password are:</p>
 	<p style='margin-left:50px;'><b>User Name:</b> $UserName</p>
 	<p style='margin-left:50px;'><b>Email:</b> $Email</p>
-	<p style='margin-left:50px;'><b>Password:</b> $NewPassword</p>
-	<p style='margin-left:50px;'><b>Password Expiry Date:</b> $Expiry</p>
+	<p style='margin-left:50px;'><b>Password:</b> $Password</p>
+	<p style='margin-left:50px;'><b>Password Expiry Date:</b> $PasswordExpiryDate</p>
 	<p style='margin-left:50px;'>Your password will expire in 365 days, on the date above.</p>
 	<div style='border-style:solid; border-width:1px; padding:10px; margin:10px;'>
 		<p style='color:blue;font-weight:bold'>Actions Required:</p>
