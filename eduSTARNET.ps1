@@ -157,7 +157,7 @@ $ProfilePEAP = `
 </WLANProfile>"
 
 # Generate eduSTAR PEAP user authentication with EAP-TLS pre-authentication machine authentication WLAN profile
-$ProfileEAPSSO = `
+$ProfilePEAPSSO = `
 "<?xml version=`"1.0`"?>
 <WLANProfile xmlns=`"http://www.microsoft.com/networking/WLAN/profile/v1`">
     <name>$($SSID.Name)</name>
