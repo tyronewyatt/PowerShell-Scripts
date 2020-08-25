@@ -1,6 +1,7 @@
 ﻿Param(
 [string]$SchoolPrefix = '0000',
 [string]$NetworkName = 'eduSTAR',
+[switch]$EducationDomain = $False,
 [string]$ScriptPath = '\\tsccm01.tallangatta-sc.vic.edu.au\SourceFiles\Packages\eduSTAR.net',
 [string]$CertificatePath = '\\tscfs01.tallangatta-sc.vic.edu.au\eduSTAR.net$',
 [string]$CertificatePassword = 'xxxxxx'
@@ -269,7 +270,7 @@ If ((Get-WmiObject Win32_ComputerSystem).PCSystemType -Eq '2')
     $WlanProfile = $($SSID.Name) + '-Profile.xml'
 
     # Test if certificate exists, if so user machine authentication else user authentication
-    If (Test-Path "$CertificatePath\$CertificateName")
+    If (Test-Path "$CertificatePath\$CertificateName" -And $EducationDomain -Eq $False)
         {
         # Import machine certificate
         Import-PfxCertificate –FilePath "$CertificatePath\$CertificateName" Cert:\LocalMachine\My -Password $SecureCertificatePassword
@@ -289,6 +290,14 @@ If ((Get-WmiObject Win32_ComputerSystem).PCSystemType -Eq '2')
         $ProfilePEAP | Out-File -Encoding utf8 -FilePath $env:TEMP\$WlanProfile
 
         # Import eduSTAR PEAP WLAN profile for user authentication
+        NetSh WLAN Add Profile FileName = $env:TEMP\$WlanProfile
+        }
+    If ($EducationDomain -Eq $True)
+        {
+        # Export eduSTAR PEAP user authentication with EAP-TLS pre-authentication machine authentication WLAN profile
+        $ProfilePEAPSSO | Out-File -Encoding utf8 -FilePath $env:TEMP\$WlanProfile
+        
+        # Import eduSTAR PEAP user authentication with EAP-TLS pre-authentication machine authentication WLAN profile
         NetSh WLAN Add Profile FileName = $env:TEMP\$WlanProfile
         }
     # Remove eduSTAR profile
