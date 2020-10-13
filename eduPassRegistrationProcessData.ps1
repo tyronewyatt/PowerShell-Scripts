@@ -6,7 +6,7 @@ $NewEduPassCSVPath = 'z:\8370_pwd_reset_log_yr8_new.csv' #Export CSV
 
 #Import CSVs
 $EduPassUsers = Import-Csv -Delimiter "," -Path $EduPassCSVPath
-$EduHubUsers = Import-Csv -Delimiter "," -Path $EduHubCSVPath | Where-Object {$_.STATUS -NotMatch 'LEFT|DEL'} 
+$EduHubUsers = Import-Csv -Delimiter "," -Path $EduHubCSVPath | Where-Object {$_.STATUS -Match 'FUT|ACTV|INAC|LVNG'} 
 $PwdResetUsers = Import-Csv -Delimiter "," -Path $PwdResetCSVPath
 
 #Create empty array
@@ -14,30 +14,30 @@ $NewEduPassCSV = @()
 
 #PwdReset loop
 ForEach ($PwdResetUser In $PwdResetUsers)
-	{
-	$PwdResetFirstName = $PwdResetUser.'First Name'
-	$PwdResetLastName = $PwdResetUser.'Last Name'
-	$PwdResetNewPassword = $PwdResetUser.'New Password'
+    {
+    $PwdResetFirstName = $PwdResetUser.'First Name'
+    $PwdResetLastName = $PwdResetUser.'Last Name'
+    $PwdResetNewPassword = $PwdResetUser.'New Password'
     $PwdResetLogin = $PwdResetUser.'Login'.ToUpper()
     $PwdResetYear = $EduPassUsers | Where-Object {$_.'login' -Eq $PwdResetUser.'Login'} | Select-Object -ExpandProperty 'year' #Match EduPass Year using login as key
     $PwdResetGroup = $EduPassUsers | Where-Object {$_.'login' -Eq $PwdResetUser.'Login'} | Select-Object -ExpandProperty 'student_class' #Match EduPass Group using login as key
 
     #EduHub loop
     ForEach ($EduHubUser In $EduHubUsers)
-	    {
-	    $EduHubFirstName = $EduHubUser.'FIRST_NAME'
-	    $EduHubLastName = $EduHubUser.'SURNAME'
+        {
+        $EduHubFirstName = $EduHubUser.'FIRST_NAME'
+        $EduHubLastName = $EduHubUser.'SURNAME'
         $EduHubLogin = $EduHubUser.'STKEY'
         $EduHubYear = $EduHubUser.'SCHOOL_YEAR'
         $EduHubGroup = $EduHubUser.'HOME_GROUP'
 
         #Match between EduHub and Password Reset Log
-		If (($EduHubFirstName -Ieq $PwdResetFirstName) -And ` #FirstName
+        If (($EduHubFirstName -Ieq $PwdResetFirstName) -And ` #FirstName
             ($EduHubLastName -Ieq $PwdResetLastName) -And #LastName
             ($EduHubYear -Eq $PwdResetYear) -And ` #Year Level
             ($EduHubGroup -Eq $PwdResetGroup) -And ` # Home Group
             ($PwdResetNewPassword -NotMatch 'is disabled. Skipped.')) # Disabled
-			    {
+                {
                 #Output data to array
                 $NewEduPassCSV += New-Object psobject -Property `
                     @{'Login'=$PwdResetLogin;
