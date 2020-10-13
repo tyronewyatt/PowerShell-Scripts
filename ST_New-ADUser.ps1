@@ -42,6 +42,7 @@ $PostalCode = '3700'
 $Country = 'Au'
 $OfficePhone = '0260761566'
 $SmtpServer = 'cormx01.corryong.vic.edu.au'
+$AddsServer = ($env:LOGONSERVER).Substring(2) + '.corryong.vic.edu.au'
 $MailTo = 'DL ICT Staff <dl.ictstaff@corryong.vic.edu.au>'
 $MailFrom = 'ICT Helpdesk <ict.helpdesk@corryong.vic.edu.au>'
 $MailSignature = `
@@ -61,6 +62,7 @@ Else
 $ADUsers = Get-ADUser `
 	-SearchBase $BaseDN `
 	-Filter * `
+    -Server $AddsServer `
 	-Properties samAccountName
 
 ### Import CSV Users ###
@@ -158,10 +160,12 @@ ForEach ($CSVUser In $CSVUsers)
 			-ChangePasswordAtLogon $True `
 			–PasswordNeverExpires $False `
 			-AllowReversiblePasswordEncryption $False `
+            -Server $AddsServer `
 			-PassThru
 		Add-ADGroupMember `
 			-Identity $GroupMember `
 			-Members $Identity `
+            -Server $AddsServer `
 			-PassThru
 			If ($?)
 				{
