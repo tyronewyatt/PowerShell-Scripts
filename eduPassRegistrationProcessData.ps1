@@ -1,8 +1,8 @@
 ﻿#Set CSV paths
 $EduHubCSVPath = '\\tscdc01\eduhub$\ST_8370.csv' #EduHub Students table
-$EduPassCSVPath = '.\8370_students.csv' #eduPass (eduSTAR.MC) Student Export
-$PwdResetCSVPath = '.\8370_pwd_reset_log_yr8.csv' #eduPass (eduSTAR.MC) Student Password Reset Log 
-$NewEduPassCSVPath = 'z:\8370_pwd_reset_log_yr8_new.csv' #Export CSV
+$EduPassCSVPath = '.\8370_students.csv' #eduPass: eduSTAR.MC > Access Managemnt > Student Passwords > Export 
+$PwdResetCSVPath = '.\8370_pwd_reset_log_yr8.csv' #eduPass: eduSTAR.MC > Access Managemnt > Student Passwords > Reset Password - by year/class 
+$NewEduPassCSVPath = '.\8370_pwd_reset_log_yr8_new.csv' #Export CSV
 
 #Import CSVs
 $EduPassUsers = Import-Csv -Delimiter "," -Path $EduPassCSVPath
@@ -34,8 +34,7 @@ ForEach ($PwdResetUser In $PwdResetUsers)
         #Match between EduHub and Password Reset Log
         If (($EduHubFirstName -Ieq $PwdResetFirstName) -And ` #FirstName
             ($EduHubLastName -Ieq $PwdResetLastName) -And #LastName
-            ($EduHubYear -Eq $PwdResetYear) -And ` #Year Level
-            ($EduHubGroup -Eq $PwdResetGroup) -And ` # Home Group
+            ($EduHubYear -Eq $PwdResetYear) -And ` #Year Level   
             ($PwdResetNewPassword -NotMatch 'is disabled. Skipped.')) # Disabled
                 {
                 #Output data to array

@@ -1,5 +1,5 @@
 ﻿#Set details
-$CSVPath = '.\8370_pwd_reset_log_yr8_new.csv'
+$CSVPath = '.\8370_pwd_reset_log_yr8_new.csv' #Import eduPassRegistrationProcessData scipts exported CSV
 $SchoolCode = '8370'
 $FQDN = 'tallangatta-sc.vic.edu.au'
 $SmtpServer = 'mail.tallangatta-sc.vic.edu.au'
@@ -14,7 +14,7 @@ $MailSignature = `
     e: <a href='mailto://ict.helpdesk@tallangatta-sc.vic.edu.au'>ict.helpdesk@tallangatta-sc.vic.edu.au</a><br />
     w: <a href='https://www.tallangatta-sc.vic.edu.au'>www.tallangatta-sc.vic.edu.au</a>"
 $Date = (Get-Date).ToString("dd MMMM, yyyy")
-$PasswordExpiryDate = (Get-Date -Day 26 -Month 06 -Year 2021).ToString("dd MMMM, yyyy")
+$PasswordExpiryDate = (Get-Date).AddYears(1).ToString("dd MMMM, yyyy")
 
 #Import data and generate email for each user
 $Users = Import-Csv -Delimiter "," -Path $CSVPath
@@ -71,6 +71,7 @@ Send-MailMessage `
     -Bcc $MailBCC `
     -From $MailFrom `
     -Subject $MailSubject `
-    -SmtpServer $SmtpServer `
+    -SmtpServer $SmtpServer ` 
+    -Priority High `
     -Body $MailBody -BodyAsHtml 
 }
