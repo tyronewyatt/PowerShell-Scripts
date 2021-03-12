@@ -44,14 +44,15 @@ ForEach ($PwdResetUser In $PwdResetUsers)
                     'Last Name'=$PwdResetLastName;
                     'New Password'=$PwdResetNewPassword;
                     'STKEY'=$EduHubLogin;
-                    'Home Group'=$PwdResetGroup
+                    'Home Group'=$PwdResetGroup;
+                    'Year Level'=$PwdResetYear
                 }
             }
         }
     }
 
 #Format objects
-$NewEduPassCSV = $NewEduPassCSV | Select-Object -Property 'Login','First Name','Last Name','New Password','STKEY','Home Group'
+$NewEduPassCSV = $NewEduPassCSV | Select-Object -Property 'Login','First Name','Last Name','New Password','STKEY','Home Group','Year Level'
 
 #Write data to screen
 $NewEduPassCSV | Format-Table 
