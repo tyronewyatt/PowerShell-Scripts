@@ -1,6 +1,6 @@
-$FirewallProfile = netsh advfirewall monitor show currentprofile
+$FirewallProfile = 'netsh advfirewall monitor show currentprofile'
 Try {
-    If ($FirewallProfile -match "Public Profile:") 
+    If ($FirewallProfile -match 'Public Profile:') 
         {
         Restart-Service -name NlaSvc -Force
         }
