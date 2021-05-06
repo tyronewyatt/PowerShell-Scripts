@@ -14,3 +14,4 @@
 
 
 $envisionwarescript | Out-File "c:\ProgramData\EnvisionWare\PC Reservation\Client Module\config\pcrClient.ewp" -Encoding Ascii
+#($envisionwarescript | Out-String) -replace "`n", "`r`n" | Out-File "c:\ProgramData\EnvisionWare\PC Reservation\Client Module\config\pcrClient.ewp" -Encoding Ascii
