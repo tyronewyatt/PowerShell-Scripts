@@ -12,6 +12,11 @@
 </Settings>
 '@
 
+($envisionwarescript | Out-String) -replace "`n|`r`n", "`r`n" | Out-File "c:\ProgramData\EnvisionWare\PC Reservation\Client Module\config\pcrClient.ewp" -Encoding Ascii -NoNewline
 
-$envisionwarescript | Out-File "c:\ProgramData\pcrClient.ewp" -Encoding Ascii
-($envisionwarescript | Out-String) -replace "`n|`r`n", "`r`n" | Out-File "c:\ProgramData\pcrClient.ewp" -Encoding Ascii -NoNewline
+$ACL = Get-Acl 'c:\ProgramData\EnvisionWare\PC Reservation\Client Module\config\pcrClient.ewp'
+$SetOwner = New-Object System.Security.Principal.NTAccount 'BUILTIN\Administrators'
+$ACL.SetOwner($SetOwner)
+$SetGroup = New-Object System.Security.Principal.NTAccount 'AzureAD\LMUser'
+$ACL.SetGroup($SetGroup)
+$ACL | Set-Acl 'c:\ProgramData\EnvisionWare\PC Reservation\Client Module\config\pcrClient.ewp'
