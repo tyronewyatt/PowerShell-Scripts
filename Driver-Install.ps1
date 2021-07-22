@@ -18,7 +18,7 @@ ElseIf ($DriverVersion -Ge "6.0.9107.1")
     Exit 0
     }
 
-# Application Unknown
+# Application Error
 Else 
     {
     Stop-Transcript | Out-Null
