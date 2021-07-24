@@ -1,7 +1,7 @@
 ﻿$PnPSignedDriver = Get-WmiObject Win32_PnPSignedDriver | Where-Object {$_.DeviceName -Eq "Realtek Audio"}
 $ComputerSystem = Get-WmiObject Win32_ComputerSystem
 
-If ($ComputerSystem.Manufacturer -Like 'Dell*' -And $ComputerSystem.Model -Match 'Latitude 7280|Latitude 7290|Latitude 7380|Latitude 7390|Latitude 7480|Latitude 7490')
+If ($ComputerSystem.Manufacturer -Like 'Dell*' -And $ComputerSystem.Model -Eq 'Latitude 7490')
     {
     # Application Installed
     If ($PnPSignedDriver.DriverVersion -Ge '6.0.9107.1')
