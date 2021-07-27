@@ -1,5 +1,5 @@
-﻿If (((netsh wlan show interfaces | Select-String 'State') -replace '.*:\s','') -Eq 'connected')
-    {
-    (netsh wlan show interfaces | Select-String ' SSID ') -replace '.*:\s','' | 
-        ForEach-Object {netsh wlan set profileparameter name="$_" connectionmode=auto}
-    }
+﻿$WlanInterfaces = netsh wlan show interfaces
+$WlanState = ($WlanInterfaces | Select-String 'State') -replace '.*:\s',''
+$WlanSSID = ($WlanInterfaces | Select-String ' SSID ') -replace '.*:\s',''
+If ($WlanState -Eq 'connected')
+    {netsh wlan set profileparameter name="$WlanSSID" connectionmode=auto}
