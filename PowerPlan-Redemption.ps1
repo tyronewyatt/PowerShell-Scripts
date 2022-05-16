@@ -1,7 +1,7 @@
 ﻿# Customized Peak (ConfigMgr) Power Scheme GUID
 $PowerSchemeGUID = 'db310065-829b-4671-9647-2261c00e86ef'
 
-# Scheme Personality GUID
+# Power Scheme Personality GUID
 $PowerSchemePersonalityGUID = '245d8541-3943-4422-b025-13a784f679b7'
 
 # Power Scheme Personality
