@@ -1,8 +1,8 @@
 ﻿
 $ContentType = 'application/json'
-$UserToken = 'user_token okYsuH6Z0xunxAQlOpcfQ4SYAPbujxgQ8jI7vuvp'
-$AppToken = 'AzLVtjC1ltRqXpsSBExv3NmxyBSp5Tmjj1NpzjPZ'
-$AppURL = 'https://helpdesk.tallangatta-sc.vic.edu.au/apirest.php'
+$UserToken = 'user_token 5VfruXdQ7rzp13Cq6zv6aL36kFK74z4puQOkxgS4'
+$AppToken = 'x0hSH0i6lpzxv8khmRsFhW1LG98vhl2JAaxu8FyQ'
+$AppURL = 'https://glpi.cloudportal.org/apirest.php'
 
 #initSession
 $SessionToken = Invoke-RestMethod `
