@@ -115,8 +115,7 @@ ElseIf ((ReturnCode) -eq 5) {
 }
 # Exit failure, pending updates
 ElseIf ($UpdateReport.updates.update.SelectNodes.Count -ge 1) {
-    Write-Output "$($UpdateReport.updates.update.SelectNodes.Count) updates were found for the system."
-    Write-Output $UpdateReport.updates.update.name
+    Write-Output "$($UpdateReport.updates.update.SelectNodes.Count) updates were found for the system.", "$UpdateReport.updates.update.name"
     Exit 1
 }
 # Exit failure, errors
