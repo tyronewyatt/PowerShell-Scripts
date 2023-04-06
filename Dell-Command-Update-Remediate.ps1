@@ -93,7 +93,7 @@ Try {
 }
 # Terminating error
 Catch {
-    Write-Error $_.Exception
+    Write-Error $_.Exception.Message
     Exit 1
 }
 
