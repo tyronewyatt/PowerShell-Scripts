@@ -91,17 +91,19 @@ Try {
     Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -userConsent=disable -scheduleManual" -Wait -WindowStyle Hidden
 
     # Perform a system scan to determine the updates for the current system configuration
-    $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
-    $ProcessStartInfo.FileName = $DellCommandUpdate
-    $ProcessStartInfo.Arguments = "/scan -updateType=$UpdateType -report=$LogPath -outputlog=$ActivityLog"
-    $ProcessStartInfo.RedirectStandardOutput = $True
-    $ProcessStartInfo.UseShellExecute = $False
-    $ProcessStartInfo.CreateNoWindow = $True
-    $Process = New-Object System.Diagnostics.Process
-    $Process.StartInfo = $ProcessStartInfo
-    $Process.Start() | Out-Null
-    $ProcessOutput = $Process.StandardOutput.ReadToEnd()
-    $Process.WaitForExit()
+    Invoke-Command -ScriptBlock {
+        $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
+        $ProcessStartInfo.FileName = $DellCommandUpdate
+        $ProcessStartInfo.Arguments = "/scan -updateType=$UpdateType -report=$LogPath -outputlog=$ActivityLog"
+        $ProcessStartInfo.RedirectStandardOutput = $True
+        $ProcessStartInfo.UseShellExecute = $False
+        $ProcessStartInfo.CreateNoWindow = $True
+        $Process = New-Object System.Diagnostics.Process
+        $Process.StartInfo = $ProcessStartInfo
+        $Process.Start() | Out-Null
+        $ProcessOutput = $Process.StandardOutput.ReadToEnd()
+        $Process.WaitForExit()
+    }
 
     # Import update report
     $UpdateReport = [xml](Get-Content "$LogPath\DCUApplicableUpdates.xml" -ErrorAction SilentlyContinue)     
