@@ -15,7 +15,6 @@ https://www.dell.com/support/manuals/de-ch/command-update/dellcommandupdate_rg/d
 $DellCommandUpdate = "$env:ProgramFiles\Dell\CommandUpdate\dcu-cli.exe"
 $LogPath = "$env:ProgramData\Dell\UpdatePackage\Log"
 $ActivityLog = "$LogPath\Dell-Command-Update-CLI-Activity_$((Get-Date).ToString("yyyyMMddTHHmmss")).log"
-$ProcessOutput = "$LogPath\Dell-Command-Update-CLI-Output.log"
 
 # Update types: bios,firmware,driver,application,others
 $UpdateType = "bios,firmware,driver"  
@@ -28,7 +27,7 @@ If (!(Test-Path $DellCommandUpdate)) {
 
 Function ReturnCode {
     # Get content from output log
-    $ReturnCode = Get-Content $ProcessOutput | Select-Object -Last 1
+    $ReturnCode = $ProcessOutput | Select-Object -Last 1
 
     # Extract exit code from exit action and trim whitespace
     $ReturnCode = ($ReturnCode -split ":")[-1].Trim()
@@ -92,7 +91,17 @@ Try {
     Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -userConsent=disable -scheduleManual" -Wait -WindowStyle Hidden
 
     # Perform a system scan to determine the updates for the current system configuration
-    Start-Process $DellCommandUpdate -ArgumentList "/scan -updateType=$UpdateType -report=$LogPath -outputlog=$ActivityLog" -Wait -WindowStyle Hidden -RedirectStandardOutput $ProcessOutput
+    $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $ProcessStartInfo.FileName = $DellCommandUpdate
+    $ProcessStartInfo.Arguments = "/scan -updateType=$UpdateType -report=$LogPath -outputlog=$ActivityLog"
+    $ProcessStartInfo.RedirectStandardOutput = $True
+    $ProcessStartInfo.UseShellExecute = $False
+    $ProcessStartInfo.CreateNoWindow = $True
+    $Process = New-Object System.Diagnostics.Process
+    $Process.StartInfo = $ProcessStartInfo
+    $Process.Start() | Out-Null
+    $ProcessOutput = $Process.StandardOutput.ReadToEnd()
+    $Process.WaitForExit()
 
     # Import update report
     $UpdateReport = [xml](Get-Content "$LogPath\DCUApplicableUpdates.xml" -ErrorAction SilentlyContinue)     
