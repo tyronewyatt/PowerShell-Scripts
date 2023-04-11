@@ -88,12 +88,13 @@ Try {
     Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -autoSuspendBitLocker=enable -userConsent=disable -maxretry=2" -Wait -WindowStyle Hidden
 
     # Applies all updates for the current system configuration
-    $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
-    $ProcessStartInfo.FileName = $DellCommandUpdate
-    $ProcessStartInfo.Arguments = "/applyUpdates -reboot=disable -updateType=$UpdateType -outputlog=$ActivityLog"
-    $ProcessStartInfo.RedirectStandardOutput = $True
-    $ProcessStartInfo.UseShellExecute = $False
-    $ProcessStartInfo.CreateNoWindow = $True
+    $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo -Property @{
+        FileName = $DellCommandUpdate
+        Arguments = "/applyUpdates -reboot=disable -updateType=$UpdateType -outputlog=$ActivityLog"
+        RedirectStandardOutput = $True
+        UseShellExecute = $False
+        CreateNoWindow = $True
+    }
     $Process = New-Object System.Diagnostics.Process
     $Process.StartInfo = $ProcessStartInfo
     $Process.Start() | Out-Null
