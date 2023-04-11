@@ -91,12 +91,13 @@ Try {
     Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -userConsent=disable -scheduleManual" -Wait -WindowStyle Hidden
 
     # Perform a system scan to determine the updates for the current system configuration
-    $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo
-    $ProcessStartInfo.FileName = $DellCommandUpdate
-    $ProcessStartInfo.Arguments = "/scan -updateType=$UpdateType -report=$LogPath -outputlog=$ActivityLog"
-    $ProcessStartInfo.RedirectStandardOutput = $True
-    $ProcessStartInfo.UseShellExecute = $False
-    $ProcessStartInfo.CreateNoWindow = $True
+    $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo -Property @{
+        FileName = $DellCommandUpdate
+        Arguments = "/scan -updateType=$UpdateType -report=$LogPath -outputlog=$ActivityLog"
+        RedirectStandardOutput = $True
+        UseShellExecute = $False
+        CreateNoWindow = $True
+    }
     $Process = New-Object System.Diagnostics.Process
     $Process.StartInfo = $ProcessStartInfo
     $Process.Start() | Out-Null
