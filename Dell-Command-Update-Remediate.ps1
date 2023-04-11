@@ -94,6 +94,7 @@ Try {
         RedirectStandardOutput = $True
         UseShellExecute = $False
         CreateNoWindow = $True
+        WindowStyle = "Hidden"
     }
     $Process = New-Object System.Diagnostics.Process
     $Process.StartInfo = $ProcessStartInfo
