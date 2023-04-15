@@ -102,6 +102,7 @@ Try {
     $ProcessOutput = $Process.StandardOutput.ReadToEnd()
     $Process.WaitForExit()
 }
+
 # Terminating error
 Catch {
     Write-Error $_.Exception.Message
@@ -116,10 +117,10 @@ If ((ReturnCode) -eq 0) {
 # Exit successful, restart pending
 ElseIf ((ReturnCode) -eq 1) {
     Write-Output "The system has been updated and requires a reboot to complete."
-    Exit 3010 
+    Exit 0 
 }
 # Exit failure
 Else {
-    Write-Warning (ReturnDescription)
+    Write-Error (ReturnDescription)
     Exit 1
 }
