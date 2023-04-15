@@ -114,23 +114,28 @@ Catch {
     Exit 1
 }
 
-# Exit successful, no updates
-If ((ReturnCode) -eq 500) {
-    Write-Output "No updates were found for the system."
-    Exit 0
+# Exit failure, pending updates
+If ((ReturnCode) -eq 0) {
+    If ($UpdateReport.updates.update.SelectNodes.Count -eq 1) {
+        Write-Output "1 update was found for the system."
+    }
+    ElseIf ($UpdateReport.updates.update.SelectNodes.Count -ge 2) {
+        Write-Output "$($UpdateReport.updates.update.SelectNodes.Count) updates were found for the system."
+    }
+    Exit 1
 }
 # Exit successful, restart pending
 ElseIf ((ReturnCode) -eq 5) {
-    Write-Output "A previous system update requires a reboot to complete."
+    Write-Output "The system has been updated and requires a reboot to complete."
     Exit 0 
 }
-# Exit failure, pending updates
-ElseIf ($UpdateReport.updates.update.SelectNodes.Count -ge 1) {
-    Write-Output "$($UpdateReport.updates.update.SelectNodes.Count) updates were found for the system.", "$UpdateReport.updates.update.name"
-    Exit 1
+# Exit successful, no updates
+ElseIf ((ReturnCode) -eq 500) {
+    Write-Output "No updates were found for the system."
+    Exit 0
 }
 # Exit failure, errors
 Else {
-    Write-Warning (ReturnDescription)
+    Write-Error (ReturnDescription)
     Exit 1
 }
