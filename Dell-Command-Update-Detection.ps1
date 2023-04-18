@@ -126,7 +126,7 @@ If ((ReturnCode) -eq 0) {
 }
 # Exit successful, restart pending
 ElseIf ((ReturnCode) -eq 5) {
-    Write-Output "The system has been updated and requires a reboot to complete."
+    Write-Output "A reboot is required to complete system updates."
     Exit 0 
 }
 # Exit successful, no updates
