@@ -105,8 +105,6 @@ Try {
     $ProcessOutput = $Process.StandardOutput.ReadToEnd()
     $Process.WaitForExit()
 
-    # Import update report
-    $UpdateReport = [xml](Get-Content "$LogPath\DCUApplicableUpdates.xml" -ErrorAction SilentlyContinue)     
 }
 # Terminating error
 Catch {
@@ -116,11 +114,23 @@ Catch {
 
 # Exit failure, pending updates
 If ((ReturnCode) -eq 0) {
-    If ($UpdateReport.updates.update.SelectNodes.Count -eq 1) {
-        Write-Output "1 update was found for the system."
+    # Import update report
+    $UpdateReport = [xml](Get-Content "$LogPath\DCUApplicableUpdates.xml")
+
+    # Count Updates
+    $UpdateCount = $UpdateReport.updates.update.SelectNodes.Count
+
+    # Name Updates
+    $UpdateName = ForEach ($Update in $UpdateReport.updates.update.name) {"`n$Update."}
+
+    # 1 update found
+    If ($UpdateCount -eq 1) {
+        Write-Output "1 update was found for the system: $UpdateName"
     }
-    ElseIf ($UpdateReport.updates.update.SelectNodes.Count -ge 2) {
-        Write-Output "$($UpdateReport.updates.update.SelectNodes.Count) updates were found for the system."
+
+    # 2 or greater updates found
+    ElseIf ($UpdateCount -ge 2) {
+        Write-Output "$UpdateCount updates were found for the system: $UpdateName"
     }
     Exit 1
 }
