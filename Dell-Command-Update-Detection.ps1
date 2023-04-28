@@ -112,39 +112,46 @@ Catch {
     Exit 1
 }
 
-# Exit failure, pending updates
+# Exit, pending updates
 If ((ReturnCode) -eq 0) {
     # Import update report
-    $UpdateReport = [xml](Get-Content "$LogPath\DCUApplicableUpdates.xml")
+    $UpdateReport = [xml](Get-Content "$LogPath\DCUApplicableUpdates.xml" -ErrorAction SilentlyContinue)
 
     # Count Updates
     $UpdateCount = $UpdateReport.updates.update.SelectNodes.Count
 
     # Name Updates
-    $UpdateName = ForEach ($Update in $UpdateReport.updates.update.name) {"`n$Update."}
+    $UpdateName = ForEach ($Update in $UpdateReport.updates.update.name) {"$Update."}
 
-    # 1 update found
-    If ($UpdateCount -eq 1) {
-        Write-Output "1 update was found for the system: $UpdateName"
+    # 0 updates found from update report
+    If ($UpdateCount -eq 0) {
+        Write-Output "0 updates were found for the system."
+        Exit 0 
     }
 
-    # 2 or greater updates found
+    # 1 update found from update report
+    ElseIf ($UpdateCount -eq 1) {
+        Write-Output "1 update was found for the system."
+        Exit 1
+    }
+
+    # 2 or more updates found from update report
     ElseIf ($UpdateCount -ge 2) {
-        Write-Output "$UpdateCount updates were found for the system: $UpdateName"
+        Write-Output "$UpdateCount updates were found for the system."
+        Exit 1
     }
-    Exit 1
 }
-# Exit successful, restart pending
+# Exit, restart pending
 ElseIf ((ReturnCode) -eq 5) {
     Write-Output "A reboot is required to complete system updates."
     Exit 0 
 }
-# Exit successful, no updates
+# Exit, no updates
 ElseIf ((ReturnCode) -eq 500) {
     Write-Output "No updates were found for the system."
     Exit 0
 }
-# Exit failure, errors
+# Exit, errors
 Else {
     Write-Error (ReturnDescription)
     Exit 1
