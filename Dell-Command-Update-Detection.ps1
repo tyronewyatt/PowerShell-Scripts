@@ -120,12 +120,9 @@ If ((ReturnCode) -eq 0) {
     # Count Updates
     $UpdateCount = $UpdateReport.updates.update.SelectNodes.Count
 
-    # Name Updates
-    $UpdateName = ForEach ($Update in $UpdateReport.updates.update.name) {"$Update."}
-
     # 0 updates found from update report
     If ($UpdateCount -eq 0) {
-        Write-Output "0 updates were found for the system."
+        Write-Output "No updates were found for the system."
         Exit 0 
     }
 
