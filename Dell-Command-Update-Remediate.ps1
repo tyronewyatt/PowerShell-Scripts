@@ -21,7 +21,7 @@ $UpdateType = "bios,firmware,driver"
 
 # Test for application
 If (!(Test-Path $DellCommandUpdate)) {
-    Write-Warning "Application not found!"
+    Write-Error "Application not found!"
     Exit 1
 }
 
@@ -85,7 +85,7 @@ Function ReturnDescription {
 # Execute and monitor for errors
 Try {
     # Set custom configuration
-    Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -autoSuspendBitLocker=enable -userConsent=disable -maxretry=2" -Wait -WindowStyle Hidden
+    Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -autoSuspendBitLocker=enable -maxretry=2" -Wait -WindowStyle Hidden
 
     # Applies all updates for the current system configuration
     $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo -Property @{
