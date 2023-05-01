@@ -21,7 +21,7 @@ $UpdateType = "bios,firmware,driver"
 
 # Test for application
 If (!(Test-Path $DellCommandUpdate)) {
-    Write-Warning "Application not found!"
+    Write-Error "Application not found!"
     Exit 1
 }
 
@@ -88,7 +88,7 @@ If (Test-Path "$LogPath\DCUApplicableUpdates.xml") {Remove-Item "$LogPath\DCUApp
 # Execute and monitor for errors
 Try {
     # Set custom configuration
-    Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -userConsent=disable -scheduleManual" -Wait -WindowStyle Hidden
+    Start-Process $DellCommandUpdate -ArgumentList "/configure -silent -userConsent=disable -updatesNotification=disable -scheduleManual" -Wait -WindowStyle Hidden
 
     # Perform a system scan to determine the updates for the current system configuration
     $ProcessStartInfo = New-Object System.Diagnostics.ProcessStartInfo -Property @{
@@ -120,10 +120,10 @@ If ((ReturnCode) -eq 0) {
     # Count Updates
     $UpdateCount = $UpdateReport.updates.update.SelectNodes.Count
 
-    # 0 updates found from update report
+    # No updates found from update report
     If ($UpdateCount -eq 0) {
         Write-Output "No updates were found for the system."
-        Exit 0 
+        Exit 0
     }
 
     # 1 update found from update report
