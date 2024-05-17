@@ -113,6 +113,6 @@ Function Import-Radios {
 
         Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
         Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
-        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+            Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
     }
 }
