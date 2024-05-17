@@ -1,0 +1,1 @@
+powershell.exe -ExecutionPolicy Bypass -File "Driver-Install.ps1"

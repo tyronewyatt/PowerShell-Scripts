@@ -1,0 +1,1 @@
+﻿Add-AppxProvisionedPackage -PackagePath "Microsoft.Whiteboard_51.10913.5796.0_neutral___8wekyb3d8bbwe.AppxBundle" -DependencyPackagePath "Microsoft.NET.Native.Framework.2.2_2.2.29512.0_x64__8wekyb3d8bbwe.Appx", "Microsoft.NET.Native.Runtime.2.2_2.2.28604.0_x64__8wekyb3d8bbwe.Appx", "Microsoft.VCLibs.140.00_14.0.30704.0_x64__8wekyb3d8bbwe.Appx" -SkipLicense -Online
