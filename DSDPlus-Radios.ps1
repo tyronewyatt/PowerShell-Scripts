@@ -6,7 +6,9 @@
     [string]$Override = 'Normal',
     [string]$Hits = '0',
     [string]$Timestamp = '0000/00/00  0:00',
-    [string]$Path = "${env:ProgramFiles(x86)}\DSDPlus"
+    [string]$Path = "${env:ProgramFiles(x86)}\DSDPlus",
+    [int]$SaveCount = 0,
+    [int]$MaxSaveCount = 5
 	)
 
 Function Set-RadioAlias {
@@ -79,8 +81,11 @@ Function Set-RadioAlias {
                 ($NetworkID -match $AgencyNetworkID)
                 ) {
                 Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`""
-                Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" | 
-                    Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+                Do {
+                    $SaveCount++
+                    Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" | 
+                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
+                } Until ($? -or $SaveCount -ge $MaxSaveCount)
             }
         }
     }
@@ -111,8 +116,11 @@ Function Import-Radios {
         $Timestamp = $CsvRadio.timestamp
         $Radioalias = $CsvRadio.'Radio alias'
 
-        Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
-        Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
-            Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+        Do {
+            $SaveCount++
+            Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
+            Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
+                Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+        } Until ($? -or $SaveCount -ge $MaxSaveCount)
     }
 }
