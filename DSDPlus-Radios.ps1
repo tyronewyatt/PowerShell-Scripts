@@ -1,14 +1,12 @@
 ﻿Param(
-	[String]$Protocol = 'P25',
-	[String]$NetworkID = 'BEE00.2D1',
-	[String]$Group = '-2',
-    [string]$Priority = '50',
-    [string]$Override = 'Normal',
-    [string]$Hits = '0',
-    [string]$Timestamp = '0000/00/00  0:00',
-    [string]$Path = "${env:ProgramFiles(x86)}\DSDPlus",
-    [int]$SaveCount = 0,
-    [int]$MaxSaveCount = 5
+    [String] $Protocol  = 'P25',
+    [String] $NetworkID = 'BEE00.2D1',
+	[String] $Group     = '-2',
+    [String] $priority  = '50',
+    [string] $Override  = 'Normal',
+    [String] $Hits      = '0',
+    [string] $Timestamp = '0000/00/00  0:00',
+    [string] $Path      = "${env:ProgramFiles(x86)}\DSDPlus"
 	)
 
 Function Set-RadioAlias {
@@ -16,7 +14,7 @@ Function Set-RadioAlias {
     $DSDPlusRadios = Get-Content -Path "$Path\DSDPlus.Radios" | 
         Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
         ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
-        Where-Object { $_.'radio alias' -eq "" } 
+        Where-Object { $_.'Radio alias' -eq "" } 
 
     $Agencies = @()
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='20####'; Name='NSW Police Force'; }
@@ -80,12 +78,11 @@ Function Set-RadioAlias {
                 ($Radio -match $AgencyRadio) -and 
                 ($NetworkID -match $AgencyNetworkID)
                 ) {
-                Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`""
+                    Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`""
                 Do {
-                    $SaveCount++
-                    Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" | 
-                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
-                } Until ($? -or $SaveCount -ge $MaxSaveCount)
+                    Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" |
+                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction Ignore
+                } Until ($?)
             }
         }
     }
@@ -97,7 +94,7 @@ Function Export-Radios {
 
     Get-Content -Path "$Path\DSDPlus.Radios" | 
         Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
-        ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' |
+        ConvertFrom-Csv -Header 'Protocol', 'NetworkID', 'Group', 'Radio', 'priority', 'Override', 'Hits', 'Timestamp', 'Radio alias' |
         Export-Csv  "$PSScriptRoot\Radios.csv" -NoTypeInformation
 }
 
@@ -107,20 +104,20 @@ Function Import-Radios {
     $CsvRadios = Import-Csv -Path "$PSScriptRoot\Radios.csv"
 
     ForEach ($CsvRadio in $CsvRadios) {
-        $NetworkID = $CsvRadio.networkID
-        $Radio = $CsvRadio.radio
-        $Group = $CsvRadio.group
-        $Priority = $CsvRadio.priority
-        $Override = $CsvRadio.override
-        $Hits = $CsvRadio.hits
-        $Timestamp = $CsvRadio.timestamp
+        $NetworkID = $CsvRadio.NetworkID
+        $Radio = $CsvRadio.Radio
+        $Group = $CsvRadio.Group
+        $priority = $CsvRadio.priority
+        $Override = $CsvRadio.Override
+        $Hits = $CsvRadio.Hits
+        $Timestamp = $CsvRadio.Timestamp
         $Radioalias = $CsvRadio.'Radio alias'
 
         Do {
             $SaveCount++
-            Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
-            Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
+            Write-Host "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
+            Write-Output "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
                 Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
-        } Until ($? -or $SaveCount -ge $MaxSaveCount)
+        } Until ($?)
     }
 }
