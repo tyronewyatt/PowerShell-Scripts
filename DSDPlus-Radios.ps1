@@ -22,14 +22,14 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='42####'; Name='NSW Police Force'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='43####'; Name='NSW Police Force'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='70####'; Name='NSW Police Force'; }
-    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='200####'; Name='Fire and Rescue NSW'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='200####'; Name='Fire & Rescue NSW'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='201####'; Name='NSW Rural Fire Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='202####'; Name='NSW Rural Fire Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='203####'; Name='NSW Rural Fire Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='204####'; Name='NSW State Emergency Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='205####'; Name='NSW State Emergency Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='206####'; Name='NSW State Emergency Service'; }
-    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='207####'; Name='Fire and Rescue NSW'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='207####'; Name='Fire & Rescue NSW'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='211####'; Name="NSW Sheriff's Office"; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='212####'; Name='Corrective Services NSW'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='2130###'; Name='Youth Justice NSW'; }
@@ -51,6 +51,7 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='292####'; Name='P25 ISSI'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320###'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='311####'; Name='Victoria Police'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='316####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='323####'; Name='Country Fire Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='324####'; Name='Country Fire Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='325####'; Name='Fire Rescue Victoria'; }
@@ -80,14 +81,14 @@ Function Set-RadioAlias {
                 ) {
                     Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`""
                 Do {
-                    Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" |
-                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction Ignore
+                    Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" |
+                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
+                    } Catch {}
                 } Until ($?)
             }
         }
     }
 }
-
 Set-RadioAlias
 
 Function Export-Radios {
@@ -116,8 +117,11 @@ Function Import-Radios {
         Do {
             $SaveCount++
             Write-Host "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
+            Try {
             Write-Output "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
                 Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+            } Catch {}
         } Until ($?)
     }
 }
+#Import-Radios
