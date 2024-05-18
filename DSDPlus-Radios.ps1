@@ -1,7 +1,7 @@
 ﻿Param(
     [String] $Protocol  = 'P25',
     [String] $NetworkID = 'BEE00.2D1',
-	[String] $Group     = '-2',
+    [String] $Group     = '-2',
     [String] $priority  = '50',
     [string] $Override  = 'Normal',
     [String] $Hits      = '0',
