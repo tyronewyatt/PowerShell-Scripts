@@ -10,13 +10,19 @@
 	)
 
 Function Set-RadioAlias {
-
-    $DSDPlusRadios = Get-Content -Path "$Path\DSDPlus.Radios" | 
-        Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
-        ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
-        Where-Object { $_.'Radio alias' -eq "" } # Select missing radio aliases
+    Do {
+        Try {
+            $DSDPlusRadios = Get-Content -Path "$Path\DSDPlus.Radios" | 
+                Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
+                ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
+                Where-Object { $_.'Radio alias' -eq "" } # Select missing radio aliases
+        } Catch {}
+    } Until ($?)
 
     $Agencies = @()
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='100####'; Name='ACT Ambulance Service'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='101####'; Name='ACT Fire Brigade'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='103####'; Name='ACT Rural Fire Service & ACT Parks'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='20####'; Name='NSW Police Force'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='21####'; Name='NSW Police Force'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='42####'; Name='NSW Police Force'; }
@@ -50,6 +56,7 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='291####'; Name='NSW Telco Authority - Network Manager'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='292####'; Name='NSW Telco Authority - Network Manager'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320###'; Name='Emergency Services Telecommunications Authority'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320####'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='311####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='314####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='316####'; Name='Victoria Police'; }
@@ -85,7 +92,7 @@ Function Set-RadioAlias {
                 Do {
                     Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" |
                         Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
-                    } Catch {} # Try catch silences save errors
+                    } Catch {}
                 } Until ($?)
             }
         }
@@ -95,10 +102,14 @@ Set-RadioAlias
 
 Function Export-Radios {
 
-    Get-Content -Path "$Path\DSDPlus.Radios" | 
-        Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
-        ConvertFrom-Csv -Header 'Protocol', 'NetworkID', 'Group', 'Radio', 'priority', 'Override', 'Hits', 'Timestamp', 'Radio alias' |
-        Export-Csv  "$PSScriptRoot\Radios.csv" -NoTypeInformation
+    Do {
+        Try {
+        Get-Content -Path "$Path\DSDPlus.Radios" | 
+            Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
+            ConvertFrom-Csv -Header 'Protocol', 'NetworkID', 'Group', 'Radio', 'priority', 'Override', 'Hits', 'Timestamp', 'Radio alias' |
+            Export-Csv  "$PSScriptRoot\Radios.csv" -NoTypeInformation
+        } Catch {}
+    } Until ($?)
 }
 
 
@@ -122,7 +133,7 @@ Function Import-Radios {
             Try {
             Write-Output "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
                 Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
-            } Catch {} # Try catch silences save errors
+            } Catch {}
         } Until ($?)
     }
 }
