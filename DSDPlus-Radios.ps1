@@ -12,9 +12,9 @@
 Function Set-RadioAlias {
 
     $DSDPlusRadios = Get-Content -Path "$Path\DSDPlus.Radios" | 
-        Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
+        Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
         ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
-        Where-Object { $_.'Radio alias' -eq "" } 
+        Where-Object { $_.'Radio alias' -eq "" } # Select missing radio aliases
 
     $Agencies = @()
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='20####'; Name='NSW Police Force'; }
@@ -51,7 +51,9 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='292####'; Name='NSW Telco Authority - Network Manager'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320###'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='311####'; Name='Victoria Police'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='314####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='316####'; Name='Victoria Police'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='317####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='323####'; Name='Country Fire Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='324####'; Name='Country Fire Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='325####'; Name='Fire Rescue Victoria'; }
@@ -65,7 +67,7 @@ Function Set-RadioAlias {
     ForEach ($Agency in $Agencies) {
         $AgencyNetworkID = $Agency.NetworkID
         $AgencyName = $Agency.Name
-        $AgencyRadio = '^' + $Agency.Radio.Replace('#','\d') + '$'  
+        $AgencyRadio = '^' + $Agency.Radio.Replace('#','\d') + '$'  # Replace hash with digit
 
         ForEach ($DSDPlusRadio in $DSDPlusRadios) {
             $NetworkID = $DSDPlusRadio.networkID
@@ -82,8 +84,8 @@ Function Set-RadioAlias {
                     Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`""
                 Do {
                     Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" |
-                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
-                    } Catch {}
+                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+                    } Catch {} # Try catch silences save errors
                 } Until ($?)
             }
         }
@@ -120,7 +122,7 @@ Function Import-Radios {
             Try {
             Write-Output "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
                 Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
-            } Catch {}
+            } Catch {} # Try catch silences save errors
         } Until ($?)
     }
 }
