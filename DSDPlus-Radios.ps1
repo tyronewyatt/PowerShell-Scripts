@@ -12,7 +12,7 @@
 Function Set-RadioAlias {
     Do {
         Try {
-            $DSDPlusRadios = Get-Content -Path "$Path\DSDPlus.Radios" | 
+            $DSDPlusRadios = Get-Content -Path "$Path\DSDPlus.Radios" -ErrorAction SilentlyContinue | 
                 Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
                 ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
                 Where-Object { $_.'Radio alias' -eq "" } # Select missing radio aliases
@@ -91,7 +91,7 @@ Function Set-RadioAlias {
                     Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`""
                 Do {
                     Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$AgencyName`"" |
-                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+                        Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
                     } Catch {}
                 } Until ($?)
             }
@@ -104,7 +104,7 @@ Function Export-Radios {
 
     Do {
         Try {
-        Get-Content -Path "$Path\DSDPlus.Radios" | 
+        Get-Content -Path "$Path\DSDPlus.Radios" -ErrorAction SilentlyContinue | 
             Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
             ConvertFrom-Csv -Header 'Protocol', 'NetworkID', 'Group', 'Radio', 'priority', 'Override', 'Hits', 'Timestamp', 'Radio alias' |
             Export-Csv  "$PSScriptRoot\Radios.csv" -NoTypeInformation
@@ -132,7 +132,7 @@ Function Import-Radios {
             Write-Host "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`""
             Try {
             Write-Output "$Protocol, $NetworkID, $Group, $Radio, $priority, $Override, $Hits, $Timestamp, `"$Radioalias`"" | 
-                Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber
+                Out-File -Append "$Path\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
             } Catch {}
         } Until ($?)
     }
