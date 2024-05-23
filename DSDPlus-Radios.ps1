@@ -44,6 +44,7 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='231####'; Name='NSW Ambulance'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='232####'; Name='NSW Ambulance'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='233####'; Name='NSW Ambulance'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='2379###'; Name='Northern NSW Local Health District'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='238####'; Name='Transport for NSW - Roads'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='242####'; Name='NSW National Parks & Wildlife Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='243####'; Name='Transport for NSW - Maritime'; }
