@@ -9,6 +9,15 @@
     [string] $Path      = "${env:ProgramFiles(x86)}\DSDPlus"
 	)
 
+Function Run-Backup {
+    $FileDateTime = Get-Date -Format yyyyMMddTHHmmss
+    If (!(Test-Path "$Path\Backup")) {
+        New-item -Path $Path -Name Backup -ItemType Directory
+    }
+    Copy-Item -Path "$Path\DSDPlus.Radios" -Destination "$Path\Backup\DSDPlus.$FileDateTime.Radios" -Force | Out-Null
+}
+Run-Backup
+
 Function Set-RadioAlias {
     Do {
         Try {
