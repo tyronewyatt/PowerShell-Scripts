@@ -53,6 +53,7 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='231####'; Name='NSW Ambulance'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='232####'; Name='NSW Ambulance'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='233####'; Name='NSW Ambulance'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='235####'; Name='Transport for NSW - Ferries'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='2379###'; Name='Northern NSW Local Health District'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='238####'; Name='Transport for NSW - Roads'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='242####'; Name='NSW National Parks & Wildlife Service'; }
@@ -66,8 +67,10 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='290####'; Name='NSW Telco Authority - Rental'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='291####'; Name='NSW Telco Authority - Network Manager'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='292####'; Name='NSW Telco Authority - Network Manager'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='311###'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320###'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320####'; Name='Emergency Services Telecommunications Authority'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='321####'; Name='Country Fire Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='311####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='314####'; Name='Victoria Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='316####'; Name='Victoria Police'; }
