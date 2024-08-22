@@ -30,8 +30,10 @@ Function Set-RadioAlias {
 
     $Agencies = @()
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='100####'; Name='ACT Ambulance Service'; }
-    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='101####'; Name='ACT Fire Brigade'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='101####'; Name='ACT Fire & Rescue'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='103####'; Name='ACT Rural Fire Service & ACT Parks'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='104####'; Name='ACT'; }    
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='105####'; Name='ACT'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='20####'; Name='NSW Police Force'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='21####'; Name='NSW Police Force'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='22####'; Name='NSW Police Force'; }
@@ -64,9 +66,10 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='2500###'; Name='NSW Police Force - Special Constables'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='26990##'; Name='RSPCA NSW'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='2800###'; Name='Surf Life Saving NSW'; }
-    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='290####'; Name='NSW Telco Authority - Rental'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='290####'; Name='NSW Telco Authority - Network Manager'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='291####'; Name='NSW Telco Authority - Network Manager'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='292####'; Name='NSW Telco Authority - Network Manager'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.2D1'; Radio='913####'; Name='Australian Federal Police'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='311###'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320###'; Name='Emergency Services Telecommunications Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='320####'; Name='Emergency Services Telecommunications Authority'; }
@@ -83,6 +86,8 @@ Function Set-RadioAlias {
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='328####'; Name='Victoria State Emergency Service'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='330####'; Name='Country Fire Authority'; }
     $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='333####'; Name='Country Fire Authority'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='902####'; Name='Australian Federal Police'; }
+    $Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='913####'; Name='Australian Federal Police'; }
     #$Agencies += [PSCustomObject] @{ NetworkID='BEE00.164'; Radio='338####'; Name='Unknown'; }
 
     ForEach ($Agency in $Agencies) {
