@@ -19,10 +19,11 @@ $Networks += [PSCustomObject] @{ ID='BEE00.AF8'; Name='Tas GRN'; }
 
 Function Run-Backup {
     $FileDateTime = Get-Date -Format yyyyMMddTHHmmss
-    If (!(Test-Path "$Path\Backup")) {
-        New-item -Path $Path -Name Backup -ItemType Directory
+    $BackupPath = "${env:ProgramFiles(x86)}\DSDPlusBackups"
+    If (!(Test-Path "$BackupPath")) {
+        New-item -Path $BackupPath -Name Radios -ItemType Directory
     }
-    Copy-Item -Path "$Path\DSDPlus.Radios" -Destination "$Path\Backup\DSDPlus.$FileDateTime.Radios" -Force | Out-Null
+    Copy-Item -Path "$Path\DSDPlus.Radios" -Destination "$BackupPath\Radios\DSDPlus.$FileDateTime.Radios" -Force | Out-Null
 }
 Run-Backup
 
