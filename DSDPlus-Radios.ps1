@@ -25,7 +25,10 @@ Function Run-Backup {
         New-item -Path $BackupPath -Name Radios -ItemType Directory
     }
     Do {
-        Try {Copy-Item -Path "$DSDPath\DSDPlus.Radios" -Destination "$BackupPath\Radios\DSDPlus.$FileDateTime.Radios" -Force -ErrorAction SilentlyContinue | Out-Null}
+        Try {
+            #Copy-Item -Path "$DSDPath\DSDPlus.Radios" -Destination "$BackupPath\Radios\DSDPlus.$FileDateTime.Radios" -Force -ErrorAction SilentlyContinue | Out-Null
+            Compress-Archive -LiteralPath "$DSDPath\DSDPlus.Radios" -DestinationPath "$BackupPath\Radios\DSDPlus.$FileDateTime.zip" -CompressionLevel Fastest -ErrorAction SilentlyContinue | Out-Null
+            }
         Catch {}
     } Until ($?)
 }
