@@ -10,6 +10,9 @@
     [bool] $NoConsole
 	)
 
+$ProgressPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+ 
 $Networks = @()
 $Networks += [PSCustomObject] @{ ID='BEE00.164'; Name='VRN (MMR/RMR)'; }
 $Networks += [PSCustomObject] @{ ID='BEE00.2D1'; Name='NSW PSN'; }
@@ -26,19 +29,19 @@ Function Run-Backup {
     }
     Do {
         Try {
-            #Copy-Item -Path "$DSDPath\DSDPlus.Radios" -Destination "$BackupPath\Radios\DSDPlus.$FileDateTime.Radios" -Force -ErrorAction SilentlyContinue | Out-Null
-            Compress-Archive -LiteralPath "$DSDPath\DSDPlus.Radios" -DestinationPath "$BackupPath\Radios\DSDPlus.$FileDateTime.zip" -CompressionLevel Fastest -ErrorAction SilentlyContinue | Out-Null
+            #Copy-Item -Path "$DSDPath\DSDPlus.Radios" -Destination "$BackupPath\Radios\DSDPlus.$FileDateTime.Radios" -Force | Out-Null
+            Compress-Archive -LiteralPath "$DSDPath\DSDPlus.Radios" -DestinationPath "$BackupPath\Radios\DSDPlus.$FileDateTime.zip" -CompressionLevel Fastest | Out-Null
             }
         Catch {}
     } Until ($?)
 }
-If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus -ErrorAction SilentlyContinue).Count -ge 1) {Run-Backup}
+If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus).Count -ge 1) {Run-Backup}
 If ($NoConsole -eq $false) {Run-Backup}
 
 Function Set-RadioAlias {
     Do {
         Try {
-            $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" -ErrorAction SilentlyContinue | 
+            $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
                 Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
                 ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
                 Where-Object { $_.'Radio alias' -eq "" -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
@@ -157,14 +160,14 @@ Function Set-RadioAlias {
                 }
                 Do {
                     Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`"" |
-                        Out-File -Append "$DSDPath\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
+                        Out-File -Append "$DSDPath\DSDPlus.Radios" -Encoding utf8 -NoClobber
                     } Catch {}
                 } Until ($?)
             }
         }
     }
 }
-If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus -ErrorAction SilentlyContinue).Count -ge 1) {Set-RadioAlias}
+If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus).Count -ge 1) {Set-RadioAlias}
 If ($NoConsole -eq $false) {Set-RadioAlias}
 
 
@@ -172,7 +175,7 @@ Function Export-Radios {
 
     Do {
         Try {
-        Get-Content -Path "$DSDPath\DSDPlus.Radios" -ErrorAction SilentlyContinue | 
+        Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
             Where-Object { $_ -notmatch "^;|^   ;;|^$" } | 
             ConvertFrom-Csv -Header 'Protocol', 'NetworkID', 'Group', 'Radio', 'priority', 'Override', 'Hits', 'Timestamp', 'Radio alias' |
             Export-Csv  "$PSScriptRoot\Radios.csv" -NoTypeInformation
@@ -199,7 +202,7 @@ Function Import-Radios {
         Do {
             Try {
             Write-Output "$CSVProtocol, $CSVNetworkID, $CSVGroup, $CSVRadio, $CSVPriority, $CSVOverride, $CSVHits, $CSVTimestamp, `"$CSVRadioalias`"" | 
-                Out-File -Append "$DSDPath\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
+                Out-File -Append "$DSDPath\DSDPlus.Radios" -Encoding utf8 -NoClobber
             } Catch {}
         } Until ($?)
     }
