@@ -6,16 +6,17 @@
     [string] $CSVOverride  = 'Normal',
     [String] $CSVHits      = '0',
     [string] $CSVTimestamp = '0000/00/00  0:00',
-    [string] $DSDPath      = "${env:ProgramFiles(x86)}\DSDPlus"
+    [string] $DSDPath      = "${env:ProgramFiles(x86)}\DSDPlus",
+    [bool] $NoConsole
 	)
 
 $Networks = @()
-$Networks += [PSCustomObject] @{ ID='BEE00.164'; Alias='VRN (MMR/RMR)'; }
-$Networks += [PSCustomObject] @{ ID='BEE00.2D1'; Alias='NSW PSN'; }
-$Networks += [PSCustomObject] @{ ID='BEE00.351'; Alias='NT ESTN'; }
-$Networks += [PSCustomObject] @{ ID='BEE00.3D3'; Alias='SA GRN'; }
-$Networks += [PSCustomObject] @{ ID='BEE00.658'; Alias='Qld QWN'; }
-$Networks += [PSCustomObject] @{ ID='BEE00.AF8'; Alias='Tas GRN'; }
+$Networks += [PSCustomObject] @{ ID='BEE00.164'; Name='VRN (MMR/RMR)'; }
+$Networks += [PSCustomObject] @{ ID='BEE00.2D1'; Name='NSW PSN'; }
+$Networks += [PSCustomObject] @{ ID='BEE00.351'; Name='NT ESTN'; }
+$Networks += [PSCustomObject] @{ ID='BEE00.3D3'; Name='SA GRN'; }
+$Networks += [PSCustomObject] @{ ID='BEE00.658'; Name='Qld QWN'; }
+$Networks += [PSCustomObject] @{ ID='BEE00.AF8'; Name='Tas GRN'; }
 
 Function Run-Backup {
     $FileDateTime = Get-Date -Format yyyyMMddTHHmmss
@@ -28,7 +29,8 @@ Function Run-Backup {
         Catch {}
     } Until ($?)
 }
-Run-Backup
+If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus -ErrorAction SilentlyContinue).Count -ge 1) {Run-Backup}
+If ($NoConsole -eq $false) {Run-Backup}
 
 Function Set-RadioAlias {
     Do {
@@ -36,7 +38,7 @@ Function Set-RadioAlias {
             $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" -ErrorAction SilentlyContinue | 
                 Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
                 ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
-                Where-Object { $_.'Radio alias' -eq "" } # Select missing radio aliases
+                Where-Object { $_.'Radio alias' -eq "" -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
         } Catch {}
     } Until ($?)
 
@@ -147,7 +149,9 @@ Function Set-RadioAlias {
                 ($Radio -match $RadioID) -and 
                 ($NetworkID -in $NetworkIDs)
                 ) {
-                Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`""
+                If ($NoConsole -eq $false) {
+                    Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`""
+                }
                 Do {
                     Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`"" |
                         Out-File -Append "$DSDPath\DSDPlus.Radios" -Encoding utf8 -NoClobber -ErrorAction SilentlyContinue
@@ -157,7 +161,9 @@ Function Set-RadioAlias {
         }
     }
 }
-Set-RadioAlias
+If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus -ErrorAction SilentlyContinue).Count -ge 1) {Set-RadioAlias}
+If ($NoConsole -eq $false) {Set-RadioAlias}
+
 
 Function Export-Radios {
 
