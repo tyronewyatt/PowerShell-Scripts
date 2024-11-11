@@ -35,8 +35,7 @@ Function Run-Backup {
         Catch {}
     } Until ($?)
 }
-If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus).Count -ge 1) {Run-Backup}
-If ($NoConsole -eq $false) {Run-Backup}
+Run-Backup
 
 Function Set-RadioAlias {
     Do {
@@ -108,13 +107,13 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='291####'; Alias='NSW Telco Authority - Network Manager'; }
     $Radios += [PSCustomObject] @{ ID='292####'; Alias='NSW Telco Authority - Network Manager'; }
     $Radios += [PSCustomObject] @{ ID='4######'; Alias='Qld GWN'; }
-    $Radios += [PSCustomObject] @{ ID='310###'; Alias='Emergency Services Telecommunications Authority'; }
-    $Radios += [PSCustomObject] @{ ID='311###'; Alias='Emergency Services Telecommunications Authority'; }
-    $Radios += [PSCustomObject] @{ ID='315###'; Alias='Emergency Services Telecommunications Authority'; }
-    $Radios += [PSCustomObject] @{ ID='320###'; Alias='Emergency Services Telecommunications Authority'; }
-    $Radios += [PSCustomObject] @{ ID='380###'; Alias='Emergency Services Telecommunications Authority'; }
-    $Radios += [PSCustomObject] @{ ID='300####'; Alias='Emergency Services Telecommunications Authority'; }
-    $Radios += [PSCustomObject] @{ ID='320####'; Alias='Emergency Services Telecommunications Authority'; }
+    $Radios += [PSCustomObject] @{ ID='310###'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='311###'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='315###'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='320###'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='380###'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='300####'; Alias='Motorola Network Manager'; }
+    $Radios += [PSCustomObject] @{ ID='320####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='321####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='311####'; Alias='Victoria Police'; }
     $Radios += [PSCustomObject] @{ ID='314####'; Alias='Victoria Police'; }
@@ -123,7 +122,7 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='322####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='323####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='324####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='325####'; Alias='Fire Rescue Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='325####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='326####'; Alias='Victoria State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='327####'; Alias='Victoria State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='328####'; Alias='Victoria State Emergency Service'; }
