@@ -50,7 +50,7 @@ Function Set-RadioAlias {
             $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
                 Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
                 ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
-                Where-Object { $_.'Radio alias' -eq "" -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
+                Where-Object { $_.'Radio alias'.StartsWith("") -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
         } Catch {}
     } Until ($?)
 
@@ -175,7 +175,7 @@ Function Set-RadioAlias {
     }
 }
 
-Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus"
+#Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus"
 Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus-VRN"
 
 Function Export-Radios {
