@@ -6,7 +6,6 @@
     [string] $CSVOverride  = 'Normal',
     [String] $CSVHits      = '0',
     [string] $CSVTimestamp = '0000/00/00  0:00',
-    [string] $DSDPath      = "${env:ProgramFiles(x86)}\DSDPlus",
     [bool] $NoConsole
 	)
 
@@ -22,8 +21,11 @@ $Networks += [PSCustomObject] @{ ID='BEE00.658'; Name='Qld QWN'; }
 $Networks += [PSCustomObject] @{ ID='BEE00.AF8'; Name='Tas GRN'; }
 
 Function Run-Backup {
+    Param (
+        [string] $DSDPath,
+        [string] $BackupPath
+    )
     $FileDateTime = Get-Date -Format yyyyMMddTHHmmss
-    $BackupPath = "${env:ProgramFiles(x86)}\DSDPlusBackups"
     If (!(Test-Path "$BackupPath")) {
         New-item -Path $BackupPath -Name Radios -ItemType Directory
     }
@@ -35,9 +37,14 @@ Function Run-Backup {
         Catch {}
     } Until ($?)
 }
-Run-Backup
+Run-Backup -DSDPath "${env:ProgramFiles(x86)}\DSDPlus" -BackupPath "${env:ProgramFiles(x86)}\DSDPlusBackups"
+Start-Sleep 1
+Run-Backup -DSDPath "${env:ProgramFiles(x86)}\DSDPlus-VRN" -BackupPath "${env:ProgramFiles(x86)}\DSDPlusBackups"
 
 Function Set-RadioAlias {
+    Param (
+        [string] $DSDPath
+    )
     Do {
         Try {
             $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
@@ -167,12 +174,14 @@ Function Set-RadioAlias {
         }
     }
 }
-If ($NoConsole -eq $true -and @(Get-Process -Name DSDPlus).Count -ge 1) {Set-RadioAlias}
-If ($NoConsole -eq $false) {Set-RadioAlias}
 
+Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus"
+Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus-VRN"
 
 Function Export-Radios {
-
+    Param (
+        [string] $DSDPath
+    )
     Do {
         Try {
         Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
@@ -182,11 +191,15 @@ Function Export-Radios {
         } Catch {}
     } Until ($?)
 }
-#Export-Radios
+#Export-Radios -DSDPath "${env:ProgramFiles(x86)}\DSDPlus"
 
 Function Import-Radios {
+    Param (
+        [string] $DSDPath,
+        [string] $RadioImport = "$PSScriptRoot\Radios.csv"
+    )
 
-    $CsvRadios = Import-Csv -Path "$PSScriptRoot\Radios2.csv"
+    $CsvRadios = Import-Csv -Path $RadioImport
 
     ForEach ($CsvRadio in $CsvRadios) {
         $CSVNetworkID = $CsvRadio.NetworkID
@@ -207,4 +220,4 @@ Function Import-Radios {
         } Until ($?)
     }
 }
-#Import-Radios
+#Import-Radios -DSDPath "${env:ProgramFiles(x86)}\DSDPlus" -RadioImport ".\Radios.csv"
