@@ -23,22 +23,24 @@ $Networks += [PSCustomObject] @{ ID='BEE00.AF8'; Name='Tas GRN'; }
 Function Run-Backup {
     Param (
         [string] $DSDPath,
-        [string] $BackupPath
+        [string] $BackupPath,
+        [string] $FileDateTime = @(Get-Date -Format yyyyMMddTHHmmss)
     )
-    $FileDateTime = Get-Date -Format yyyyMMddTHHmmss
     If (!(Test-Path "$BackupPath")) {
         New-item -Path $BackupPath -Name Radios -ItemType Directory
     }
     Do {
         Try {
-            #Copy-Item -Path "$DSDPath\DSDPlus.Radios" -Destination "$BackupPath\Radios\DSDPlus.$FileDateTime.Radios" -Force | Out-Null
-            Compress-Archive -LiteralPath "$DSDPath\DSDPlus.Radios" -DestinationPath "$BackupPath\Radios\DSDPlus.$FileDateTime.zip" -CompressionLevel Fastest | Out-Null
+            Compress-Archive -LiteralPath "$DSDPath\DSDPlus.Radios" -DestinationPath "$BackupPath\Radios\DSDPlus.$FileDateTime.zip" -CompressionLevel Fastest
+            If ($?) {Write-Host "$DSDPath\DSDPlus.Radios > $BackupPath\Radios\DSDPlus.$FileDateTime.zip"}
+            Start-Sleep -Seconds 1
             }
         Catch {}
     } Until ($?)
+
 }
+Write-Host "== RUN BACKUP =="
 Run-Backup -DSDPath "${env:ProgramFiles(x86)}\DSDPlus" -BackupPath "${env:ProgramFiles(x86)}\DSDPlusBackups"
-Start-Sleep 1
 Run-Backup -DSDPath "${env:ProgramFiles(x86)}\DSDPlus-VRN" -BackupPath "${env:ProgramFiles(x86)}\DSDPlusBackups"
 
 Function Set-RadioAlias {
@@ -50,7 +52,7 @@ Function Set-RadioAlias {
             $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
                 Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
                 ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
-                Where-Object { $_.'Radio alias'.StartsWith("") -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
+                Where-Object { $_.'Radio alias' -eq "" -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
         } Catch {}
     } Until ($?)
 
@@ -61,6 +63,7 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='104####'; Alias='ACT'; }    
     $Radios += [PSCustomObject] @{ ID='1050###'; Alias='ACT Ambulance Service'; }
     $Radios += [PSCustomObject] @{ ID='1051###'; Alias='ACT Fire & Rescue'; }
+    $Radios += [PSCustomObject] @{ ID='1052###'; Alias='ACT State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='1053###'; Alias='ACT Rural Fire Service'; }
     $Radios += [PSCustomObject] @{ ID='20####'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='21####'; Alias='NSW Police Force'; }
@@ -108,12 +111,12 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='248####'; Alias='Forestry Corporation of NSW'; }
     $Radios += [PSCustomObject] @{ ID='2500###'; Alias='NSW Police Force - Special Constables'; }
     $Radios += [PSCustomObject] @{ ID='26000##'; Alias='Australian Broadcasting Corporation'; }
+    $Radios += [PSCustomObject] @{ ID='2665###'; Alias='St John Ambulance NSW'; }
     $Radios += [PSCustomObject] @{ ID='26990##'; Alias='RSPCA NSW'; }
     $Radios += [PSCustomObject] @{ ID='2800###'; Alias='Surf Life Saving NSW'; }
     $Radios += [PSCustomObject] @{ ID='290####'; Alias='NSW Telco Authority - Network Manager'; }
     $Radios += [PSCustomObject] @{ ID='291####'; Alias='NSW Telco Authority - Network Manager'; }
     $Radios += [PSCustomObject] @{ ID='292####'; Alias='NSW Telco Authority - Network Manager'; }
-    $Radios += [PSCustomObject] @{ ID='4######'; Alias='Qld GWN'; }
     $Radios += [PSCustomObject] @{ ID='310###'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='311###'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='315###'; Alias='Triple Zero Victoria'; }
@@ -133,16 +136,22 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='326####'; Alias='Victoria State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='327####'; Alias='Victoria State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='328####'; Alias='Victoria State Emergency Service'; }
+    $Radios += [PSCustomObject] @{ ID='329####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='330####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='331####'; Alias='Country Fire Authority'; }
+    $Radios += [PSCustomObject] @{ ID='332####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='333####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='338####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='339####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='344####'; Alias='Life Saving Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='4######'; Alias='Qld GWN'; }
+    $Radios += [PSCustomObject] @{ ID='5######'; Alias='SA GRN'; }
+    $Radios += [PSCustomObject] @{ ID='6######'; Alias='WA GRN'; }
+    $Radios += [PSCustomObject] @{ ID='7######'; Alias='Tas GRN'; }
+    $Radios += [PSCustomObject] @{ ID='8######'; Alias='NT ESTN'; }
     $Radios += [PSCustomObject] @{ ID='902####'; Alias='Australian Federal Police'; }
     $Radios += [PSCustomObject] @{ ID='913####'; Alias='Australian Federal Police'; }
     $Radios += [PSCustomObject] @{ ID='925####'; Alias='Australian Federal Police'; }
-    #$Radios += [PSCustomObject] @{ ID='338####'; Alias='Unknown'; }
 
     ForEach ($Radio in $Radios) {
         $NetworkIDs = $Networks.ID
@@ -163,7 +172,7 @@ Function Set-RadioAlias {
                 ($NetworkID -in $NetworkIDs)
                 ) {
                 If ($NoConsole -eq $false) {
-                    Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`""
+                    Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`"" "> $DSDPath\DSDPlus.Radios"
                 }
                 Do {
                     Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`"" |
@@ -174,8 +183,8 @@ Function Set-RadioAlias {
         }
     }
 }
-
-#Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus"
+Write-Host "== SET RADIO ALIAS =="
+Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus"
 Set-RadioAlias -DSDPath "${env:ProgramFiles(x86)}\DSDPlus-VRN"
 
 Function Export-Radios {
@@ -211,7 +220,7 @@ Function Import-Radios {
         $CSVTimestamp = $CsvRadio.Timestamp
         $CSVRadioalias = $CsvRadio.'Radio alias'
 
-        Write-Host "$CSVProtocol, $CSVNetworkID, $CSVGroup, $CSVRadio, $CSVPriority, $CSVOverride, $CSVHits, $CSVTimestamp, `"$CSVRadioalias`""
+        Write-Host "$CSVProtocol, $CSVNetworkID, $CSVGroup, $CSVRadio, $CSVPriority, $CSVOverride, $CSVHits, $CSVTimestamp, `"$CSVRadioalias`"" 
         Do {
             Try {
             Write-Output "$CSVProtocol, $CSVNetworkID, $CSVGroup, $CSVRadio, $CSVPriority, $CSVOverride, $CSVHits, $CSVTimestamp, `"$CSVRadioalias`"" | 
