@@ -97,14 +97,14 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='231####'; Alias='NSW Ambulance'; }
     $Radios += [PSCustomObject] @{ ID='232####'; Alias='NSW Ambulance'; }
     $Radios += [PSCustomObject] @{ ID='233####'; Alias='NSW Ambulance'; }
-    $Radios += [PSCustomObject] @{ ID='235####'; Alias='Transport for NSW - Ferries'; }
+    $Radios += [PSCustomObject] @{ ID='235####'; Alias='Transport for NSW - Roads & Waterways'; }
     $Radios += [PSCustomObject] @{ ID='23600##'; Alias='Transport for NSW'; }
     $Radios += [PSCustomObject] @{ ID='23790##'; Alias='New born & pædiatric Emergency Transport Service'; }
     $Radios += [PSCustomObject] @{ ID='2379###'; Alias='Northern NSW Local Health District'; }
     $Radios += [PSCustomObject] @{ ID='237####'; Alias='NSW Trains'; }
-    $Radios += [PSCustomObject] @{ ID='238####'; Alias='Transport for NSW - Roads'; }
+    $Radios += [PSCustomObject] @{ ID='238####'; Alias='Transport for NSW - Roads & Waterways'; }
     $Radios += [PSCustomObject] @{ ID='242####'; Alias='NSW National Parks & Wildlife Service'; }
-    $Radios += [PSCustomObject] @{ ID='243####'; Alias='Transport for NSW - Maritime'; }
+    $Radios += [PSCustomObject] @{ ID='243####'; Alias='Transport for NSW - Roads & Waterways'; }
     $Radios += [PSCustomObject] @{ ID='245####'; Alias='Water NSW'; }
     $Radios += [PSCustomObject] @{ ID='2448###'; Alias='NSW Department of Primary Industries'; }
     $Radios += [PSCustomObject] @{ ID='2449###'; Alias='NSW Environmental Protection Agency'; }
