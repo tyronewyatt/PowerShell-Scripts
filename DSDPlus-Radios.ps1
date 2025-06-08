@@ -51,29 +51,33 @@ Function Set-RadioAlias {
         Try {
             $CSVRadios = Get-Content -Path "$DSDPath\DSDPlus.Radios" | 
                 Where-Object { $_ -notmatch "^;|^   ;;|^$" } | # Remove comments and empty lines
-                ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias' | 
+                ConvertFrom-Csv -Header 'protocol', 'networkID', 'group', 'radio', 'priority', 'override', 'hits', 'timestamp', 'radio alias', 'callsign' | 
                 Where-Object { $_.'Radio alias' -eq "" -and $_.'networkID' -in $Networks.ID } # Select radios with missing aliases and with known networks
         } Catch {}
     } Until ($?)
 
     $Radios = @()
+#    $Radios += [PSCustomObject] @{ ID='20####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='21####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='22####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='23####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='27####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='41####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='42####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='4284##'; Alias='NSW Police Force - Tactical Operations Unit'; }
+#    $Radios += [PSCustomObject] @{ ID='425###'; Alias='NSW Police Force - Public Order and Riot Squad'; }
+#    $Radios += [PSCustomObject] @{ ID='4285##'; Alias='NSW Police Force - Rescue Squad'; }
+#    $Radios += [PSCustomObject] @{ ID='43####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='70####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='7000##'; Alias='NSW Police Force - Aviation Command'; }
     $Radios += [PSCustomObject] @{ ID='100####'; Alias='ACT Ambulance Service'; }
     $Radios += [PSCustomObject] @{ ID='101####'; Alias='ACT Fire & Rescue'; }
     $Radios += [PSCustomObject] @{ ID='103####'; Alias='ACT Rural Fire Service'; }
-    $Radios += [PSCustomObject] @{ ID='104####'; Alias='ACT'; }    
+#    $Radios += [PSCustomObject] @{ ID='104####'; Alias='ACT'; }    
     $Radios += [PSCustomObject] @{ ID='1050###'; Alias='ACT Ambulance Service'; }
     $Radios += [PSCustomObject] @{ ID='1051###'; Alias='ACT Fire & Rescue'; }
     $Radios += [PSCustomObject] @{ ID='1052###'; Alias='ACT State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='1053###'; Alias='ACT Rural Fire Service'; }
-    $Radios += [PSCustomObject] @{ ID='20####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='21####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='22####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='23####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='27####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='41####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='42####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='43####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='70####'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='200####'; Alias='Fire & Rescue NSW'; }
     $Radios += [PSCustomObject] @{ ID='201####'; Alias='NSW Rural Fire Service'; }
     $Radios += [PSCustomObject] @{ ID='202####'; Alias='NSW Rural Fire Service'; }
@@ -82,14 +86,15 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='205####'; Alias='NSW State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='206####'; Alias='NSW State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='207####'; Alias='Fire & Rescue NSW'; }
-    $Radios += [PSCustomObject] @{ ID='210####'; Alias='Unknown'; }
+    $Radios += [PSCustomObject] @{ ID='210####'; Alias=''; }
     $Radios += [PSCustomObject] @{ ID='211####'; Alias="NSW Sheriff's Office"; }
     $Radios += [PSCustomObject] @{ ID='212####'; Alias='Corrective Services NSW'; }
     $Radios += [PSCustomObject] @{ ID='2130###'; Alias='Youth Justice NSW'; }
     $Radios += [PSCustomObject] @{ ID='214####'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='215####'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='216####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='217####'; Alias='Unknown'; }
+#    $Radios += [PSCustomObject] @{ ID='217####'; Alias=''; }
+    $Radios += [PSCustomObject] @{ ID='2177###'; Alias='NSW Crime Commission'; }
     $Radios += [PSCustomObject] @{ ID='218####'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='219####'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='2240###'; Alias='Hunter Water'; }
@@ -111,6 +116,7 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='248####'; Alias='Forestry Corporation of NSW'; }
     $Radios += [PSCustomObject] @{ ID='2500###'; Alias='NSW Police Force - Special Constables'; }
     $Radios += [PSCustomObject] @{ ID='26000##'; Alias='Australian Broadcasting Corporation'; }
+    $Radios += [PSCustomObject] @{ ID='2650###'; Alias='Sydney Opera House'; }
     $Radios += [PSCustomObject] @{ ID='2665###'; Alias='St John Ambulance NSW'; }
     $Radios += [PSCustomObject] @{ ID='26990##'; Alias='RSPCA NSW'; }
     $Radios += [PSCustomObject] @{ ID='2800###'; Alias='Surf Life Saving NSW'; }
@@ -144,12 +150,15 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='338####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='339####'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='344####'; Alias='Life Saving Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='4######'; Alias='Qld GWN'; }
-    $Radios += [PSCustomObject] @{ ID='5######'; Alias='SA GRN'; }
-    $Radios += [PSCustomObject] @{ ID='6######'; Alias='WA GRN'; }
-    $Radios += [PSCustomObject] @{ ID='7######'; Alias='Tas GRN'; }
-    $Radios += [PSCustomObject] @{ ID='8######'; Alias='NT ESTN'; }
+    $Radios += [PSCustomObject] @{ ID='430####'; Alias='Queensland Police Service'; }
+    $Radios += [PSCustomObject] @{ ID='436####'; Alias='Queensland State Emergency Service'; }
+#    $Radios += [PSCustomObject] @{ ID='4######'; Alias='Qld GWN'; }
+#    $Radios += [PSCustomObject] @{ ID='5######'; Alias='SA GRN'; }
+#    $Radios += [PSCustomObject] @{ ID='6######'; Alias='WA GRN'; }
+#    $Radios += [PSCustomObject] @{ ID='7######'; Alias='Tas GRN'; }
+#    $Radios += [PSCustomObject] @{ ID='8######'; Alias='NT ESTN'; }
     $Radios += [PSCustomObject] @{ ID='902####'; Alias='Australian Federal Police'; }
+    $Radios += [PSCustomObject] @{ ID='903####'; Alias='Australian Federal Police'; }
     $Radios += [PSCustomObject] @{ ID='913####'; Alias='Australian Federal Police'; }
     $Radios += [PSCustomObject] @{ ID='925####'; Alias='Australian Federal Police'; }
 
@@ -167,6 +176,7 @@ Function Set-RadioAlias {
             $Override = $CSVRadio.override
             $Hits = $CSVRadio.hits
             $Timestamp = $CSVRadio.timestamp
+            $Callsign = $CSVRadio.callsign
             If (
                 ($Radio -match $RadioID) -and 
                 ($NetworkID -in $NetworkIDs)
