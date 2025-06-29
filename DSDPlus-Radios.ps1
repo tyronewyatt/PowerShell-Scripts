@@ -57,7 +57,13 @@ Function Set-RadioAlias {
     } Until ($?)
 
     $Radios = @()
-#    $Radios += [PSCustomObject] @{ ID='20####'; Alias='NSW Police Force'; }
+#    $Radios += [PSCustomObject] @{ ID='201###'; Alias='NSW Police Force - Sydney Radio Operations Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='202###'; Alias='NSW Police Force - Illawarra Radio Operations Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='203###'; Alias='NSW Police Force - Newcastle Radio Operations Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='204###'; Alias='NSW Police Force - Wagga Radio Operations Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='205###'; Alias='NSW Police Force - Tamworth Radio Operations Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='206###'; Alias='NSW Police Force - Penrith Radio Operations Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='207###'; Alias='NSW Police Force - State Emergency Operations Centre'; }
 #    $Radios += [PSCustomObject] @{ ID='21####'; Alias='NSW Police Force'; }
 #    $Radios += [PSCustomObject] @{ ID='22####'; Alias='NSW Police Force'; }
 #    $Radios += [PSCustomObject] @{ ID='23####'; Alias='NSW Police Force'; }
@@ -111,10 +117,12 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='242####'; Alias='NSW National Parks & Wildlife Service'; }
     $Radios += [PSCustomObject] @{ ID='243####'; Alias='Transport for NSW - Roads & Waterways'; }
     $Radios += [PSCustomObject] @{ ID='245####'; Alias='Water NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2448###'; Alias='NSW Department of Primary Industries'; }
+    $Radios += [PSCustomObject] @{ ID='2442###'; Alias='NSW Department of Primary Industries - Plantation Forestry'; }
+    $Radios += [PSCustomObject] @{ ID='2448###'; Alias='NSW Department of Primary Industries - Fisheries'; }
     $Radios += [PSCustomObject] @{ ID='2449###'; Alias='Marine Rescue NSW'; }
     $Radios += [PSCustomObject] @{ ID='248####'; Alias='Forestry Corporation of NSW'; }
     $Radios += [PSCustomObject] @{ ID='2500###'; Alias='NSW Police Force - Special Constables'; }
+    $Radios += [PSCustomObject] @{ ID='25765##'; Alias='ACEREZ Central-West Orana Renewable Energy Zone'; }
     $Radios += [PSCustomObject] @{ ID='26000##'; Alias='Australian Broadcasting Corporation'; }
     $Radios += [PSCustomObject] @{ ID='26296##'; Alias='Blue Mountains City Council'; }
     $Radios += [PSCustomObject] @{ ID='2650###'; Alias='Sydney Opera House'; }
