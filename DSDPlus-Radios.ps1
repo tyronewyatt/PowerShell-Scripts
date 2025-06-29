@@ -85,12 +85,16 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='1052###'; Alias='ACT State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='1053###'; Alias='ACT Rural Fire Service'; }
     $Radios += [PSCustomObject] @{ ID='200####'; Alias='Fire & Rescue NSW'; }
+#    $Radios += [PSCustomObject] @{ ID='20000##'; Alias='Fire & Rescue NSW - Sydney Communication Centre'; }
+#    $Radios += [PSCustomObject] @{ ID='20001##'; Alias='Fire & Rescue NSW - Newcastle Communication Centre'; }
     $Radios += [PSCustomObject] @{ ID='201####'; Alias='NSW Rural Fire Service'; }
+#    $Radios += [PSCustomObject] @{ ID='20199##'; Alias='NSW Rural Fire Service - Operational Communications Centre'; }
     $Radios += [PSCustomObject] @{ ID='202####'; Alias='NSW Rural Fire Service'; }
     $Radios += [PSCustomObject] @{ ID='203####'; Alias='NSW Rural Fire Service'; }
     $Radios += [PSCustomObject] @{ ID='204####'; Alias='NSW State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='205####'; Alias='NSW State Emergency Service'; }
     $Radios += [PSCustomObject] @{ ID='206####'; Alias='NSW State Emergency Service'; }
+#    $Radios += [PSCustomObject] @{ ID='20699##'; Alias='NSW State Emergency Service - State Operations Centre'; }
     $Radios += [PSCustomObject] @{ ID='207####'; Alias='Fire & Rescue NSW'; }
     $Radios += [PSCustomObject] @{ ID='210####'; Alias=''; }
     $Radios += [PSCustomObject] @{ ID='211####'; Alias="NSW Sheriff's Office"; }
