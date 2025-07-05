@@ -76,7 +76,7 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='2110000-2119999'; Alias="NSW Sheriff's Office"; }
     $Radios += [PSCustomObject] @{ ID='2120000-2129999'; Alias='Corrective Services NSW'; }
     $Radios += [PSCustomObject] @{ ID='2130999-2130999'; Alias='Youth Justice NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2140000-2039999'; Alias='NSW Police Force'; }
+    $Radios += [PSCustomObject] @{ ID='2140000-2169999'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='2177000-2177999'; Alias='NSW Crime Commission'; }
     $Radios += [PSCustomObject] @{ ID='2180000-2199999'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='2240000-2240999'; Alias='Hunter Water'; }
