@@ -57,132 +57,88 @@ Function Set-RadioAlias {
     } Until ($?)
 
     $Radios = @()
-#    $Radios += [PSCustomObject] @{ ID='201###'; Alias='NSW Police Force - Sydney Radio Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='202###'; Alias='NSW Police Force - Illawarra Radio Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='203###'; Alias='NSW Police Force - Newcastle Radio Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='204###'; Alias='NSW Police Force - Wagga Radio Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='205###'; Alias='NSW Police Force - Tamworth Radio Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='206###'; Alias='NSW Police Force - Penrith Radio Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='207###'; Alias='NSW Police Force - State Emergency Operations Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='21####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='22####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='23####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='27####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='41####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='42####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='4284##'; Alias='NSW Police Force - Tactical Operations Unit'; }
-#    $Radios += [PSCustomObject] @{ ID='425###'; Alias='NSW Police Force - Public Order and Riot Squad'; }
-#    $Radios += [PSCustomObject] @{ ID='4285##'; Alias='NSW Police Force - Rescue Squad'; }
-#    $Radios += [PSCustomObject] @{ ID='43####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='70####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='7000##'; Alias='NSW Police Force - Aviation Command'; }
-    $Radios += [PSCustomObject] @{ ID='100####'; Alias='ACT Ambulance Service'; }
-    $Radios += [PSCustomObject] @{ ID='101####'; Alias='ACT Fire & Rescue'; }
-    $Radios += [PSCustomObject] @{ ID='103####'; Alias='ACT Rural Fire Service'; }
-#    $Radios += [PSCustomObject] @{ ID='104####'; Alias='ACT'; }    
-    $Radios += [PSCustomObject] @{ ID='1050###'; Alias='ACT Ambulance Service'; }
-    $Radios += [PSCustomObject] @{ ID='1051###'; Alias='ACT Fire & Rescue'; }
-    $Radios += [PSCustomObject] @{ ID='1052###'; Alias='ACT State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='1053###'; Alias='ACT Rural Fire Service'; }
-    $Radios += [PSCustomObject] @{ ID='200####'; Alias='Fire & Rescue NSW'; }
-#    $Radios += [PSCustomObject] @{ ID='20000##'; Alias='Fire & Rescue NSW - Sydney Communication Centre'; }
-#    $Radios += [PSCustomObject] @{ ID='20001##'; Alias='Fire & Rescue NSW - Newcastle Communication Centre'; }
-    $Radios += [PSCustomObject] @{ ID='201####'; Alias='NSW Rural Fire Service'; }
-#    $Radios += [PSCustomObject] @{ ID='20199##'; Alias='NSW Rural Fire Service - Operational Communications Centre'; }
-    $Radios += [PSCustomObject] @{ ID='202####'; Alias='NSW Rural Fire Service'; }
-    $Radios += [PSCustomObject] @{ ID='203####'; Alias='NSW Rural Fire Service'; }
-    $Radios += [PSCustomObject] @{ ID='204####'; Alias='NSW State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='205####'; Alias='NSW State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='206####'; Alias='NSW State Emergency Service'; }
-#    $Radios += [PSCustomObject] @{ ID='20699##'; Alias='NSW State Emergency Service - State Operations Centre'; }
-    $Radios += [PSCustomObject] @{ ID='207####'; Alias='Fire & Rescue NSW'; }
-    $Radios += [PSCustomObject] @{ ID='210####'; Alias=''; }
-    $Radios += [PSCustomObject] @{ ID='211####'; Alias="NSW Sheriff's Office"; }
-    $Radios += [PSCustomObject] @{ ID='212####'; Alias='Corrective Services NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2130###'; Alias='Youth Justice NSW'; }
-    $Radios += [PSCustomObject] @{ ID='214####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='215####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='216####'; Alias='NSW Police Force'; }
-#    $Radios += [PSCustomObject] @{ ID='217####'; Alias=''; }
-    $Radios += [PSCustomObject] @{ ID='2177###'; Alias='NSW Crime Commission'; }
-    $Radios += [PSCustomObject] @{ ID='218####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='219####'; Alias='NSW Police Force'; }
-    $Radios += [PSCustomObject] @{ ID='2240###'; Alias='Hunter Water'; }
-    $Radios += [PSCustomObject] @{ ID='230####'; Alias='Australian Rail Track Corporation'; }
-    $Radios += [PSCustomObject] @{ ID='231####'; Alias='NSW Ambulance'; }
-    $Radios += [PSCustomObject] @{ ID='232####'; Alias='NSW Ambulance'; }
-    $Radios += [PSCustomObject] @{ ID='233####'; Alias='NSW Ambulance'; }
-    $Radios += [PSCustomObject] @{ ID='235####'; Alias='Transport for NSW - Roads & Waterways'; }
-    $Radios += [PSCustomObject] @{ ID='23600##'; Alias='Transport for NSW'; }
-    $Radios += [PSCustomObject] @{ ID='23790##'; Alias='New born & pædiatric Emergency Transport Service'; }
-    $Radios += [PSCustomObject] @{ ID='2379###'; Alias='Northern NSW Local Health District'; }
-    $Radios += [PSCustomObject] @{ ID='237####'; Alias='NSW Trains'; }
-    $Radios += [PSCustomObject] @{ ID='238####'; Alias='Transport for NSW - Roads & Waterways'; }
-    $Radios += [PSCustomObject] @{ ID='242####'; Alias='NSW National Parks & Wildlife Service'; }
-    $Radios += [PSCustomObject] @{ ID='243####'; Alias='Transport for NSW - Roads & Waterways'; }
-    $Radios += [PSCustomObject] @{ ID='245####'; Alias='Water NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2442###'; Alias='NSW Department of Primary Industries - Plantation Forestry'; }
-    $Radios += [PSCustomObject] @{ ID='2448###'; Alias='NSW Department of Primary Industries - Fisheries'; }
-    $Radios += [PSCustomObject] @{ ID='2449###'; Alias='Marine Rescue NSW'; }
-    $Radios += [PSCustomObject] @{ ID='248####'; Alias='Forestry Corporation of NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2500###'; Alias='NSW Police Force - Special Constables'; }
-    $Radios += [PSCustomObject] @{ ID='25765##'; Alias='ACEREZ Central-West Orana Renewable Energy Zone'; }
-    $Radios += [PSCustomObject] @{ ID='26000##'; Alias='Australian Broadcasting Corporation'; }
-    $Radios += [PSCustomObject] @{ ID='26296##'; Alias='Blue Mountains City Council'; }
-    $Radios += [PSCustomObject] @{ ID='2650###'; Alias='Sydney Opera House'; }
-    $Radios += [PSCustomObject] @{ ID='2665###'; Alias='St John Ambulance NSW'; }
-    $Radios += [PSCustomObject] @{ ID='26990##'; Alias='RSPCA NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2800###'; Alias='Surf Life Saving NSW'; }
-    $Radios += [PSCustomObject] @{ ID='290####'; Alias='NSW Telco Authority - Network Manager'; }
-    $Radios += [PSCustomObject] @{ ID='291####'; Alias='NSW Telco Authority - Network Manager'; }
-    $Radios += [PSCustomObject] @{ ID='292####'; Alias='NSW Telco Authority - Network Manager'; }
-    $Radios += [PSCustomObject] @{ ID='310###'; Alias='Triple Zero Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='311###'; Alias='Triple Zero Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='315###'; Alias='Triple Zero Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='320###'; Alias='Triple Zero Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='380###'; Alias='Triple Zero Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='300####'; Alias='Motorola Network Manager'; }
-    $Radios += [PSCustomObject] @{ ID='320####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='321####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='311####'; Alias='Victoria Police'; }
-    $Radios += [PSCustomObject] @{ ID='314####'; Alias='Victoria Police'; }
-    $Radios += [PSCustomObject] @{ ID='316####'; Alias='Victoria Police'; }
-    $Radios += [PSCustomObject] @{ ID='317####'; Alias='Victoria Police'; }
-    $Radios += [PSCustomObject] @{ ID='322####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='323####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='324####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='325####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='326####'; Alias='Victoria State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='327####'; Alias='Victoria State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='328####'; Alias='Victoria State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='329####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='330####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='331####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='332####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='333####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='338####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='339####'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='344####'; Alias='Life Saving Victoria'; }
-    $Radios += [PSCustomObject] @{ ID='430####'; Alias='Queensland Police Service'; }
-    $Radios += [PSCustomObject] @{ ID='436####'; Alias='Queensland State Emergency Service'; }
-#    $Radios += [PSCustomObject] @{ ID='4######'; Alias='Qld GWN'; }
-#    $Radios += [PSCustomObject] @{ ID='5######'; Alias='SA GRN'; }
-#    $Radios += [PSCustomObject] @{ ID='6######'; Alias='WA GRN'; }
-#    $Radios += [PSCustomObject] @{ ID='7######'; Alias='Tas GRN'; }
-#    $Radios += [PSCustomObject] @{ ID='8######'; Alias='NT ESTN'; }
-    $Radios += [PSCustomObject] @{ ID='902####'; Alias='Australian Federal Police'; }
-    $Radios += [PSCustomObject] @{ ID='903####'; Alias='Australian Federal Police'; }
-    $Radios += [PSCustomObject] @{ ID='913####'; Alias='Australian Federal Police'; }
-    $Radios += [PSCustomObject] @{ ID='925####'; Alias='Australian Federal Police'; }
+    $Radios += [PSCustomObject] @{ ID='1000000-1009999'; Alias='ACT Ambulance Service'; }
+    $Radios += [PSCustomObject] @{ ID='1010000-1019999'; Alias='ACT Fire & Rescue'; }
+    $Radios += [PSCustomObject] @{ ID='1030000-1039999'; Alias='ACT Rural Fire Service'; } 
+    $Radios += [PSCustomObject] @{ ID='1050000-1050999'; Alias='ACT Ambulance Service'; }
+    $Radios += [PSCustomObject] @{ ID='1051000-1051999'; Alias='ACT Fire & Rescue'; }
+    $Radios += [PSCustomObject] @{ ID='1052000-1052999'; Alias='ACT State Emergency Service'; }
+    $Radios += [PSCustomObject] @{ ID='1053000-1053999'; Alias='ACT Rural Fire Service'; }
+    $Radios += [PSCustomObject] @{ ID='2000000-2000099'; Alias='Fire & Rescue NSW - Sydney Communication Centre'; }
+    $Radios += [PSCustomObject] @{ ID='2000100-2000199'; Alias='Fire & Rescue NSW - Newcastle Communication Centre'; }
+    $Radios += [PSCustomObject] @{ ID='2000200-2009999'; Alias='Fire & Rescue NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2010000-2019899'; Alias='NSW Rural Fire Service'; }
+    $Radios += [PSCustomObject] @{ ID='2019900-2019999'; Alias='NSW Rural Fire Service - Operational Communications Centre'; }
+    $Radios += [PSCustomObject] @{ ID='2020000-2039999'; Alias='NSW Rural Fire Service'; }
+    $Radios += [PSCustomObject] @{ ID='2040000-2069899'; Alias='NSW State Emergency Service'; }
+    $Radios += [PSCustomObject] @{ ID='2069900-2069999'; Alias='NSW State Emergency Service - State Operations Centre'; }
+    $Radios += [PSCustomObject] @{ ID='2070000-2079999'; Alias='Fire & Rescue NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2110000-2119999'; Alias="NSW Sheriff's Office"; }
+    $Radios += [PSCustomObject] @{ ID='2120000-2129999'; Alias='Corrective Services NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2130999-2130999'; Alias='Youth Justice NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2140000-2039999'; Alias='NSW Police Force'; }
+    $Radios += [PSCustomObject] @{ ID='2177000-2177999'; Alias='NSW Crime Commission'; }
+    $Radios += [PSCustomObject] @{ ID='2180000-2199999'; Alias='NSW Police Force'; }
+    $Radios += [PSCustomObject] @{ ID='2240000-2240999'; Alias='Hunter Water'; }
+    $Radios += [PSCustomObject] @{ ID='2300000-2309999'; Alias='Australian Rail Track Corporation'; }
+    $Radios += [PSCustomObject] @{ ID='2310000-2339999'; Alias='NSW Ambulance'; }
+    $Radios += [PSCustomObject] @{ ID='2350000-2359999'; Alias='Transport for NSW - Roads & Waterways'; }
+    $Radios += [PSCustomObject] @{ ID='2360099-2360099'; Alias='Transport for NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2379000-2379099'; Alias='New born & pædiatric Emergency Transport Service'; }
+    $Radios += [PSCustomObject] @{ ID='2379000-2379999'; Alias='Northern NSW Local Health District'; }
+    $Radios += [PSCustomObject] @{ ID='2370000-2379999'; Alias='NSW Trains'; }
+    $Radios += [PSCustomObject] @{ ID='2380000-2389999'; Alias='Transport for NSW - Roads & Waterways'; }
+    $Radios += [PSCustomObject] @{ ID='2420000-2429999'; Alias='NSW National Parks & Wildlife Service'; }
+    $Radios += [PSCustomObject] @{ ID='2430000-2439999'; Alias='Transport for NSW - Roads & Waterways'; }
+    $Radios += [PSCustomObject] @{ ID='2450000-2459999'; Alias='Water NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2442000-2442999'; Alias='NSW Department of Primary Industries - Plantation Forestry'; }
+    $Radios += [PSCustomObject] @{ ID='2448000-2449999'; Alias='NSW Department of Primary Industries - Fisheries'; }
+    $Radios += [PSCustomObject] @{ ID='2449000-2449999'; Alias='Marine Rescue NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2480000-2489999'; Alias='Forestry Corporation of NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2500000-2500999'; Alias='NSW Police Force - Special Constables'; }
+    $Radios += [PSCustomObject] @{ ID='2576500-2576599'; Alias='ACEREZ Central-West Orana Renewable Energy Zone'; }
+    $Radios += [PSCustomObject] @{ ID='2600000-2600099'; Alias='Australian Broadcasting Corporation'; }
+    $Radios += [PSCustomObject] @{ ID='2629600-2629699'; Alias='Blue Mountains City Council'; }
+    $Radios += [PSCustomObject] @{ ID='2650000-2650999'; Alias='Sydney Opera House'; }
+    $Radios += [PSCustomObject] @{ ID='2665000-2665999'; Alias='St John Ambulance NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2699099-2699099'; Alias='RSPCA NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2800000-2800999'; Alias='Surf Life Saving NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2900000-2929999'; Alias='NSW Telco Authority - Network Manager'; }
+    $Radios += [PSCustomObject] @{ ID='310000-310999'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='311000-311999'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='315000-315999'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='320000-320999'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='380000-280999'; Alias='Triple Zero Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='3000000-3009999'; Alias='Motorola Network Manager'; }
+    $Radios += [PSCustomObject] @{ ID='3200000-3219999'; Alias='Country Fire Authority'; }
+    $Radios += [PSCustomObject] @{ ID='3110000-3119999'; Alias='Victoria Police'; }
+    $Radios += [PSCustomObject] @{ ID='3140000-3149999'; Alias='Victoria Police'; }
+    $Radios += [PSCustomObject] @{ ID='3160000-3179999'; Alias='Victoria Police'; }
+    $Radios += [PSCustomObject] @{ ID='3220000-3259999'; Alias='Country Fire Authority'; }
+    $Radios += [PSCustomObject] @{ ID='3260000-3289999'; Alias='Victoria State Emergency Service'; }
+    $Radios += [PSCustomObject] @{ ID='3290000-3339999'; Alias='Country Fire Authority'; }
+    $Radios += [PSCustomObject] @{ ID='3380000-3399999'; Alias='Country Fire Authority'; }
+    $Radios += [PSCustomObject] @{ ID='3440000-3449999'; Alias='Life Saving Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='4300000-4309999'; Alias='Queensland Police Service'; }
+    $Radios += [PSCustomObject] @{ ID='4360000-4369999'; Alias='Queensland State Emergency Service'; }
+#    $Radios += [PSCustomObject] @{ ID='4000000-4999999'; Alias='Qld GWN'; }
+#    $Radios += [PSCustomObject] @{ ID='5000000-5999999'; Alias='SA GRN'; }
+#    $Radios += [PSCustomObject] @{ ID='6000000-6999999'; Alias='WA GRN'; }
+#    $Radios += [PSCustomObject] @{ ID='7000000-7999999'; Alias='Tas GRN'; }
+#    $Radios += [PSCustomObject] @{ ID='8000000-8999999'; Alias='NT ESTN'; }
+    $Radios += [PSCustomObject] @{ ID='9020000-9039999'; Alias='Australian Federal Police'; }
+    $Radios += [PSCustomObject] @{ ID='9130000-9139999'; Alias='Australian Federal Police'; }
+    $Radios += [PSCustomObject] @{ ID='9250000-9259999'; Alias='Australian Federal Police'; }
 
     ForEach ($Radio in $Radios) {
-        $NetworkIDs = $Networks.ID
-        $RadioAlias = $Radio.Alias
-        $RadioID = '^' + $Radio.ID.Replace('#','\d') + '$'  # Replace hash with digit
+        $NIDs = $Networks.ID
+        $Agency = $Radio.Alias
+        #$RadioID = '^' + $Radio.ID.Replace('#','\d') + '$'  # Replace hash with digit
+        $RIDs = $Radio.ID -split '-'
 
         ForEach ($CSVRadio in $CSVRadios) {
             $Protocol = $CSVRadio.protocol
-            $NetworkID = $CSVRadio.networkID
+            $Network = $CSVRadio.networkID
             $Radio = $CSVRadio.radio
             $Group = $CSVRadio.group
             $Priority = $CSVRadio.priority
@@ -191,14 +147,15 @@ Function Set-RadioAlias {
             $Timestamp = $CSVRadio.timestamp
             $Callsign = $CSVRadio.callsign
             If (
-                ($Radio -match $RadioID) -and 
-                ($NetworkID -in $NetworkIDs)
+                (($Radio -gt $RIDs[0]) -and ($Radio -lt $RIDs[1])) -and
+                (($Radio.ToString().Length -eq $RIDs[0].ToString().Length) -and ($Radio.ToString().Length -eq $RIDs[1].ToString().Length)) -and
+                ($Network -in $NIDs)
                 ) {
                 If ($NoConsole -eq $false) {
-                    Write-Host "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`"" "> $DSDPath\DSDPlus.Radios"
+                    Write-Host "$Protocol, $Network, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Agency`"" "> $DSDPath\DSDPlus.Radios"
                 }
                 Do {
-                    Try {Write-Output "$Protocol, $NetworkID, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$RadioAlias`"" |
+                    Try {Write-Output "$Protocol, $Network, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Agency`"" |
                         Out-File -Append "$DSDPath\DSDPlus.Radios" -Encoding utf8 -NoClobber
                     } Catch {}
                 } Until ($?)
