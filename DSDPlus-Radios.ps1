@@ -57,6 +57,7 @@ Function Set-RadioAlias {
     } Until ($?)
 
     $Radios = @()
+#    $Radios += [PSCustomObject] @{ ID=''; Alias=''; }
     $Radios += [PSCustomObject] @{ ID='1000000-1009999'; Alias='ACT Ambulance Service'; }
     $Radios += [PSCustomObject] @{ ID='1010000-1019999'; Alias='ACT Fire & Rescue'; }
     $Radios += [PSCustomObject] @{ ID='1030000-1039999'; Alias='ACT Rural Fire Service'; } 
@@ -75,24 +76,27 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='2070000-2079999'; Alias='Fire & Rescue NSW'; }
     $Radios += [PSCustomObject] @{ ID='2110000-2119999'; Alias="NSW Sheriff's Office"; }
     $Radios += [PSCustomObject] @{ ID='2120000-2129999'; Alias='Corrective Services NSW'; }
-    $Radios += [PSCustomObject] @{ ID='2130999-2130999'; Alias='Youth Justice NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2130000-2130999'; Alias='Youth Justice NSW'; }
     $Radios += [PSCustomObject] @{ ID='2140000-2169999'; Alias='NSW Police Force'; }
     $Radios += [PSCustomObject] @{ ID='2177000-2177999'; Alias='NSW Crime Commission'; }
     $Radios += [PSCustomObject] @{ ID='2180000-2199999'; Alias='NSW Police Force'; }
+    $Radios += [PSCustomObject] @{ ID='2200000-2200999'; Alias='Central Tablelands Water'; }
+    $Radios += [PSCustomObject] @{ ID='2220000-2221999'; Alias='Ausgrid'; }
+    $Radios += [PSCustomObject] @{ ID='2230000-2230999'; Alias='Integral Energy'; }
     $Radios += [PSCustomObject] @{ ID='2240000-2240999'; Alias='Hunter Water'; }
-    $Radios += [PSCustomObject] @{ ID='2300000-2309999'; Alias='Australian Rail Track Corporation'; }
+    $Radios += [PSCustomObject] @{ ID='2300000-2300599'; Alias='Australian Rail Track Corporation'; }
     $Radios += [PSCustomObject] @{ ID='2310000-2339999'; Alias='NSW Ambulance'; }
     $Radios += [PSCustomObject] @{ ID='2350000-2359999'; Alias='Transport for NSW - Roads & Waterways'; }
     $Radios += [PSCustomObject] @{ ID='2360099-2360099'; Alias='Transport for NSW'; }
     $Radios += [PSCustomObject] @{ ID='2379000-2379099'; Alias='New born & pædiatric Emergency Transport Service'; }
-    $Radios += [PSCustomObject] @{ ID='2379000-2379999'; Alias='Northern NSW Local Health District'; }
+    $Radios += [PSCustomObject] @{ ID='2379100-2379999'; Alias='Northern NSW Local Health District'; }
     $Radios += [PSCustomObject] @{ ID='2370000-2379999'; Alias='NSW Trains'; }
     $Radios += [PSCustomObject] @{ ID='2380000-2389999'; Alias='Transport for NSW - Roads & Waterways'; }
     $Radios += [PSCustomObject] @{ ID='2420000-2429999'; Alias='NSW National Parks & Wildlife Service'; }
     $Radios += [PSCustomObject] @{ ID='2430000-2439999'; Alias='Transport for NSW - Roads & Waterways'; }
-    $Radios += [PSCustomObject] @{ ID='2450000-2459999'; Alias='Water NSW'; }
+    $Radios += [PSCustomObject] @{ ID='2450000-2450999'; Alias='Water NSW'; }
     $Radios += [PSCustomObject] @{ ID='2442000-2442999'; Alias='NSW Department of Primary Industries - Plantation Forestry'; }
-    $Radios += [PSCustomObject] @{ ID='2448000-2449999'; Alias='NSW Department of Primary Industries - Fisheries'; }
+    $Radios += [PSCustomObject] @{ ID='2448000-2448999'; Alias='NSW Department of Primary Industries - Fisheries'; }
     $Radios += [PSCustomObject] @{ ID='2449000-2449999'; Alias='Marine Rescue NSW'; }
     $Radios += [PSCustomObject] @{ ID='2480000-2489999'; Alias='Forestry Corporation of NSW'; }
     $Radios += [PSCustomObject] @{ ID='2500000-2500999'; Alias='NSW Police Force - Special Constables'; }
@@ -148,8 +152,7 @@ Function Set-RadioAlias {
             $Callsign = $CSVRadio.callsign
             If (
                 (($Radio -gt $RIDs[0]) -and ($Radio -lt $RIDs[1])) -and
-                (($Radio.ToString().Length -eq $RIDs[0].ToString().Length) -and ($Radio.ToString().Length -eq $RIDs[1].ToString().Length)) -and
-                ($Network -in $NIDs)
+                (($Radio.ToString().Length -eq $RIDs[0].ToString().Length) -and ($Radio.ToString().Length -eq $RIDs[1].ToString().Length))
                 ) {
                 If ($NoConsole -eq $false) {
                     Write-Host "$Protocol, $Network, $Group, $Radio, $Priority, $Override, $Hits, $Timestamp, `"$Agency`"" "> $DSDPath\DSDPlus.Radios"
