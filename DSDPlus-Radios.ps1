@@ -111,21 +111,24 @@ Function Set-RadioAlias {
     $Radios += [PSCustomObject] @{ ID='2699000-2699099'; Alias='RSPCA NSW'; }
     $Radios += [PSCustomObject] @{ ID='2800000-2800999'; Alias='Surf Life Saving NSW'; }
     $Radios += [PSCustomObject] @{ ID='2900000-2929999'; Alias='NSW Telco Authority - Network Manager'; }
-    $Radios += [PSCustomObject] @{ ID='3010000-3019999'; Alias='Ambulance Victoria'; }
     $Radios += [PSCustomObject] @{ ID='310000-310999'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='311000-311999'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='315000-315999'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='320000-320999'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='380000-280999'; Alias='Triple Zero Victoria'; }
     $Radios += [PSCustomObject] @{ ID='3000000-3009999'; Alias='Motorola Network Manager'; }
+    $Radios += [PSCustomObject] @{ ID='3010000-3019999'; Alias='Motorola Network Manager'; }
     $Radios += [PSCustomObject] @{ ID='3200000-3219999'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='3110000-3119999'; Alias='Victoria Police'; }
+    $Radios += [PSCustomObject] @{ ID='3110000-3129999'; Alias='Victoria Police'; }
     $Radios += [PSCustomObject] @{ ID='3140000-3149999'; Alias='Victoria Police'; }
     $Radios += [PSCustomObject] @{ ID='3160000-3179999'; Alias='Victoria Police'; }
+    $Radios += [PSCustomObject] @{ ID='3180000-3189999'; Alias='Corrections Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='3200000-3219999'; Alias='Fire Rescue Victoria'; }
     $Radios += [PSCustomObject] @{ ID='3220000-3259999'; Alias='Country Fire Authority'; }
     $Radios += [PSCustomObject] @{ ID='3260000-3289999'; Alias='Victoria State Emergency Service'; }
-    $Radios += [PSCustomObject] @{ ID='3290000-3339999'; Alias='Country Fire Authority'; }
-    $Radios += [PSCustomObject] @{ ID='3380000-3399999'; Alias='Country Fire Authority'; }
+    $Radios += [PSCustomObject] @{ ID='3290000-3299999'; Alias='Marine Search and Rescue'; }
+    $Radios += [PSCustomObject] @{ ID='3300000-3339999'; Alias='Forest Fire Management Victoria'; }
+    $Radios += [PSCustomObject] @{ ID='3380000-3399999'; Alias='Forest Fire Management Victoria'; }
     $Radios += [PSCustomObject] @{ ID='3440000-3449999'; Alias='Life Saving Victoria'; }
     $Radios += [PSCustomObject] @{ ID='4300000-4309999'; Alias='Queensland Police Service'; }
     $Radios += [PSCustomObject] @{ ID='4360000-4369999'; Alias='Queensland State Emergency Service'; }
